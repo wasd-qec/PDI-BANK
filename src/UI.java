@@ -4,6 +4,7 @@ import java.util.Scanner;
 public class UI {
     Scanner scanner = new Scanner(System.in);
     Read dbReader = new Read();
+    CustomRead customDbReader = new CustomRead();
     public void displayWelcomeMessage() {
         System.out.println("===================================");
         System.out.println("   Welcome to the Banking System   ");
@@ -37,8 +38,8 @@ public class UI {
         String accountNumber = scanner.nextLine();
         System.out.print("Enter your Password: ");
         String password = scanner.nextLine();
-        Read dbReader = new Read();
-        String storedPassword = dbReader.getPasswordByAccNo(accountNumber);
+        CustomRead customDbReader = new CustomRead();
+        String storedPassword = customDbReader.getPasswordByAccNo(accountNumber);
         if (storedPassword != null && pe.verifyPassword(password, storedPassword)) {
             System.out.println("Login successful!");
             return accountNumber;

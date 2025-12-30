@@ -96,71 +96,6 @@ public class Read {
         }
     }
     
-    public Customer InitializedCus(String AccNo) {
-        String sql = "SELECT * FROM users WHERE accNo = ?";
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
-            pstmt.setString(1, AccNo);
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                String Id = rs.getString("id");
-                String Name = rs.getString("name");
-                double Balance = rs.getDouble("balance");
-                long PhoneNumber = rs.getLong("PhoneNumber");
-                String RetrievedAccNo = rs.getString("accNo");
-                String Address = rs.getString("address");
-                String BirthDate = rs.getString("BirthDate");
-                String CreateDate = rs.getString("CreateDate");
-                boolean Active = rs.getBoolean("Active");
-                String hashedPassword = rs.getString("password");
-
-                
-                System.out.println("\n=== Search Result for Account: " + AccNo + " ===");
-                System.out.printf("  ID: %-15s | Name: %-20s | Account: %s\n", Id, Name, RetrievedAccNo);
-                System.out.printf("  Balance: $%-10.2f | Phone: %d\n", Balance, PhoneNumber);
-                System.out.printf("  Address: %s\n", Address);
-                System.out.printf("  Birth Date: %-12s | Create Date: %-12s | Active: %b\n", BirthDate, CreateDate, Active);
-                System.out.println("  " + "-".repeat(80));
-
-                Customer customer = new Customer(RetrievedAccNo, Id, Name, hashedPassword, Balance, PhoneNumber, Address, BirthDate, CreateDate, Active);
-                return customer;
-            } else {
-                System.out.println("No user found with Account Number: " + AccNo);
-                return null;
-            }
-            
-        } catch (SQLException e) {
-            System.out.println("Error searching user: " + e.getMessage());
-            return null;
-        }
-    }
-    
-    public String getPasswordByAccNo(String AccNo) {
-        String sql = "SELECT password FROM users WHERE accNo = ?";
-        
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
-            pstmt.setString(1, AccNo);
-            ResultSet rs = pstmt.executeQuery();
-            
-            if (rs.next()) {
-                String Password = rs.getString("password");
-                System.out.println("\nPassword for Account " + AccNo + ": " + Password);
-                return Password;
-            } else {
-                System.out.println("No user found with Account Number: " + AccNo);
-                return null;
-            }
-            
-        } catch (SQLException e) {
-            System.out.println("Error retrieving password: " + e.getMessage());
-            return null;
-        }
-    }
-    
     public void readAllData() {
         String sql = "SELECT * FROM users";
         
@@ -196,27 +131,5 @@ public class Read {
         }
     }
     
-    public void readDataByBalance(double minBalance) {
-        String sql = "SELECT * FROM users WHERE balance >= ?";
-        
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
-            pstmt.setDouble(1, minBalance);
-            ResultSet rs = pstmt.executeQuery();
-            
-            while (rs.next()) {
-                String Id = rs.getString("id");
-                String Name = rs.getString("name");
-                double Balance = rs.getDouble("balance");
-                String AccNo = rs.getString("accNo");
-                
-                System.out.printf("  • ID: %-8s | Name: %-15s | Balance: $%-10.2f | Account: %s\n", 
-                                  Id, Name, Balance, AccNo);
-            }
-            
-        } catch (SQLException e) {
-            System.out.println("Error reading data: " + e.getMessage());
-        }
-    }
+   
 }
