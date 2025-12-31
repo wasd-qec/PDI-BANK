@@ -60,4 +60,37 @@ public class Customer extends User {
     public String toString() {
         return super.toString() + "\nID: " + id;
     }
+    
+    // Transaction methods
+    /**
+     * Withdraw money from account
+     * @param amount the amount to withdraw
+     * @return true if successful, false if insufficient funds
+     */
+    public boolean withdraw(double amount) {
+        if (amount <= 0) {
+            System.out.println("Amount must be positive");
+            return false;
+        }
+        if (balance >= amount) {
+            balance -= amount;
+            return true;
+        }
+        System.out.println("Insufficient funds");
+        return false;
+    }
+    
+    /**
+     * Deposit money into account
+     * @param amount the amount to deposit
+     * @return true if successful
+     */
+    public boolean deposit(double amount) {
+        if (amount <= 0) {
+            System.out.println("Amount must be positive");
+            return false;
+        }
+        balance += amount;
+        return true;
+    }
 }

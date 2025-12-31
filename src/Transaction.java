@@ -19,6 +19,14 @@ public class Transaction {
         this.Type = Type;
     }
 
+    // Getters
+    public String getTransactionId() { return TransactionId; }
+    public String getReceiverId() { return ReceiverId; }
+    public String getSenderId() { return SenderId; }
+    public double getAmount() { return Amount; }
+    public String getTimestamp() { return Timestamp; }
+    public String getType() { return Type; }
+
     @Override
     public String toString() {
         return String.format("Transaction[%s: %s -> %s, $%.2f, %s, %s]",

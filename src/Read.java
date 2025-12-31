@@ -132,7 +132,7 @@ public class Read {
     }
     
     public void InsertTransaction (String TransactionId , String ReceiverId, String SenderId, double Amount, String Type, String Timestamp) {
-        String sql = "INSERT INTO transactions (TransactionId, ReceiverId, SenderId, Amount, Type, Timestamp) " +
+        String sql = "INSERT INTO burger (TransactionId, ReceiverId, SenderId, Amount, Type, Timestamp) " +
                      "VALUES (?, ?, ?, ?, ?, ?)";
         
         try (Connection conn = DriverManager.getConnection(DB_URL);
@@ -152,7 +152,7 @@ public class Read {
     }
    
     public void readAllTransactions() {
-        String sql = "SELECT * FROM transactions";
+        String sql = "SELECT * FROM burger";
         
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
