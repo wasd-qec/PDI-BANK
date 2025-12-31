@@ -37,70 +37,27 @@ public class Customer extends User {
         this.CreateDate = CreateDate;
     }
 
+    // Getters and Setters
+    public String getAccNo() { return accNo; }
+    public void setAccNo(String accNo) { this.accNo = accNo; }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
+    public double getBalance() { return balance; }
+    public void setBalance(double balance) { this.balance = balance; }
+    public long getPhoneNumber() { return PhoneNumber; }
+    public void setPhoneNumber(long phoneNumber) { PhoneNumber = phoneNumber; }
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
+    public String getBirthDate() { return BirthDate; }
+    public void setBirthDate(String birthDate) { BirthDate = birthDate; }
+    public String getCreateDate() { return CreateDate; }
+    public void setCreateDate(String createDate) { CreateDate = createDate; }
     @Override
     public String getRole() {
         return "Customer";
     }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-    
-
     @Override
     public String toString() {
         return super.toString() + "\nID: " + id;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
-
-    public long getPhoneNumber() {
-        return PhoneNumber;
-    }
-
-    public void setPhoneNumber(long phoneNumber) {
-        PhoneNumber = phoneNumber;
-    }
-
-    public String getAccNo() {
-        return accNo;
-    }
-
-    public void setAccNo(String accNo) {
-        this.accNo = accNo;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getBirthDate() {
-        return BirthDate;
-    }
-
-    public void setBirthDate(String birthDate) {
-        BirthDate = birthDate;
-    }
-
-    public String getCreateDate() {
-        return CreateDate;
-    }
-
-    public void setCreateDate(String createDate) {
-        CreateDate = createDate;
     }
 }

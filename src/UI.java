@@ -21,7 +21,6 @@ public class UI {
             switch (choice) {
                 case "1":
                     System.out.println("Admin role selected.");
-                    dbReader.readAllData();
                     return "1";
                 case "2":
                     System.out.println("User role selected.");

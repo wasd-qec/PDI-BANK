@@ -24,7 +24,7 @@ public class Read {
     
     public static void main(String[] args) {
         Read dbReader = new Read();
-        dbReader.readAllData();
+        dbReader.readAllUsers();
     }
     public void createTable() {
         String sql = "CREATE TABLE IF NOT EXISTS users (" +
@@ -50,7 +50,7 @@ public class Read {
         }
     }
     
-    public void insertData(String Id, String Name, String Password, double Balance, 
+    public void insertUser(String Id, String Name, String Password, double Balance, 
                                      long PhoneNumber, String AccNo, String Address, 
                                      String BirthDate, String CreateDate, boolean Active) {
         String sql = "INSERT INTO users (accNo, id, name, password, balance, PhoneNumber, address, BirthDate, CreateDate, Active) " +
@@ -96,7 +96,7 @@ public class Read {
         }
     }
     
-    public void readAllData() {
+    public void readAllUsers() {
         String sql = "SELECT * FROM users";
         
         try (Connection conn = DriverManager.getConnection(DB_URL);
@@ -131,5 +131,49 @@ public class Read {
         }
     }
     
+    public void InsertTransaction (String TransactionId , String ReceiverId, String SenderId, double Amount, String Type, String Timestamp) {
+        String sql = "INSERT INTO transactions (TransactionId, ReceiverId, SenderId, Amount, Type, Timestamp) " +
+                     "VALUES (?, ?, ?, ?, ?, ?)";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, TransactionId);
+            pstmt.setString(2, ReceiverId);
+            pstmt.setString(3, SenderId);
+            pstmt.setDouble(4, Amount);
+            pstmt.setString(5, Type);
+            pstmt.setString(6, Timestamp);
+            pstmt.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.out.println("Error inserting transaction: " + e.getMessage());
+        }
+    }
    
+    public void readAllTransactions() {
+        String sql = "SELECT * FROM transactions";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            
+            System.out.println("All transactions in database:\n");
+            
+            while (rs.next()) {
+                String TransactionId = rs.getString("TransactionId");
+                String ReceiverId = rs.getString("ReceiverId");
+                String SenderId = rs.getString("SenderId");
+                double Amount = rs.getDouble("Amount");
+                String Type = rs.getString("Type");
+                String Timestamp = rs.getString("Timestamp");
+                
+                System.out.printf("  • ID: %-8s | From: %-15s | To: %-15s | Amount: $%-10.2f | Type: %-10s | Time: %s\n", 
+                                  TransactionId, SenderId, ReceiverId, Amount, Type, Timestamp);
+            }
+            
+        } catch (SQLException e) {
+            System.out.println("Error reading transactions: " + e.getMessage());
+        }
+    }
 }

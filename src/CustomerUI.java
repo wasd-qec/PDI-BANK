@@ -48,17 +48,13 @@ public class CustomerUI {
                 System.out.println("  " + "-".repeat(80));
     }
     
-    public void checkBalance(Customer customer) { }
-    
+    public void checkBalance(Customer customer) { 
+        System.out.printf("\nYour current balance is: $%.2f\n", customer.getBalance());
+    }   
     public void deposit(Customer customer) { }
-    
     public void withdraw(Customer customer) { }
-    
     public void transfer(Customer customer) { }
-    
     public void viewTransactionHistory(Customer customer) { }
-    
     public void editProfile(Customer customer) { }
-    
     public void changePassword(Customer customer) { }
 }

@@ -15,6 +15,8 @@ public class Main {
         }
         else {
             System.out.println("Admin access granted.");
+            AdminUI adminUI = new AdminUI();
+            adminUI.showMenu();
         }
     }
         
