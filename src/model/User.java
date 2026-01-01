@@ -1,13 +1,14 @@
+package model;
+
+/**
+ * Abstract base class for all users
+ * Open/Closed: Can be extended without modification
+ */
 public abstract class User {
     private String name;
     private String password;
 
     public User(String name, String password) {
-        this.name = name;
-        this.password = password;
-    }
-
-    public User(String name, String password, int age) {
         this.name = name;
         this.password = password;
     }
