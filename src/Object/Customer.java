@@ -48,6 +48,30 @@ public class Customer {
     public void setName(String name) {this.Name = name;}
     public String getPassword() {return HashedPassword;}
     public void setPassword(String password) {this.HashedPassword = password;}
+
+    public void withdraw(double amount) {
+        if (amount > 0 && amount <= Balance) {
+            Balance -= amount;
+        } else {
+            throw new IllegalArgumentException("Invalid withdrawal amount");
+        }
+    }
+    public void deposit(double amount) {
+        if (amount > 0) {
+            Balance += amount;
+        } else {
+            throw new IllegalArgumentException("Invalid deposit amount");
+        }
+    }
+    public void transfer(Customer recipient, double amount) {
+        if (amount > 0 && amount <= Balance) {
+            this.withdraw(amount);
+            recipient.deposit(amount);
+        } else {
+            throw new IllegalArgumentException("Invalid transfer amount");
+        }
+    }
+}
 }
 
     
