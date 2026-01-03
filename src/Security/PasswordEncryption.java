@@ -1,35 +1,26 @@
+package Security;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
-/*
- * ===== AVAILABLE FUNCTIONS =====
- * 1. encryptPassword(String password) - Encrypts a password using SHA-256 with random salt
- * 2. verifyPassword(String plainPassword, String encryptedPassword) - Verifies if plain password matches encrypted password
- * 3. hashPassword(String password, byte[] salt) - Private helper method to hash password with given salt
- * ================================
- */
 public class PasswordEncryption {
     
     private static final int SALT_LENGTH = 16;
     
     public String encryptPassword(String password) throws NoSuchAlgorithmException {
-        // Generate a random salt
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[SALT_LENGTH];
         random.nextBytes(salt);
         
-        // Hash the password with the salt
         String hashedPassword = hashPassword(password, salt);
         
-        // Return salt:hash format
         return Base64.getEncoder().encodeToString(salt) + ":" + hashedPassword;
     }
     
     public boolean verifyPassword(String plainPassword, String encryptedPassword) {
         try {
-            // Split the encrypted password into salt and hash
             String[] parts = encryptedPassword.split(":");
             if (parts.length != 2) {
                 return false;
@@ -38,10 +29,8 @@ public class PasswordEncryption {
             byte[] salt = Base64.getDecoder().decode(parts[0]);
             String storedHash = parts[1];
             
-            // Hash the input password with the same salt
             String hashedInput = hashPassword(plainPassword, salt);
             
-            // Compare the hashes
             return hashedInput.equals(storedHash);
             
         } catch (Exception e) {
@@ -71,6 +60,7 @@ public class PasswordEncryption {
             }
             
         } catch (NoSuchAlgorithmException e) {
+            System.err.println("Error: SHA-256 algorithm not available");
             e.printStackTrace();
         }
     }

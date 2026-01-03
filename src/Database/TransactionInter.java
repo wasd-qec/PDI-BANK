@@ -1,0 +1,8 @@
+package Database;
+import java.util.List;
+
+import Object.Transaction;
+public interface TransactionInter{
+    void saveTransaction(Transaction transaction);
+    List<Transaction> ShowAllTransaction();
+}
