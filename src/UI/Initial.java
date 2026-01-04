@@ -1,6 +1,8 @@
 package UI;
 
 import java.util.Scanner;
+
+import Database.Admin;
 import UI.CustomerUI;
 import Object.Customer;
 
@@ -20,6 +22,8 @@ public class Initial {
         switch (roleChoice) {
             case 1:
                 System.out.println("Admin role selected.");
+                AdminUI adminUI = new AdminUI();
+                adminUI.AdminLoginPrompt();
                 break;
             case 2:
                 System.out.println("Customer role selected.");

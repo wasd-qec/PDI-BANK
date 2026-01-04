@@ -65,7 +65,9 @@ public class Customer {
             throw new IllegalArgumentException("Invalid deposit amount");
         }
     }
-    
+    public String toString() {
+        return "Account number:" + AccNo + ", Name: " + Name + ", Balance: " + Balance;
+}
 }
 
 
