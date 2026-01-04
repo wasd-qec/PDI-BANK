@@ -14,12 +14,12 @@ import java.sql.Statement;
 public class TransactionImple implements TransactionInter{
     
     public void saveTransaction(Transaction transaction) {
-      String sql = "INSERT INTO burger(TransactionID, ReciverID, SenderID, Amount, Type, Timestamp)" +
+      String sql = "INSERT INTO burger(TransactionID, ReceiverID, SenderID, Amount, Type, Timestamp)" +
                     "VALUES(?,?,?,?,?,?)";
       try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, transaction.getTransactionID());  
-            pstmt.setString(2, transaction.getReciverID());  
+            pstmt.setString(2, transaction.getReceiverID());  
             pstmt.setString(3, transaction.getSenderID());
             pstmt.setDouble(4, transaction.getAmount());
             pstmt.setString(5, transaction.getType());
@@ -55,6 +55,21 @@ public class TransactionImple implements TransactionInter{
             rs.getString("Timestamp"),
             rs.getString("Type")
         );
+    }
+    
+    public boolean exists(String transactionId) {
+        String sql = "SELECT COUNT(*) FROM burger WHERE TransactionID = ?";
+        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, transactionId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking transaction existence: " + e.getMessage());
+        }
+        return false;
     }
 
 }

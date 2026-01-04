@@ -8,35 +8,6 @@ public class Write {
     
     private static final String DB_URL = "jdbc:sqlite:mydatabase.db";
     
-    public static void main(String[] args) {
-        // Create database and table
-        createTable();
-        
-        // Insert some data
-        insertData("John Doe", 30, "john@example.com");
-        insertData("Jane Smith", 25, "jane@example.com");
-        insertData("Bob Johnson", 35, "bob@example.com");
-        
-        System.out.println("Data inserted successfully!");
-    }
-    
-    private static void createTable() {
-        String sql = "CREATE TABLE IF NOT EXISTS users (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "name TEXT NOT NULL," +
-                    "age INTEGER," +
-                    "email TEXT)";
-        
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             Statement stmt = conn.createStatement()) {
-            
-            stmt.execute(sql);
-            System.out.println("Table created successfully!");
-            
-        } catch (SQLException e) {
-            System.out.println("Error creating table: " + e.getMessage());
-        }
-    }
     
     private static void insertData(String name, int age, String email) {
         String sql = "INSERT INTO users (name, age, email) VALUES (?, ?, ?)";

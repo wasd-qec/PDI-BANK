@@ -13,7 +13,7 @@ import java.sql.ResultSet;
 
 
 
-public class CustomerInter implements CustomerImple {
+public class CustomerImple implements CustomerInter {
     
     public String getPasswordByAccNo(String accNo){
         String sql = "SELECT password FROM users WHERE accNo = ?";
@@ -23,6 +23,21 @@ public class CustomerInter implements CustomerImple {
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 return rs.getString("password");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public Customer getCustomerByAccNo(String accNo){
+        String sql = "SELECT * FROM users WHERE accNo = ?";
+        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, accNo);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return mapResultSetToCustomer(rs);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -80,6 +95,17 @@ public class CustomerInter implements CustomerImple {
             System.out.println("Error retrieving customers: " + e.getMessage());
         }
         return customers;
+    }
+    public void updateBalance(Customer customer){
+        String sql = "UPDATE users SET balance = ? WHERE id = ?";
+        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setDouble(1, customer.getBalance());
+            pstmt.setString(2, customer.getID());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
     private Customer mapResultSetToCustomer(ResultSet rs) throws SQLException {
         return new Customer(

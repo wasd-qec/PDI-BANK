@@ -49,29 +49,24 @@ public class Customer {
     public String getPassword() {return HashedPassword;}
     public void setPassword(String password) {this.HashedPassword = password;}
 
-    public void withdraw(double amount) {
+    public Boolean withdraw(double amount) {
         if (amount > 0 && amount <= Balance) {
             Balance -= amount;
+            return true;
         } else {
             throw new IllegalArgumentException("Invalid withdrawal amount");
         }
     }
-    public void deposit(double amount) {
+    public Boolean deposit(double amount) {
         if (amount > 0) {
             Balance += amount;
+            return true;
         } else {
             throw new IllegalArgumentException("Invalid deposit amount");
         }
     }
-    public void transfer(Customer recipient, double amount) {
-        if (amount > 0 && amount <= Balance) {
-            this.withdraw(amount);
-            recipient.deposit(amount);
-        } else {
-            throw new IllegalArgumentException("Invalid transfer amount");
-        }
-    }
+    
 }
-}
+
 
     
