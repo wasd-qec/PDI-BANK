@@ -1,9 +1,6 @@
 package UI;
 
 import java.util.Scanner;
-
-import Database.Admin;
-import UI.CustomerUI;
 import Object.Customer;
 
 public class Initial {

@@ -7,11 +7,15 @@ import Database.CustomerImple;
 import Database.TransactionImple;
 import Service.TransactionService;
 import Object.Customer;
+import Object.Transaction;
+import java.util.List;
 
 public class CustomerUI {
     UIcomponent ui = new UIcomponent();
     Scanner scanner = new Scanner(System.in);
     CustomerImple customerIN = new CustomerImple();
+    TransactionImple transactionImple = new TransactionImple();
+    TransactionService transactionService = new TransactionService(customerIN, transactionImple);
     
     public Customer LoginPrompt() {
         
@@ -32,34 +36,65 @@ public class CustomerUI {
 }   
 }
     public void displayMenu(Customer customer) {
+        Boolean Status = true;
+        while(Status){ 
         System.out.println("Customer Menu:");
         System.out.println("1. Transfer Funds");
         System.out.println("2. Withdraw Funds");
         System.out.println("3. Deposit Funds");
+        System.out.println("4. View Transaction History");
+        System.out.println("5. Logout");
 
         System.out.print("Select an option: ");
         int choice = scanner.nextInt();
-        switch (choice) {
-            case 1:
-                transferFunds(customer);
-                break;
-            case 2:
-                System.out.println("Displaying Cart...");
-                // Code to display cart
-                break;
-            case 3:
-                System.out.println("Proceeding to Checkout...");
-                // Code to handle checkout
-                break;
-            default:
-                System.out.println("Invalid choice. Please try again.");
-                displayMenu(customer);
-                break;
+        if (choice == 1) {
+            System.out.println("1. Transfer Funds");
+            transferFunds(customer);
+        } else if (choice == 2) {
+            System.out.println("2. Withdrawing Funds");
+            withdrawFunds(customer);
+            
+        } else if (choice == 3) {
+            System.out.println("3. Depositing Funds");
+            DepositFunds(customer);
+            
+        } else if (choice == 4) {
+            System.out.println("4. View Transaction History");
+            viewTransactionHistory(customer);
+            
+        } else if (choice == 5) {
+            System.out.println("5. Logout");
+            logout();
+            Status = false;
+        }
+        else {
+            System.out.println("Invalid choice. Please try again.");
         }
     }
+}
+    public void viewTransactionHistory(Customer customer) {
+        System.out.println("Transaction History:");
+        List<Transaction> transactions = transactionImple.GetTransactionByCustomer(customer);
+        for (Transaction transaction : transactions) {
+            System.out.printf("%-36s | %-10s | %-10s | %10.2f | %-10s | %s\n",
+                transaction.getTransactionID(),
+                transaction.getReceiverID(),
+                transaction.getSenderID(),
+                transaction.getAmount(),
+                transaction.getType(),
+                transaction.getTimestamp()
+            );
+        }
+    }
+    public void logout() {
+        System.out.println("Logging out...");
+        ui.pause();
+        ui.clearscreen();
+        Initial initial = new Initial();
+        initial.launch();
+    }
     public void transferFunds(Customer customer) {
-        TransactionService transactionService = new TransactionService(customerIN, new TransactionImple());
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine(); 
         System.out.println("Enter receipient account number:");
         String accountNumber = scanner.nextLine();
         System.out.println("Enter amount to transfer:");
@@ -67,5 +102,17 @@ public class CustomerUI {
         Customer receiver = customerIN.getCustomerByAccNo(accountNumber);
         System.out.println(transactionService.processTransfer(customer, receiver, amount));
 
+    }
+    public void withdrawFunds(Customer customer) {
+        scanner.nextLine();
+        System.out.println("Enter amount to Withdraw:");
+        double amount = scanner.nextDouble();
+        System.out.println(transactionService.WithdrawService(customer,amount));
+    }
+    public void DepositFunds(Customer customer) {
+        scanner.nextLine();
+        System.out.println("Enter amount to Deposit:");
+        double amount = scanner.nextDouble();
+        System.out.println(transactionService.DepositService(customer,amount));
     }
 }

@@ -15,3 +15,12 @@ i have show all transaction and show all customer
 will make a ui tmr, 
 cutomer: login -make all type of transaction,
 admin: login -can check all accounts and all transaction, 
+
+1/4/2026:
+will do:
+customer view their own transaction.
+admin can create account.
+will have to check if id and acc no exist yet;
+if possible do deactivate function.
+customer can update address, phone number, password;
+admin can update anything, 

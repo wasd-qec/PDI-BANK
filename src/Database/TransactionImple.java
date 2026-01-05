@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.Statement;
+import Object.Customer;
 
 
 public class TransactionImple implements TransactionInter{
@@ -56,7 +57,25 @@ public class TransactionImple implements TransactionInter{
             rs.getString("Type")
         );
     }
-    
+    public List<Transaction> GetTransactionByCustomer(Customer customer){
+        List<Transaction> transactions = new ArrayList<>();
+        String sql = "SELECT * FROM burger WHERE ReceiverID = ? OR SenderID = ? ORDER BY TimeStamp DESC";
+        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, customer.getID());
+            pstmt.setString(2, customer.getID());
+            ResultSet rs = pstmt.executeQuery();
+            
+            while (rs.next()) {
+            transactions.add(mapResultSetToTransaction(rs));
+            }
+            return transactions;
+    }
+    catch (SQLException e) {
+        System.out.println("Error retrieving transactions for customer: " + e.getMessage());
+    }
+    return null;
+    }
     public boolean exists(String transactionId) {
         String sql = "SELECT COUNT(*) FROM burger WHERE TransactionID = ?";
         try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());

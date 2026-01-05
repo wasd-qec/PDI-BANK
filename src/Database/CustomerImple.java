@@ -5,11 +5,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import Config.DatabaseConfig;
 import Object.Customer;
-import Object.Transaction;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 
 
@@ -46,8 +41,8 @@ public class CustomerImple implements CustomerInter {
     }
 
     public void save(Customer customer){
-        String sql = "INSERT INTO users(accNo, id, name, password, balance, PhoneNumber, address, BirthDate, CreateDate, Active" +
-                    " Values (?,?,?,?,?,?,?,?,?,?";
+        String sql = "INSERT INTO users(accNo, id, name, password, balance, PhoneNumber, address, BirthDate, CreateDate, Active) " +
+                    "VALUES (?,?,?,?,?,?,?,?,?,?)";
         try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
             PreparedStatement pstmt = conn.prepareStatement(sql)){
 
@@ -56,13 +51,12 @@ public class CustomerImple implements CustomerInter {
                 pstmt.setString(3, customer.getName());
                 pstmt.setString(4, customer.getPassword());
                 pstmt.setDouble(5, customer.getBalance());
-                pstmt.setInt(5, customer.getPhoneNumber());
-                pstmt.setString(6, customer.getAddress());
-                pstmt.setString(7, customer.getBirthDate());
-                pstmt.setString(8, customer.getCreateDate());
-                pstmt.setBoolean(9, customer.isActive());
+                pstmt.setInt(6, customer.getPhoneNumber());
+                pstmt.setString(7, customer.getAddress());
+                pstmt.setString(8, customer.getBirthDate());
+                pstmt.setString(9, customer.getCreateDate());
+                pstmt.setBoolean(10, customer.isActive());
                 pstmt.executeUpdate();
-
             }
             catch (Exception e){
                 System.out.println ("Error"+e.getMessage());
@@ -120,6 +114,34 @@ public class CustomerImple implements CustomerInter {
             rs.getString("CreateDate"),
             rs.getBoolean("Active")
         );
+    }
+    public boolean existsid(String id) {
+        String sql = "SELECT COUNT(*) FROM users WHERE id = ?";
+        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking transaction existence: " + e.getMessage());
+        }
+        return false;
+    }
+    public boolean existsAccNo(String accNo) {
+        String sql = "SELECT COUNT(*) FROM users WHERE accNo = ?";
+        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, accNo);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking transaction existence: " + e.getMessage());
+        }
+        return false;
     }
 
 }

@@ -7,8 +7,6 @@ import Database.TransactionInter;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import java.time.format.DateTimeFormatter;
-import Database.CustomerImple;
-import Database.TransactionImple;
 
 
 

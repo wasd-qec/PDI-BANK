@@ -8,7 +8,6 @@ import java.util.List;
 import Database.Admin;
 import Database.TransactionImple;
 import Object.Transaction;
-import Service.TransactionService;
 import Service.CustomerService;
 
 public class AdminUI {
@@ -31,29 +30,81 @@ public class AdminUI {
             System.out.println("Login failed! Invalid account number or password.");
         }
     }
-    
     public void displayMenu() {
         Boolean exit = true;
         while(exit){
         System.out.println("Admin Menu:");
-        System.out.println("1. View Reports");
-        System.out.println("2. Manage Users");
-        System.out.println("3. Exit");
+        System.out.println("1. View Transactions");
+        System.out.println("2. View Users");
+        System.out.println("3. Create new Account");
+        System.out.println("4. Exit");
         System.out.print("Select an option: ");
         int choice = scanner.nextInt();
-        if (choice < 1 || choice > 3) {
-            System.out.println("Invalid choice. Please try again.");
-        }
         if (choice == 1) {
             ViewTransactions();
         } else if (choice == 2) {
             ViewUsers();
         } else if (choice == 3) {
+            CreateNewAccounts();
+        } 
+        else if (choice == 4) {
             exit = false;
         }
+        else {
+            System.out.println("Invalid choice. Please try again.");
         }
     }
-
+    }
+    public void CreateNewAccounts() {
+        System.out.println("Creating New Account...");
+        scanner.nextLine();
+        CustomerService customerService = new CustomerService();
+        System.out.println("Enter Account Number: ");
+        String accountNumber = scanner.nextLine();
+        if (customerIN.existsAccNo(accountNumber)) {
+            System.out.println("Account Number already exists. Please try again with a different Account Number.");
+            return;
+        }
+        System.out.println("Enter ID:");
+        String id = scanner.nextLine();
+        if (customerIN.existsid(id)) {
+            System.out.println("ID already exists. Please try again with a different ID.");
+            return;
+        }
+        System.out.println("Enter Name: ");
+        String name = scanner.nextLine();
+        System.out.println("Enter Initial Deposit Amount: ");
+        double initialDeposit = scanner.nextDouble();
+        System.out.println("Enter Password: ");
+        scanner.nextLine(); 
+        String password = scanner.nextLine();
+        
+        System.out.println("Enter Phone Number:");
+        int phoneNumber = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Enter Address:");
+        String address = scanner.nextLine();
+        System.out.println("Enter Birth Date (YYYY-MM-DD):");
+        String birthDate = scanner.nextLine();
+        Customer newCustomer = customerService.createCustomerAccount(
+            id, 
+            accountNumber,
+            name, 
+            password, 
+            phoneNumber, 
+            address, 
+            initialDeposit, 
+            birthDate);
+            customerIN.save(newCustomer);
+        if (newCustomer != null) {
+            System.out.println("Account created successfully!");
+            System.out.println("Account Number: " + newCustomer.getAccNo());
+            System.out.println("Name: " + newCustomer.getName());
+            System.out.println("Initial Balance: " + newCustomer.getBalance());
+        } else {
+            System.out.println("Failed to create account.");
+        }
+    }
     public void ViewTransactions() {
         System.out.println("Viewing Reports...");
         List<Transaction> transactions = transactionimple.ShowAllTransaction();
@@ -70,7 +121,6 @@ public class AdminUI {
         }
         
     }
-
     public void ViewUsers() {
         System.out.println("Managing Users...");
         List<Customer> accounts = customerIN.getAllCustomers();
