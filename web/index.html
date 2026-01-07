@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABA Banking System</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Role Selection Screen -->
+    <div id="role-selection" class="screen active">
+        <div class="center-container">
+            <div class="login-box">
+                <div class="logo-panel">
+                    <span class="logo-text">ABA</span>
+                </div>
+                <h2 class="login-as-text">Login as</h2>
+                <button class="btn btn-primary" onclick="showScreen('customer-login')">Customer</button>
+                <button class="btn btn-primary" onclick="showScreen('admin-login')">Admin</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer Login Screen -->
+    <div id="customer-login" class="screen">
+        <div class="top-bar">
+            <button class="btn btn-back" onclick="showScreen('role-selection')">Back</button>
+        </div>
+        <div class="center-container">
+            <div class="login-form">
+                <div class="logo-panel">
+                    <span class="logo-text">ABA</span>
+                </div>
+                <h2 class="form-title">Login Your Account</h2>
+                <div class="form-group">
+                    <label for="customer-accno">Account Number</label>
+                    <input type="text" id="customer-accno" placeholder="Enter your account number">
+                </div>
+                <div class="form-group">
+                    <label for="customer-password">Password</label>
+                    <input type="password" id="customer-password" placeholder="Enter your password">
+                </div>
+                <button class="btn btn-primary" onclick="customerLogin()">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Login Screen -->
+    <div id="admin-login" class="screen">
+        <div class="top-bar">
+            <button class="btn btn-back" onclick="showScreen('role-selection')">Back</button>
+        </div>
+        <div class="center-container">
+            <div class="login-form">
+                <div class="logo-panel">
+                    <span class="logo-text">ABA</span>
+                </div>
+                <h2 class="form-title">Admin Login</h2>
+                <div class="form-group">
+                    <label for="admin-username">Username</label>
+                    <input type="text" id="admin-username" placeholder="Enter your username">
+                </div>
+                <div class="form-group">
+                    <label for="admin-password">Password</label>
+                    <input type="password" id="admin-password" placeholder="Enter your password">
+                </div>
+                <button class="btn btn-primary" onclick="adminLogin()">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer Dashboard Screen -->
+    <div id="customer-dashboard" class="screen">
+        <div class="dashboard-layout">
+            <!-- Sidebar -->
+            <div class="sidebar customer-sidebar">
+                <div class="logo-panel sidebar-logo">
+                    <span class="logo-text">ABA</span>
+                </div>
+                <nav class="sidebar-menu">
+                    <button class="menu-btn" onclick="showAccountDetail()">Account detail</button>
+                    <button class="menu-btn" onclick="showWithdrawModal()">Withdraw</button>
+                    <button class="menu-btn" onclick="showTransferModal()">Transfer</button>
+                    <button class="menu-btn" onclick="showDepositModal()">Deposit</button>
+                    <button class="menu-btn" onclick="showDeactivateConfirm()">Deactivate</button>
+                    <button class="menu-btn" onclick="showCustomerReport()">Report</button>
+                    <button class="menu-btn" onclick="customerLogout()">Log out</button>
+                </nav>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="main-content">
+                <div class="balance-card">
+                    <span class="balance-label">Balance</span>
+                    <span id="customer-balance" class="balance-amount">$0.00</span>
+                </div>
+                
+                <h3 class="section-title">Recent Transactions</h3>
+                
+                <div id="customer-transactions" class="transaction-list">
+                    <!-- Transactions will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard Screen -->
+    <div id="admin-dashboard" class="screen">
+        <div class="dashboard-layout">
+            <!-- Sidebar -->
+            <div class="sidebar admin-sidebar">
+                <div class="logo-panel sidebar-logo">
+                    <span class="logo-text">ABA</span>
+                </div>
+                <nav class="sidebar-menu" id="admin-sidebar-menu">
+                    <button class="menu-btn" onclick="adminSearch()">Search</button>
+                    <button class="menu-btn" id="create-account-btn" onclick="showCreateAccountModal()">Create Account</button>
+                    <button class="menu-btn" onclick="adminLogout()">Log out</button>
+                </nav>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="main-content admin-content">
+                <!-- Tab Header -->
+                <div class="tab-header">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" id="account-tab" onclick="switchAdminTab('account')">Account</button>
+                        <span class="tab-separator">|</span>
+                        <button class="tab-btn" id="transaction-tab" onclick="switchAdminTab('transaction')">Transaction</button>
+                    </div>
+                </div>
+                
+                <!-- Account List -->
+                <div id="account-list" class="content-panel active">
+                    <!-- Accounts will be loaded here -->
+                </div>
+                
+                <!-- Transaction List -->
+                <div id="transaction-list" class="content-panel">
+                    <!-- Transactions will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Account Detail Modal -->
+    <div id="account-detail-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Account Details</h3>
+                <button class="close-btn" onclick="closeModal('account-detail-modal')">&times;</button>
+            </div>
+            <div class="modal-body" id="account-detail-content">
+                <!-- Account details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div id="withdraw-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Withdraw</h3>
+                <button class="close-btn" onclick="closeModal('withdraw-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="withdraw-amount">Amount</label>
+                    <input type="number" id="withdraw-amount" placeholder="Enter amount" min="0" step="0.01">
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="closeModal('withdraw-modal')">Cancel</button>
+                    <button class="btn btn-primary" onclick="processWithdraw()">Withdraw</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deposit Modal -->
+    <div id="deposit-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Deposit</h3>
+                <button class="close-btn" onclick="closeModal('deposit-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="deposit-amount">Amount</label>
+                    <input type="number" id="deposit-amount" placeholder="Enter amount" min="0" step="0.01">
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="closeModal('deposit-modal')">Cancel</button>
+                    <button class="btn btn-primary" onclick="processDeposit()">Deposit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transfer Modal -->
+    <div id="transfer-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Transfer</h3>
+                <button class="close-btn" onclick="closeModal('transfer-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="transfer-recipient">Recipient Account Number</label>
+                    <input type="text" id="transfer-recipient" placeholder="Enter recipient account number">
+                </div>
+                <div class="form-group">
+                    <label for="transfer-amount">Amount</label>
+                    <input type="number" id="transfer-amount" placeholder="Enter amount" min="0" step="0.01">
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="closeModal('transfer-modal')">Cancel</button>
+                    <button class="btn btn-primary" onclick="processTransfer()">Transfer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Account Modal (Admin) -->
+    <div id="create-account-modal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3>Create New Account</h3>
+                <button class="close-btn" onclick="closeModal('create-account-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="new-name">Name</label>
+                        <input type="text" id="new-name" placeholder="Enter name">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">Password</label>
+                        <input type="password" id="new-password" placeholder="Enter password">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="new-phone">Phone Number</label>
+                        <input type="number" id="new-phone" placeholder="Enter phone number">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-address">Address</label>
+                        <input type="text" id="new-address" placeholder="Enter address">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="new-birthdate">Birth Date</label>
+                        <input type="date" id="new-birthdate">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-balance">Initial Balance</label>
+                        <input type="number" id="new-balance" placeholder="0" min="0" step="0.01" value="0">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="closeModal('create-account-modal')">Cancel</button>
+                    <button class="btn btn-primary" onclick="createAccount()">Create Account</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Modal -->
+    <div id="search-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="search-title">Search</h3>
+                <button class="close-btn" onclick="closeModal('search-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label id="search-label" for="search-input">Enter search term</label>
+                    <input type="text" id="search-input" placeholder="Search...">
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="closeModal('search-modal')">Cancel</button>
+                    <button class="btn btn-primary" onclick="executeSearch()">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Modal -->
+    <div id="report-modal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3>Transaction Report</h3>
+                <button class="close-btn" onclick="closeModal('report-modal')">&times;</button>
+            </div>
+            <div class="modal-body" id="report-content">
+                <!-- Report content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div id="confirm-modal" class="modal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h3 id="confirm-title">Confirm</h3>
+                <button class="close-btn" onclick="closeModal('confirm-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-message">Are you sure?</p>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="closeModal('confirm-modal')">Cancel</button>
+                    <button class="btn btn-primary" id="confirm-btn" onclick="confirmAction()">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Modal -->
+    <div id="alert-modal" class="modal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h3 id="alert-title">Alert</h3>
+                <button class="close-btn" onclick="closeModal('alert-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="alert-message"></p>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" onclick="closeModal('alert-modal')">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

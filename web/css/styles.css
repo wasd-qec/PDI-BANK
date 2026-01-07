@@ -1,0 +1,662 @@
+/* ABA Banking System - Styles matching Java Swing UI */
+
+/* ========== CSS Variables (from UIColors.java) ========== */
+:root {
+    --primary-bg: #668090;       /* Steel blue background (102, 128, 144) */
+    --panel-bg: #3d5260;         /* Darker panel background (61, 82, 96) */
+    --sidebar-bg: #3d5260;       /* Sidebar background (61, 82, 96) */
+    --text-color: #4fa6b7;       /* Teal text color (79, 166, 183) */
+    --white: #ffffff;
+    --black: #000000;
+    --button-bg: #e6e6e6;        /* Light gray button (230, 230, 230) */
+    --card-bg: #4b5f6e;          /* Card background (75, 95, 110) */
+    --header-bg: #c0c0c0;        /* Header background (192, 192, 192) */
+    --tab-active: #3d5260;       /* Active tab color */
+    --tab-inactive: #ffffff;     /* Inactive tab color */
+    --card-border: #8a2be2;      /* Purple border (138, 43, 226) */
+    --green: #228b22;            /* Forest green (34, 139, 34) */
+    --red: #b22222;              /* Fire brick (178, 34, 34) */
+    --logo-bg: #254061;          /* Logo background (37, 64, 97) */
+    --admin-sidebar-bg: #d9d9d9; /* Admin sidebar (217, 217, 217) */
+}
+
+/* ========== Reset & Base ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--primary-bg);
+    color: var(--white);
+    min-height: 100vh;
+}
+
+/* ========== Screen Management ========== */
+.screen {
+    display: none;
+    min-height: 100vh;
+}
+
+.screen.active {
+    display: block;
+}
+
+/* ========== Center Container ========== */
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* ========== Logo Panel ========== */
+.logo-panel {
+    background-color: var(--logo-bg);
+    padding: 15px 30px;
+    border-radius: 8px;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.logo-text {
+    color: var(--white);
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.sidebar-logo {
+    margin-bottom: 30px;
+}
+
+/* ========== Login Box (Role Selection) ========== */
+.login-box {
+    background-color: var(--panel-bg);
+    padding: 40px 60px;
+    border-radius: 10px;
+    text-align: center;
+    min-width: 300px;
+}
+
+.login-as-text {
+    color: var(--text-color);
+    font-size: 20px;
+    font-weight: normal;
+    margin-bottom: 30px;
+}
+
+/* ========== Login Form ========== */
+.login-form {
+    background-color: var(--primary-bg);
+    padding: 40px 50px;
+    text-align: center;
+    max-width: 400px;
+}
+
+.form-title {
+    color: var(--text-color);
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+/* ========== Form Elements ========== */
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    color: var(--text-color);
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: var(--white);
+    color: var(--black);
+}
+
+.form-group input:focus {
+    outline: 2px solid var(--text-color);
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+/* ========== Buttons ========== */
+.btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 120px;
+}
+
+.btn-primary {
+    background-color: var(--button-bg);
+    color: var(--black);
+}
+
+.btn-primary:hover {
+    background-color: #d4d4d4;
+}
+
+.btn-secondary {
+    background-color: #888;
+    color: var(--white);
+}
+
+.btn-secondary:hover {
+    background-color: #666;
+}
+
+.btn-back {
+    background-color: transparent;
+    color: var(--white);
+    border: 1px solid var(--white);
+    padding: 8px 20px;
+    font-size: 12px;
+}
+
+.btn-back:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.login-box .btn,
+.login-form .btn {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.login-box .btn:last-child,
+.login-form .btn:last-child {
+    margin-bottom: 0;
+}
+
+/* ========== Top Bar ========== */
+.top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 15px 20px;
+    z-index: 100;
+}
+
+/* ========== Dashboard Layout ========== */
+.dashboard-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ========== Sidebar ========== */
+.sidebar {
+    width: 160px;
+    padding: 20px 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.customer-sidebar {
+    background-color: var(--sidebar-bg);
+}
+
+.admin-sidebar {
+    background-color: var(--admin-sidebar-bg);
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.menu-btn {
+    background: none;
+    border: none;
+    color: var(--white);
+    text-align: left;
+    padding: 8px 5px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.customer-sidebar .menu-btn {
+    color: var(--white);
+}
+
+.customer-sidebar .menu-btn:hover {
+    color: var(--text-color);
+}
+
+.admin-sidebar .menu-btn {
+    color: var(--black);
+}
+
+.admin-sidebar .menu-btn:hover {
+    color: var(--text-color);
+}
+
+/* ========== Main Content ========== */
+.main-content {
+    flex: 1;
+    padding: 20px;
+    background-color: var(--primary-bg);
+}
+
+.admin-content {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ========== Balance Card ========== */
+.balance-card {
+    background-color: var(--card-bg);
+    padding: 20px 25px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.balance-label {
+    font-size: 16px;
+    color: var(--white);
+}
+
+.balance-amount {
+    font-size: 28px;
+    font-weight: bold;
+    color: var(--white);
+}
+
+/* ========== Section Title ========== */
+.section-title {
+    color: var(--text-color);
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* ========== Transaction List ========== */
+.transaction-list {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.transaction-card {
+    background-color: var(--card-bg);
+    padding: 15px 20px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 4px solid var(--card-border);
+}
+
+.transaction-info {
+    flex: 1;
+}
+
+.transaction-type {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.transaction-id {
+    font-size: 12px;
+    color: #aaa;
+}
+
+.transaction-details {
+    font-size: 12px;
+    color: #ccc;
+    margin-top: 3px;
+}
+
+.transaction-amount {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.transaction-amount.credit {
+    color: var(--green);
+}
+
+.transaction-amount.debit {
+    color: var(--red);
+}
+
+.transaction-date {
+    font-size: 11px;
+    color: #aaa;
+    text-align: right;
+    margin-top: 5px;
+}
+
+.no-data {
+    text-align: center;
+    color: #aaa;
+    font-style: italic;
+    padding: 20px;
+}
+
+/* ========== Tab Header (Admin) ========== */
+.tab-header {
+    background-color: var(--header-bg);
+    padding: 15px 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.tab-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.tab-btn {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+    background-color: var(--tab-active);
+    color: var(--white);
+}
+
+.tab-btn:not(.active) {
+    background-color: var(--tab-inactive);
+    color: var(--black);
+}
+
+.tab-btn:not(.active):hover {
+    background-color: #f0f0f0;
+}
+
+.tab-separator {
+    color: #666;
+    font-size: 20px;
+}
+
+/* ========== Content Panel ========== */
+.content-panel {
+    display: none;
+    flex: 1;
+    overflow-y: auto;
+    border: 2px solid var(--card-border);
+    border-radius: 5px;
+    padding: 15px;
+    background-color: var(--primary-bg);
+}
+
+.content-panel.active {
+    display: block;
+}
+
+/* ========== Account Card ========== */
+.account-card {
+    background-color: var(--card-bg);
+    padding: 15px 20px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-left: 4px solid var(--card-border);
+}
+
+.account-card:hover {
+    transform: translateX(5px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.account-info {
+    flex: 1;
+}
+
+.account-name {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.account-number {
+    font-size: 13px;
+    color: #aaa;
+}
+
+.account-balance {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--green);
+}
+
+/* ========== Admin Transaction Card ========== */
+.admin-transaction-card {
+    background-color: var(--card-bg);
+    padding: 15px 20px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border-left: 4px solid var(--card-border);
+}
+
+.admin-transaction-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.admin-transaction-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #ccc;
+    margin-bottom: 3px;
+}
+
+/* ========== Modal ========== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background-color: var(--panel-bg);
+    border-radius: 10px;
+    min-width: 400px;
+    max-width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-content.modal-small {
+    min-width: 350px;
+}
+
+.modal-content.modal-large {
+    min-width: 500px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header h3 {
+    color: var(--text-color);
+    font-size: 18px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: var(--white);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: var(--text-color);
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* ========== Account Detail Table ========== */
+.detail-table {
+    width: 100%;
+}
+
+.detail-table tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.detail-table td {
+    padding: 12px 10px;
+}
+
+.detail-table td:first-child {
+    color: var(--text-color);
+    font-weight: bold;
+    width: 40%;
+}
+
+.detail-table td:last-child {
+    color: var(--white);
+}
+
+/* ========== Report Table ========== */
+.report-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.report-table th {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    padding: 12px 10px;
+    text-align: left;
+}
+
+.report-table td {
+    padding: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--white);
+}
+
+.report-table tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* ========== Scrollbar ========== */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--panel-bg);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--card-bg);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #5a7a8a;
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 120px;
+        padding: 15px 10px;
+    }
+    
+    .modal-content {
+        min-width: 90%;
+    }
+    
+    .form-row {
+        flex-direction: column;
+    }
+    
+    .balance-card {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+}
+
+/* ========== Alert Types ========== */
+.alert-success .modal-header {
+    border-left: 4px solid var(--green);
+}
+
+.alert-error .modal-header {
+    border-left: 4px solid var(--red);
+}
+
+.alert-warning .modal-header {
+    border-left: 4px solid #ffa500;
+}
