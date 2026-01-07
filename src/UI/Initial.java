@@ -26,7 +26,12 @@ public class Initial {
                 System.out.println("Customer role selected.");
                  CustomerUI customerUI = new CustomerUI();
                  Customer customer = customerUI.LoginPrompt();
-                 if (customer != null) {
+                 if (!customer.isActive()){
+                    System.out.print("The account has been deactivated, please contact our nearest branch!");
+                    break;
+                 }
+                 if (customer != null ) {
+                    System.out.println("Login successful!");
                      customerUI.displayMenu(customer);
                  }
                 break;

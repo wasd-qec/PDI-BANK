@@ -11,4 +11,7 @@ public interface CustomerInter {
     void delete(String customerId);
     List<Customer> getAllCustomers();
     void updateBalance(Customer customer);
+    public boolean existsid(String id);
+    boolean existsAccNo(String accNo);
+
 }

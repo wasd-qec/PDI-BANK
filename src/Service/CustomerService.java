@@ -14,6 +14,10 @@ public class CustomerService {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     CustomerImple customerImple = new CustomerImple();
     
+    public boolean isAccountActive(String accNo) {
+        Customer customer = customerImple.getCustomerByAccNo(accNo);
+        return customer != null && customer.isActive();
+    }
     public Customer createCustomerAccount(String ID, String AccNo, String Name,
     String Password, int Phone, String Address, double Balance, String Birthdate){
     try {

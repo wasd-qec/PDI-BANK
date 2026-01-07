@@ -1,9 +1,11 @@
+package GUI;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class LoginFormAdmin extends JPanel {
+public class LoginFormUser extends JPanel {
 
-    public LoginFormAdmin(CardLayout cardLayout, JPanel mainPanel) {
+    public LoginFormUser(CardLayout cardLayout, JPanel mainPanel) {
 
         setBackground(new Color(96, 129, 146));
         setLayout(null);
@@ -12,11 +14,11 @@ public class LoginFormAdmin extends JPanel {
         backBtn.setBounds(20, 20, 80, 30);
         backBtn.addActionListener(e -> cardLayout.show(mainPanel, "selection"));
 
-        JLabel title = new JLabel("Admin Login", SwingConstants.CENTER);
+        JLabel title = new JLabel("Customer Login", SwingConstants.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 18));
         title.setBounds(230, 100, 240, 30);
 
-        JLabel accLabel = new JLabel("Username");
+        JLabel accLabel = new JLabel("Account Number");
         accLabel.setFont(new Font("Arial", Font.BOLD, 14));
         accLabel.setForeground(new Color(30, 70, 90));
         accLabel.setBounds(200, 170, 200, 25);
@@ -41,8 +43,8 @@ public class LoginFormAdmin extends JPanel {
         add(title);
         add(accLabel);
         add(accField);
-        add(passLabel);
         add(passField);
         add(loginBtn);
+        add(passLabel);
     }
 }

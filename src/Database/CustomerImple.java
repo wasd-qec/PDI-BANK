@@ -143,5 +143,42 @@ public class CustomerImple implements CustomerInter {
         }
         return false;
     }
+    public boolean IsActive(String accNo){
+        String sql = "SELECT Active FROM users WHERE accNo = ?";
+    try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+         PreparedStatement pstmt = conn.prepareStatement(sql)){
+            pstmt.setString(1, accNo);
+            ResultSet rs = pstmt.executeQuery();
+            boolean Active = rs.getBoolean("Active");
+            return Active;
+         } catch (Exception e){     
+            System.out.println("Error checking Status: " + e.getMessage());
+         }
+         return false;
+    }
+    public void DeactivateCustomer(String accNo){
+        String sql = "UPDATE users SET Active = ? WHERE accNo = ?";
+        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setBoolean(1, false);
+            pstmt.setString(2, accNo);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public void ActivateCustomer(String accNo){
+        String sql = "UPDATE users SET Active = ? WHERE accNo = ?";
+        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setBoolean(1, true);
+            pstmt.setString(2, accNo);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
 
 }

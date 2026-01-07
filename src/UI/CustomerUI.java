@@ -27,11 +27,9 @@ public class CustomerUI {
         String password = scanner.nextLine();
         String storedPassword = customerIN.getPasswordByAccNo(accountNumber);
         if (storedPassword != null && pe.verifyPassword(password, storedPassword)) {
-            System.out.println("Login successful!");
             return customerIN.getCustomerByAccNo(accountNumber);
         } else {
             System.out.println("Login failed! Invalid account number or password.");
-        
         }
 }   
 }
@@ -50,20 +48,28 @@ public class CustomerUI {
         if (choice == 1) {
             System.out.println("1. Transfer Funds");
             transferFunds(customer);
-        } else if (choice == 2) {
+        } 
+        else if (choice == 2) {
             System.out.println("2. Withdrawing Funds");
             withdrawFunds(customer);
-            
-        } else if (choice == 3) {
+        } 
+        else if (choice == 3) {
             System.out.println("3. Depositing Funds");
-            DepositFunds(customer);
-            
-        } else if (choice == 4) {
+            DepositFunds(customer); 
+        } 
+        else if (choice == 4) {
             System.out.println("4. View Transaction History");
             viewTransactionHistory(customer);
-            
-        } else if (choice == 5) {
-            System.out.println("5. Logout");
+        } 
+        else if (choice == 5) {
+            System.out.println("5. Deactivate Account");
+            customer.setActive(false);
+            customerIN.DeactivateCustomer(customer.getAccNo());
+            System.out.println("Account Deactivated Successfully.");
+            Status = false;
+        }
+        else if (choice == 8) {
+            System.out.println("8. Logout");
             logout();
             Status = false;
         }
