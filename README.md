@@ -32,8 +32,12 @@ admin can update anything,
 1/6/2026
 customer can deactivate own acc, theres activate and deactivate function.
 missing: admin cant deactivate yet but there is function to check but havent apply yet
-
 deactivate acc:
 can deactivate own acc admin can deactivate and activate
 customer cant login, so login check password first then check deactivate then block login
 during deactivating details can be update cant do any transaction so when transfer have to check active
+
+1/7/2026
+Can deactivate account,
+will:
+admin will delete account and update

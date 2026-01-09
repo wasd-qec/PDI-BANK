@@ -34,26 +34,44 @@ public class AdminUI {
         Boolean exit = true;
         while(exit){
         System.out.println("Admin Menu:");
-        System.out.println("1. View Transactions");
-        System.out.println("2. View Users");
-        System.out.println("3. Create new Account");
-        System.out.println("4. Exit");
+        System.out.println("1. Exit");
+        System.out.println("2. View Transactions");
+        System.out.println("3. View Users");
+        System.out.println("4. Create new Account");
+        System.out.println("5. Deactivate account");
+        System.out.println("6. Delete Accounts");
         System.out.print("Select an option: ");
         int choice = scanner.nextInt();
         if (choice == 1) {
-            ViewTransactions();
-        } else if (choice == 2) {
-            ViewUsers();
-        } else if (choice == 3) {
-            CreateNewAccounts();
-        } 
-        else if (choice == 4) {
             exit = false;
+        } else if (choice == 2) {
+            ViewTransactions();
+        } else if (choice == 3) {
+            ViewUsers();
+        } else if (choice == 4) {
+            CreateNewAccounts();
+        } else if (choice == 5) {
+            DeactivateAccount();
+        } else if (choice == 6) {
+            // Future feature can be added here
         }
         else {
             System.out.println("Invalid choice. Please try again.");
         }
     }
+    }
+    public void DeactivateAccount() {
+        System.out.println("Deactivating Account...");
+        scanner.nextLine();
+        System.out.println("Enter Account Number to Deactivate: ");
+        String accountNumber = scanner.nextLine();
+        Customer customer = customerIN.getCustomerByAccNo(accountNumber);
+        if (customer != null) {
+            customerIN.DeactivateCustomer(accountNumber);
+            System.out.println("Account " + accountNumber + " has been deactivated.");
+        } else {
+            System.out.println("Account not found. Please check the Account Number and try again.");
+        }
     }
     public void CreateNewAccounts() {
         System.out.println("Creating New Account...");
