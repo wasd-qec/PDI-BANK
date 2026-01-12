@@ -41,3 +41,9 @@ during deactivating details can be update cant do any transaction so when transf
 Can deactivate account,
 will:
 admin will delete account and update
+
+
+1/12/2026
+Updating and reset password use the same imple function, just need to rework the logic of how to apply
+update, activate and delete have functions just how to implement it?
+For updating i want to have placeholder of the account so that we can just change whats neccessary.

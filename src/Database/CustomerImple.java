@@ -91,11 +91,11 @@ public class CustomerImple implements CustomerInter {
         return customers;
     }
     public void updateBalance(Customer customer){
-        String sql = "UPDATE users SET balance = ? WHERE id = ?";
+        String sql = "UPDATE users SET balance = ? WHERE accNo = ?";
         try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setDouble(1, customer.getBalance());
-            pstmt.setString(2, customer.getID());
+            pstmt.setString(2, customer.getAccNo());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -178,7 +178,44 @@ public class CustomerImple implements CustomerInter {
             System.out.println(e.getMessage());
         }
     }
-
-
-
+    public void updateCustomerInfo(Customer customer){
+        String sql = "UPDATE users SET name = ?, PhoneNumber = ?, address = ?, BirthDate = ? WHERE id = ?";
+        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, customer.getName());
+            pstmt.setInt(2, customer.getPhoneNumber());
+            pstmt.setString(3, customer.getAddress());
+            pstmt.setString(4, customer.getBirthDate());
+            pstmt.setString(5, customer.getID());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public void updateCustomerPro(Customer customer){
+        String sql = "UPDATE users SET name = ?, PhoneNumber = ?, address = ?, id = ?,BirthDate = ? WHERE accNo = ?";
+        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, customer.getName());
+            pstmt.setInt(2, customer.getPhoneNumber());
+            pstmt.setString(3, customer.getAddress());
+            pstmt.setString(4, customer.getID());
+            pstmt.setString(5, customer.getBirthDate());
+            pstmt.setString(6, customer.getAccNo());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public void updatePassword(String accNo, String newPassword){
+        String sql = "UPDATE users SET password = ? WHERE accNo = ?";
+        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, newPassword);
+            pstmt.setString(2, accNo);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

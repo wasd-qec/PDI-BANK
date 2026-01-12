@@ -41,4 +41,15 @@ public class CustomerService {
         return null;
     }
     }
+    public void updatePassword(Customer customer, String newPassword) {
+        try {
+            String hashedPassword = pe.encryptPassword(newPassword);
+            customerImple.updatePassword(customer.getAccNo(), hashedPassword);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public Customer getCustomerByAccNo(String accNo) {
+        return customerImple.getCustomerByAccNo(accNo);
+    }
 }
