@@ -3,6 +3,9 @@ package ui;
 import model.Customer;
 import model.Transaction;
 import repository.*;
+import Search.CustomerSearchCriteria;
+import Search.SearchService;
+import Search.TransactionSearchCriteria;
 import security.PasswordEncryption;
 import service.AdminService;
 import service.CustomerService;
@@ -11,6 +14,7 @@ import ui.common.CardFactory;
 import ui.common.ComponentFactory;
 import ui.common.UIColors;
 import ui.dialog.DialogFactory;
+import ui.dialog.SearchFilterDialog;
 import ui.panel.LoginPanel;
 
 import javax.swing.*;
@@ -40,6 +44,7 @@ public class AdminSwingUI extends JFrame {
     private final AdminService adminService;
     private final CustomerService customerService;
     private final TransactionService transactionService;
+    private final SearchService searchService;
     
     public AdminSwingUI() {
         // Initialize dependencies
@@ -51,6 +56,7 @@ public class AdminSwingUI extends JFrame {
         this.adminService = new AdminService(adminRepository);
         this.customerService = new CustomerService(customerRepository, passwordEncryption);
         this.transactionService = new TransactionService(transactionRepository, customerRepository);
+        this.searchService = new SearchService(customerRepository, transactionRepository);
         
         // Initialize admin system
         adminService.initialize();
@@ -140,8 +146,8 @@ public class AdminSwingUI extends JFrame {
         }
         
         String[] menuItems = currentTab.equals("ACCOUNT") 
-            ? new String[]{"Search", "Create Account", "Log out"}
-            : new String[]{"Search", "Report"};
+            ? new String[]{"Search", "Filter", "Show All", "Create Account", "Log out"}
+            : new String[]{"Search", "Filter", "Show All", "Report", "Log out"};
         
         for (String item : menuItems) {
             JButton menuBtn = createAdminMenuButton(item);
@@ -359,6 +365,20 @@ public class AdminSwingUI extends JFrame {
                     searchTransactions();
                 }
             }
+            case "Filter" -> {
+                if (currentTab.equals("ACCOUNT")) {
+                    filterAccounts();
+                } else {
+                    filterTransactions();
+                }
+            }
+            case "Show All" -> {
+                if (currentTab.equals("ACCOUNT")) {
+                    refreshAccountList();
+                } else {
+                    refreshTransactionList();
+                }
+            }
             case "Create Account" -> showCreateAccountDialog();
             case "Report" -> DialogFactory.showTransactionReport(this, transactionService.getTransactionHistory());
             case "Log out" -> handleLogout();
@@ -366,11 +386,13 @@ public class AdminSwingUI extends JFrame {
     }
     
     private void searchAccounts() {
-        String searchTerm = DialogFactory.showSearchDialog(this, "Search Account", "Enter account number or name:");
-        if (searchTerm == null) return;
+        CustomerSearchCriteria criteria = SearchFilterDialog.showCustomerSearchDialog(this);
+        if (criteria == null || !criteria.hasSearchTerms()) {
+            return;
+        }
         
         accountListPanel.removeAll();
-        List<Customer> accounts = customerService.searchCustomers(searchTerm);
+        List<Customer> accounts = searchService.searchCustomers(criteria);
         
         for (Customer account : accounts) {
             JPanel accountCard = CardFactory.createAccountCard(account, 
@@ -379,7 +401,30 @@ public class AdminSwingUI extends JFrame {
         }
         
         if (accounts.isEmpty()) {
-            accountListPanel.add(createNoDataLabel("No accounts found matching: " + searchTerm));
+            accountListPanel.add(createNoDataLabel("No accounts found matching search criteria"));
+        }
+        
+        accountListPanel.revalidate();
+        accountListPanel.repaint();
+    }
+    
+    private void filterAccounts() {
+        CustomerSearchCriteria criteria = SearchFilterDialog.showCustomerFilterDialog(this);
+        if (criteria == null || !criteria.hasFilters()) {
+            return;
+        }
+        
+        accountListPanel.removeAll();
+        List<Customer> accounts = searchService.filterCustomers(criteria);
+        
+        for (Customer account : accounts) {
+            JPanel accountCard = CardFactory.createAccountCard(account, 
+                () -> DialogFactory.showAccountDetail(this, account));
+            accountListPanel.add(accountCard);
+        }
+        
+        if (accounts.isEmpty()) {
+            accountListPanel.add(createNoDataLabel("No accounts found matching filter criteria"));
         }
         
         accountListPanel.revalidate();
@@ -387,18 +432,41 @@ public class AdminSwingUI extends JFrame {
     }
     
     private void searchTransactions() {
-        String searchTerm = DialogFactory.showSearchDialog(this, "Search Transaction", "Enter transaction ID or user ID:");
-        if (searchTerm == null) return;
+        TransactionSearchCriteria criteria = SearchFilterDialog.showTransactionSearchDialog(this);
+        if (criteria == null || !criteria.hasSearchTerm()) {
+            return;
+        }
         
         transactionListPanel.removeAll();
-        List<Transaction> transactions = transactionService.searchTransactions(searchTerm);
+        List<Transaction> transactions = searchService.searchTransactions(criteria);
         
         for (Transaction t : transactions) {
             transactionListPanel.add(CardFactory.createAdminTransactionCard(t));
         }
         
         if (transactions.isEmpty()) {
-            transactionListPanel.add(createNoDataLabel("No transactions found matching: " + searchTerm));
+            transactionListPanel.add(createNoDataLabel("No transactions found matching search criteria"));
+        }
+        
+        transactionListPanel.revalidate();
+        transactionListPanel.repaint();
+    }
+    
+    private void filterTransactions() {
+        TransactionSearchCriteria criteria = SearchFilterDialog.showTransactionFilterDialog(this);
+        if (criteria == null || !criteria.hasFilters()) {
+            return;
+        }
+        
+        transactionListPanel.removeAll();
+        List<Transaction> transactions = searchService.filterTransactions(criteria);
+        
+        for (Transaction t : transactions) {
+            transactionListPanel.add(CardFactory.createAdminTransactionCard(t));
+        }
+        
+        if (transactions.isEmpty()) {
+            transactionListPanel.add(createNoDataLabel("No transactions found matching filter criteria"));
         }
         
         transactionListPanel.revalidate();
