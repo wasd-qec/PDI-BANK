@@ -41,7 +41,9 @@ public class CustomerUI {
         System.out.println("2. Withdraw Funds");
         System.out.println("3. Deposit Funds");
         System.out.println("4. View Transaction History");
-        System.out.println("5. Logout");
+        System.out.println("5. Deactivate Account");
+        System.out.println("6. View Account Information");
+        System.out.println("8. Logout");
 
         System.out.print("Select an option: ");
         int choice = scanner.nextInt();
@@ -68,6 +70,10 @@ public class CustomerUI {
             System.out.println("Account Deactivated Successfully.");
             Status = false;
         }
+        else if (choice == 6) {
+            System.out.println("6. View Account Information");
+            displayinfo(customer);
+        }
         else if (choice == 8) {
             System.out.println("8. Logout");
             logout();
@@ -78,6 +84,16 @@ public class CustomerUI {
         }
     }
 }
+    public void displayinfo(Customer customer) {
+        System.out.println("Account Information:");
+        System.out.printf("%-16s %-20s \n","Account Number:", customer.getAccNo());
+        System.out.printf("%-16s %-20s \n","Account ID:", customer.getID());
+        System.out.printf("%-16s %-20s \n","Phone Number:", customer.getPhoneNumber());
+        System.out.printf("%-16s %-20s \n","Address:", customer.getAddress());
+        System.out.printf("%-16s %-20s \n","Birth Date:", customer.getBirthDate());
+        System.out.printf("%-16s %.2f\n","Balance:", customer.getBalance());
+        System.out.printf("%-16s %-20s \n","Account Active:", customer.isActive());
+    }
     public void viewTransactionHistory(Customer customer) {
         System.out.println("Transaction History:");
         List<Transaction> transactions = transactionImple.GetTransactionByCustomer(customer);

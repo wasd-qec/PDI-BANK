@@ -35,14 +35,11 @@ public class TransactionService {
             System.out.println("Invalid transfer amount");
             return null;
         }
-        Transaction transaction = new Transaction(
-            generateTransactionId(),
+        Transaction transaction = createTransaction(
             receiver.getID(),
             sender.getID(),
             amount,
-            "TRANSFER",
-            LocalDateTime.now().format(FORMATTER)
-            
+            "TRANSFER"
         );
         
         transactionDB.saveTransaction(transaction);
@@ -77,20 +74,34 @@ public class TransactionService {
 
     private Transaction createTransaction(String receiverId, String senderId, double amount, String type) {
         return new Transaction(
-            generateTransactionId(),
+            generateTransactionId(type),
             receiverId,
             senderId,
             amount,
-            LocalDateTime.now().format(FORMATTER),
-            type
+            type,
+            LocalDateTime.now().format(FORMATTER)
         );
     }
     
 
-    private String generateTransactionId() {
+    private String generateTransactionId(String type) {
+    String prefix;
+    switch (type) {
+        case "DEPOSIT":
+            prefix = "TXN-D";
+            break;
+        case "WITHDRAW":
+            prefix = "TXN-W";
+            break;
+        case "TRANSFER":
+            prefix = "TXN-T";
+            break;
+        default:
+            prefix = "TXN-";
+    }
     String id;
     do {
-        id = "TXN-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        id = prefix + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     } while (transactionDB.exists(id)); 
     return id;
 }   
