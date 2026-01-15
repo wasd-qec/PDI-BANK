@@ -46,4 +46,7 @@ admin will delete account and update
 1/12/2026
 Updating and reset password use the same imple function, just need to rework the logic of how to apply
 update, activate and delete have functions just how to implement it?
-For updating i want to have placeholder of the account so that we can just change whats neccessary.
+For updating i want to have placeholder of the account so that we can just change whats neccessary.'
+
+1/15/2026
+imma just try to have all the function to search and filter for now
