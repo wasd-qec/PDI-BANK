@@ -1,43 +1,8 @@
-================================================================================
-                          PDI BANKING SYSTEM - USER INFO
-================================================================================
 
-CUSTOMERS
----------
-ID        Name            Age     Password (Plain)    Initial Balance
---------------------------------------------------------------------------------
-C1001     Heng            25      1280                $1000 - $5000 (random)
-C1002     Both            26      1250                $1000 - $5000 (random)
-C1003     Caro            27      1190                $1000 - $5000 (random)
-C1004     Rith            28      1150                $1000 - $5000 (random)
+ABC001    Heng    1280                
+ABC002    Both    1250                
+ABC003    Caro    1190                
+ABC004    Rith    1150                
+ABC005    Roth    1212
 
-ADMINS
-------
-Username              Password (Plain)
---------------------------------------------------------------------------------
-Administrator         admin123
-
-================================================================================
-                              LOGIN INSTRUCTIONS
-================================================================================
-
-Customer Login:
-  - Select option 1 from main menu
-  - Enter username (e.g., Heng, Both, Caro, Rith)
-  - Enter password (e.g., 1280, 1250, 1190, 1150)
-
-Admin Login:
-  - Select option 2 from main menu
-  - Username: Administrator
-  - Password: admin123
-
-================================================================================
-                              NOTES
-================================================================================
-
-- Passwords in Password.csv are stored as SHA-256 hashed values with salt
-- The plain passwords above are the original values before hashing
-- New customers registered through the app will have their passwords hashed
-- Balances are randomly generated between $1000-$5000 on startup
-
-================================================================================
+admin admin123

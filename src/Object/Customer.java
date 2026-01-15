@@ -48,6 +48,27 @@ public class Customer {
     public void setName(String name) {this.Name = name;}
     public String getPassword() {return HashedPassword;}
     public void setPassword(String password) {this.HashedPassword = password;}
+
+    public Boolean withdraw(double amount) {
+        if (amount > 0 && amount <= Balance) {
+            Balance -= amount;
+            return true;
+        } else {
+            throw new IllegalArgumentException("Invalid withdrawal amount");
+        }
+    }
+    public Boolean deposit(double amount) {
+        if (amount > 0) {
+            Balance += amount;
+            return true;
+        } else {
+            throw new IllegalArgumentException("Invalid deposit amount");
+        }
+    }
+    public String toString() {
+        return "Account number:" + AccNo + ", Name: " + Name + ", Balance: " + Balance;
 }
+}
+
 
     
