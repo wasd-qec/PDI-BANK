@@ -53,8 +53,8 @@ public class TransactionImple implements TransactionInter{
             rs.getString("ReceiverId"),
             rs.getString("SenderId"),
             rs.getDouble("Amount"),
-            rs.getString("Timestamp"),
-            rs.getString("Type")
+            rs.getString("Type"),
+            rs.getString("Timestamp")
         );
     }
     public List<Transaction> GetTransactionByCustomer(Customer customer){

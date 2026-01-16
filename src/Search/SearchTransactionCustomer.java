@@ -32,8 +32,8 @@ public class SearchTransactionCustomer {
             rs.getString("ReceiverID"),
             rs.getString("SenderID"),
             rs.getDouble("Amount"),
-            rs.getString("Timestamp"),
-            rs.getString("Type")
+            rs.getString("Type"),
+            rs.getString("Timestamp")
         );
     }
 }
