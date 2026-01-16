@@ -44,6 +44,76 @@ public class SearchCustomer {
 		return customers;
 	}
 
+	public List<Customer> filter(CustomerSearchCriteria criteria) {
+		List<Customer> customers = new ArrayList<>();
+		StringBuilder sql = new StringBuilder("SELECT * FROM users WHERE 1=1");
+		List<Object> params = new ArrayList<>();
+
+		// Exact search fields
+		if (criteria.getAccNo() != null && !criteria.getAccNo().isEmpty()) {
+			sql.append(" AND accNo = ?");
+			params.add(criteria.getAccNo());
+		}
+		if (criteria.getId() != null && !criteria.getId().isEmpty()) {
+			sql.append(" AND id = ?");
+			params.add(criteria.getId());
+		}
+		if (criteria.getName() != null && !criteria.getName().isEmpty()) {
+			sql.append(" AND name = ?");
+			params.add(criteria.getName());
+		}
+		if (criteria.getPhoneNumber() != null && !criteria.getPhoneNumber().isEmpty()) {
+			sql.append(" AND PhoneNumber = ?");
+			params.add(Integer.parseInt(criteria.getPhoneNumber()));
+		}
+
+		// Filter fields (partial match / range)
+		if (criteria.getNameFilter() != null && !criteria.getNameFilter().isEmpty()) {
+			sql.append(" AND name LIKE ?");
+			params.add("%" + criteria.getNameFilter() + "%");
+		}
+		if (criteria.getAddressFilter() != null && !criteria.getAddressFilter().isEmpty()) {
+			sql.append(" AND address LIKE ?");
+			params.add("%" + criteria.getAddressFilter() + "%");
+		}
+		if (criteria.getMinBalance() != null) {
+			sql.append(" AND balance >= ?");
+			params.add(criteria.getMinBalance());
+		}
+		if (criteria.getMaxBalance() != null) {
+			sql.append(" AND balance <= ?");
+			params.add(criteria.getMaxBalance());
+		}
+		if (criteria.getActive() != null) {
+			sql.append(" AND Active = ?");
+			params.add(criteria.getActive());
+		}
+		if (criteria.getCreateDateFrom() != null && !criteria.getCreateDateFrom().isEmpty()) {
+			sql.append(" AND CreateDate >= ?");
+			params.add(criteria.getCreateDateFrom());
+		}
+		if (criteria.getCreateDateTo() != null && !criteria.getCreateDateTo().isEmpty()) {
+			sql.append(" AND CreateDate <= ?");
+			params.add(criteria.getCreateDateTo());
+		}
+
+		sql.append(" ORDER BY name");
+
+		try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+			 PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+			for (int i = 0; i < params.size(); i++) {
+				pstmt.setObject(i + 1, params.get(i));
+			}
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				customers.add(mapResultSetToCustomer(rs));
+			}
+		} catch (SQLException e) {
+			System.out.println("Error filtering customers: " + e.getMessage());
+		}
+		return customers;
+	}
+
 	private Customer mapResultSetToCustomer(ResultSet rs) throws SQLException {
 		return new Customer(
 			rs.getString("name"),
