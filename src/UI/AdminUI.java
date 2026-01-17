@@ -13,6 +13,7 @@ import Search.SearchCustomer;
 import Search.SearchTransaction;
 import Search.CustomerSearchCriteria;
 import Search.TransactionSearchCriteria;
+import Database.Report;
 
 public class AdminUI {
     Scanner scanner = new Scanner(System.in);
@@ -21,6 +22,7 @@ public class AdminUI {
     CustomerImple customerIN = new CustomerImple();
     SearchCustomer searchCustomer = new SearchCustomer();
     SearchTransaction searchTransaction = new SearchTransaction();
+    Report report = new Report();
     
     public void AdminLoginPrompt() {
         PasswordEncryption pe = new PasswordEncryption();
@@ -48,6 +50,7 @@ public class AdminUI {
         System.out.println("6. Delete Accounts");
         System.out.println("7. Filter Transactions");
         System.out.println("8. Filter Customers");
+        System.out.println("9. View Bank Report");
         System.out.print("Select an option: ");
         int choice = scanner.nextInt();
         if (choice == 1) {
@@ -66,11 +69,18 @@ public class AdminUI {
             filterTransactionsMenu();
         } else if (choice == 8) {
             filterCustomersMenu();
+        } else if (choice == 9) {
+            viewBankReport();
         }
         else {
             System.out.println("Invalid choice. Please try again.");
         }
     }
+    }
+
+    public void viewBankReport() {
+        System.out.println("\nGenerating Bank Report...\n");
+        report.printSummaryReport();
     }
     public void DeactivateAccount() {
         System.out.println("Deactivating Account...");

@@ -1,6 +1,7 @@
 package Database;
 
 import Config.DatabaseConfig;
+import Object.Customer;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -144,5 +145,84 @@ public class Report {
         System.out.println("Total Transactions: " + getTotalTransactions());
         System.out.println("Total Balance:      $" + String.format("%.2f", getTotalBalance()));
         System.out.println("==========================================");
+    }
+
+    // Get total deposit amount for a specific customer
+    public double getCustomerTotalDeposit(Customer customer) {
+        String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE ReceiverID = ? AND Type = 'Deposit'";
+        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, customer.getID());
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("total");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error calculating customer deposits: " + e.getMessage());
+        }
+        return 0.0;
+    }
+
+    // Get total withdrawal amount for a specific customer
+    public double getCustomerTotalWithdrawal(Customer customer) {
+        String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE SenderID = ? AND Type = 'Withdrawal'";
+        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, customer.getID());
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("total");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error calculating customer withdrawals: " + e.getMessage());
+        }
+        return 0.0;
+    }
+
+    // Get total transfer out amount for a specific customer (money sent)
+    public double getCustomerTotalTransferOut(Customer customer) {
+        String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE SenderID = ? AND Type = 'Transfer'";
+        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, customer.getID());
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("total");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error calculating customer transfer out: " + e.getMessage());
+        }
+        return 0.0;
+    }
+
+    // Get total transfer in amount for a specific customer (money received)
+    public double getCustomerTotalTransferIn(Customer customer) {
+        String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE ReceiverID = ? AND Type = 'Transfer'";
+        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, customer.getID());
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("total");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error calculating customer transfer in: " + e.getMessage());
+        }
+        return 0.0;
+    }
+
+    // Print customer account summary
+    public void printCustomerAccountSummary(Customer customer) {
+        System.out.println("======== ACCOUNT SUMMARY ========");
+        System.out.println("Account Number:   " + customer.getAccNo());
+        System.out.println("Account Name:     " + customer.getName());
+        System.out.println("---------------------------------");
+        System.out.println("Total Deposits:     $" + String.format("%.2f", getCustomerTotalDeposit(customer)));
+        System.out.println("Total Withdrawals:  $" + String.format("%.2f", getCustomerTotalWithdrawal(customer)));
+        System.out.println("Transfer In:        $" + String.format("%.2f", getCustomerTotalTransferIn(customer)));
+        System.out.println("Transfer Out:       $" + String.format("%.2f", getCustomerTotalTransferOut(customer)));
+        System.out.println("---------------------------------");
+        System.out.println("Current Balance:    $" + String.format("%.2f", customer.getBalance()));
+        System.out.println("=================================");
     }
 }
