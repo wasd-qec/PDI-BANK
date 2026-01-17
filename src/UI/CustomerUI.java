@@ -1,14 +1,13 @@
-package UI;
+package ui;
 
 import java.util.Scanner;
 
-import Security.PasswordEncryption;
-import Database.CustomerImple;
-import Database.TransactionImple;
-import Database.Report;
-import Service.TransactionService;
-import Object.Customer;
-import Object.Transaction;
+import security.PasswordEncryption;
+import database.CustomerImple;
+import database.TransactionImple;
+import service.TransactionService;
+import object.Customer;
+import object.Transaction;
 import java.util.List;
 
 public class CustomerUI {
@@ -17,7 +16,6 @@ public class CustomerUI {
     CustomerImple customerIN = new CustomerImple();
     TransactionImple transactionImple = new TransactionImple();
     TransactionService transactionService = new TransactionService(customerIN, transactionImple);
-    Report report = new Report();
     
     public Customer LoginPrompt() {
         
@@ -45,7 +43,6 @@ public class CustomerUI {
         System.out.println("4. View Transaction History");
         System.out.println("5. Deactivate Account");
         System.out.println("6. View Account Information");
-        System.out.println("7. View Account Summary");
         System.out.println("8. Logout");
 
         System.out.print("Select an option: ");
@@ -76,10 +73,6 @@ public class CustomerUI {
         else if (choice == 6) {
             System.out.println("6. View Account Information");
             displayinfo(customer);
-        }
-        else if (choice == 7) {
-            System.out.println("7. View Account Summary");
-            viewAccountSummary(customer);
         }
         else if (choice == 8) {
             System.out.println("8. Logout");
@@ -143,10 +136,5 @@ public class CustomerUI {
         System.out.println("Enter amount to Deposit:");
         double amount = scanner.nextDouble();
         System.out.println(transactionService.DepositService(customer,amount));
-    }
-
-    public void viewAccountSummary(Customer customer) {
-        System.out.println("\nGenerating Account Summary...\n");
-        report.printCustomerAccountSummary(customer);
     }
 }

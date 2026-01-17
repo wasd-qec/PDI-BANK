@@ -1,7 +1,7 @@
-package UI;
+package ui;
 
 import java.util.Scanner;
-import Object.Customer;
+import object.Customer;
 
 public class Initial {
     Scanner scanner = new Scanner(System.in);

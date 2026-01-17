@@ -1,4 +1,4 @@
-package Config;
+package config;
 
 public class DatabaseConfig {
     private static final String DB_URL = "jdbc:sqlite:Asset/bank.db";

@@ -1,62 +1,110 @@
 package GUI;
 
+package GUI;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class LoginSelection extends JPanel {
+public class LoginSelection extends JFrame {
 
-    public LoginSelection(CardLayout cardLayout, JPanel mainPanel) {
+    public LoginSelection() {
+        setTitle("Login Selection");
+        setSize(600, 450);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        getContentPane().setBackground(new Color(213, 197, 186));
+        setLayout(null);
 
-        setBackground(new Color(96, 129, 146));
-        setLayout(new GridBagLayout());
-
-        JPanel card = new JPanel();
-        card.setPreferredSize(new Dimension(400, 350));
-        card.setBackground(new Color(58, 92, 110));
+        RoundedPanel card = new RoundedPanel(30);
+        card.setBackground(new Color(8, 25, 64));
+        card.setBounds(100, 50, 350, 330);
+        card.setOpaque(false);
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
+        add(card);
 
-        JLabel title = new JLabel("Login as");
-        title.setFont(new Font("Arial", Font.BOLD, 18));
-        title.setForeground(Color.WHITE);
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        ImageIcon logo = new ImageIcon("PDI-BANK/src/GUI/TMB_Logo.png");
+        Image scaled = logo.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
+        JLabel logoLabel = new JLabel(new ImageIcon(scaled));
+        logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // ===== LOGO PANEL (TOP-LEFT) =====
-        JPanel logoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        logoPanel.setOpaque(false); // keep card background color
-
-        ImageIcon abaIcon = new ImageIcon("aba.png");
-        Image abaImage = abaIcon.getImage().getScaledInstance(100, 50, Image.SCALE_SMOOTH);
-        JLabel logoLabel = new JLabel(new ImageIcon(abaImage));
-
-        logoPanel.add(logoLabel);
-
-        JButton adminBtn = new JButton("Admin");
-        adminBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JButton customerBtn = new JButton("Customer");
-        customerBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        // Same size
-        Dimension buttonSize = new Dimension(200, 40);
-        adminBtn.setPreferredSize(buttonSize);
-        customerBtn.setPreferredSize(buttonSize);
-        adminBtn.setMaximumSize(buttonSize);
-        customerBtn.setMaximumSize(buttonSize);
-
-        adminBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        customerBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        adminBtn.addActionListener(e -> cardLayout.show(mainPanel, "admin"));
-
-        customerBtn.addActionListener(e -> cardLayout.show(mainPanel, "user"));
-
-        card.add(Box.createVerticalStrut(60));
-        card.add(title);
-        card.add(Box.createVerticalStrut(30));
-        card.add(customerBtn);
         card.add(Box.createVerticalStrut(20));
+        card.add(logoLabel);
+
+        JLabel title = new JLabel("Login Selection");
+        title.setForeground(Color.WHITE);
+        title.setFont(new Font("Serif", Font.BOLD, 28));
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        card.add(Box.createVerticalStrut(10));
+        card.add(title);
+
+        RoundedButton customerBtn = new RoundedButton("Customer");
+        customerBtn.setMaximumSize(new Dimension(180, 40));
+        customerBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        card.add(Box.createVerticalStrut(25));
+        card.add(customerBtn);
+
+        RoundedButton adminBtn = new RoundedButton("Admin");
+        adminBtn.setMaximumSize(new Dimension(180, 40));
+        adminBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        card.add(Box.createVerticalStrut(15));
         card.add(adminBtn);
 
-        add(card);
+        // ====== BUTTON EVENTS ======
+        customerBtn.addActionListener(e -> {
+            dispose();
+            new SignInCustomer();
+        });
+
+        adminBtn.addActionListener(e -> {
+            dispose();
+            new SignInAdmin(); // or AdminSignInPage if you make one
+        });
+
+        setVisible(true);
+    }
+
+    class RoundedPanel extends JPanel {
+        private int radius;
+
+        RoundedPanel(int radius) {
+            this.radius = radius;
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(getBackground());
+            g2.fillRoundRect(0, 0, getWidth(), getHeight(), radius, radius);
+            super.paintComponent(g);
+        }
+    }
+
+    class RoundedButton extends JButton {
+        RoundedButton(String text) {
+            super(text);
+            setFocusPainted(false);
+            setBorderPainted(false);
+            setContentAreaFilled(false);
+            setForeground(Color.BLACK);
+            setFont(new Font("Segoe UI", Font.BOLD, 16));
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            // FIXED ROUND VALUES (proper button shape)
+            g2.setColor(new Color(218, 186, 121));
+            g2.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);
+
+            super.paintComponent(g);
+            g2.dispose();
+        }
+    }
+
+    public static void main(String[] args) {
+        new LoginSelection();
     }
 }
