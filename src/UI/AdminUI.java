@@ -1,14 +1,14 @@
-package UI;
+package ui;
 
-import Object.Customer;
-import Security.PasswordEncryption;
-import Database.CustomerImple;
+import object.Customer;
+import security.PasswordEncryption;
+import database.CustomerImple;
 import java.util.Scanner;
 import java.util.List;
-import Database.Admin;
-import Database.TransactionImple;
-import Object.Transaction;
-import Service.CustomerService;
+import database.Admin;
+import database.TransactionImple;
+import object.Transaction;
+import service.CustomerService;
 
 public class AdminUI {
     Scanner scanner = new Scanner(System.in);

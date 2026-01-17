@@ -1,13 +1,13 @@
-package UI;
+package ui;
 
 import java.util.Scanner;
 
-import Security.PasswordEncryption;
-import Database.CustomerImple;
-import Database.TransactionImple;
-import Service.TransactionService;
-import Object.Customer;
-import Object.Transaction;
+import security.PasswordEncryption;
+import database.CustomerImple;
+import database.TransactionImple;
+import service.TransactionService;
+import object.Customer;
+import object.Transaction;
 import java.util.List;
 
 public class CustomerUI {
