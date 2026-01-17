@@ -19,7 +19,7 @@ public class MainFrame extends JFrame {
         mainPanel = new JPanel(cardLayout);
 
         // Create pages
-        LoginSelection selection = new LoginSelection(cardLayout, mainPanel);
+        LoginSelection selection = new LoginSelection();
         LoginFormAdmin adminForm = new LoginFormAdmin(cardLayout, mainPanel);
         LoginFormUser userForm = new LoginFormUser(cardLayout, mainPanel);
 

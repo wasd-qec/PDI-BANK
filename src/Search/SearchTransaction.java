@@ -1,4 +1,4 @@
-package search;
+package Search;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,8 +9,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import config.DatabaseConfig;
-import object.Transaction;
+import Config.DatabaseConfig;
+import Object.Transaction;
 
 public class SearchTransaction {
     
