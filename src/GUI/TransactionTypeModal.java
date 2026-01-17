@@ -39,6 +39,21 @@ public class TransactionTypeModal extends JDialog {
         JButton withdrawBtn = styledBtn("Withdraw", 195, 110);
         JButton transferBtn = styledBtn("Transfer", 310, 110);
 
+        depositBtn.addActionListener(e -> {
+            dispose(); // close this modal
+            new DepositTransactionModal(parent); // open the next modal
+        });
+
+        withdrawBtn.addActionListener(e -> {
+            dispose();
+            System.out.println("Withdraw chosen"); // or later new WithdrawModal(...)
+        });
+
+        transferBtn.addActionListener(e -> {
+            dispose();
+            new TransferTransactionModal(parent);
+        });
+
         panel.add(depositBtn);
         panel.add(withdrawBtn);
         panel.add(transferBtn);

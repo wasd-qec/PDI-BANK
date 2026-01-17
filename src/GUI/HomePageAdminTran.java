@@ -221,17 +221,32 @@ public class HomePageAdminTran extends JFrame {
             depositBtn.setForeground(Color.WHITE);
             panel.add(depositBtn);
 
+            depositBtn.addActionListener(e -> {
+                dispose();
+                new DepositTransactionModal(parent);
+            });
+
             RoundedButton withdrawBtn = new RoundedButton("Withdraw");
             withdrawBtn.setBounds(195, 110, 110, 40);
             withdrawBtn.setBackground(new Color(8, 25, 64));
             withdrawBtn.setForeground(Color.WHITE);
             panel.add(withdrawBtn);
 
+            withdrawBtn.addActionListener(e -> {
+                dispose();
+                new WithdrawTransactionModal(parent);
+            });
+
             RoundedButton transferBtn = new RoundedButton("Transfer");
             transferBtn.setBounds(310, 110, 110, 40);
             transferBtn.setBackground(new Color(8, 25, 64));
             transferBtn.setForeground(Color.WHITE);
             panel.add(transferBtn);
+
+            transferBtn.addActionListener(e -> {
+                dispose();
+                new TransferTransactionModal(parent);
+            });
 
             // Cancel label
             JLabel cancelLabel = new JLabel("Cancel", SwingConstants.CENTER);

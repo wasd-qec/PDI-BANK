@@ -28,7 +28,7 @@ public class SignInCustomer extends JFrame {
         add(card);
 
         // --- LOGO ---
-        ImageIcon logo = new ImageIcon("TMB_Logo.png");
+        ImageIcon logo = new ImageIcon("PDI-BANK/src/GUI/TMB_Logo.png");
         Image scaledImg = logo.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
         JLabel logoLabel = new JLabel(new ImageIcon(scaledImg));
         logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
