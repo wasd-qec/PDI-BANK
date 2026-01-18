@@ -6,7 +6,8 @@ import java.awt.*;
 public class TransferTransactionModal extends JDialog {
 
     public TransferTransactionModal(JFrame parent) {
-        super(parent, true);
+        super(parent, false);
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setSize(550, 470);
         setUndecorated(true);
         setLocationRelativeTo(parent);

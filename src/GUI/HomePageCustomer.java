@@ -238,6 +238,7 @@ public class HomePageCustomer extends JFrame {
         confirmBtn.addActionListener(e -> {
             successDialog.dispose();
             dispose();
+            new LoginSelection();
         });
         successDialog.add(confirmBtn);
 
@@ -268,7 +269,26 @@ public class HomePageCustomer extends JFrame {
         reportField.setBackground(new Color(218, 186, 121));
         reportField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         reportField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        reportField.setForeground(Color.GRAY);
         reportField.setText("Enter your report");
+
+        reportField.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                if (reportField.getText().equals("Enter your report")) {
+                    reportField.setText("");
+                    reportField.setForeground(Color.BLACK);
+                }
+            }
+
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (reportField.getText().isEmpty()) {
+                    reportField.setForeground(Color.GRAY);
+                    reportField.setText("Enter your report");
+                }
+            }
+        });
         reportDialog.add(reportField);
 
         RoundedButton submitBtn = new RoundedButton("Submit");
@@ -392,34 +412,72 @@ public class HomePageCustomer extends JFrame {
             int yPos = 55;
 
             if (isTransfer) {
-                JLabel recipientLabel = new JLabel("Recipient Account number");
-                recipientLabel.setForeground(new Color(30, 50, 85));
-                recipientLabel.setBounds(20, yPos, 200, 20);
-                add(recipientLabel);
+            JLabel recipientLabel = new JLabel("Recipient Account number");
+            recipientLabel.setForeground(new Color(30, 50, 85));
+            recipientLabel.setBounds(20, yPos, 200, 20);
+            add(recipientLabel);
 
-                JTextField recipientField = new JTextField();
-                recipientField.setBounds(20, yPos + 25, 340, 35);
-                recipientField.setBackground(new Color(218, 186, 121));
-                recipientField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-                recipientField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-                recipientField.setText("Enter recipient account number");
-                add(recipientField);
+            JTextField recipientField = new JTextField();
+            recipientField.setBounds(20, yPos + 25, 340, 35);
+            recipientField.setBackground(new Color(218, 186, 121));
+            recipientField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+            recipientField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+            recipientField.setForeground(Color.GRAY);
+            recipientField.setText("Enter recipient account number");
+            
+            recipientField.addFocusListener(new java.awt.event.FocusAdapter() {
+                @Override
+                public void focusGained(java.awt.event.FocusEvent e) {
+                    if (recipientField.getText().equals("Enter recipient account number")) {
+                        recipientField.setText("");
+                        recipientField.setForeground(Color.BLACK);
+                    }
+                }
 
-                yPos += 70;
+                @Override
+                public void focusLost(java.awt.event.FocusEvent e) {
+                    if (recipientField.getText().isEmpty()) {
+                        recipientField.setForeground(Color.GRAY);
+                        recipientField.setText("Enter recipient account number");
+                    }
+                }
+            });
+            add(recipientField);
+
+            yPos += 70;
+        }
+
+        JLabel amountLabel = new JLabel("Amount");
+        amountLabel.setForeground(new Color(30, 50, 85));
+        amountLabel.setBounds(20, yPos, 150, 20);
+        add(amountLabel);
+
+        JTextField amountField = new JTextField();
+        amountField.setBounds(20, yPos + 25, 340, 35);
+        amountField.setBackground(new Color(218, 186, 121));
+        amountField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        amountField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        amountField.setForeground(Color.GRAY);
+        amountField.setText("Enter amount");
+
+        amountField.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                if (amountField.getText().equals("Enter amount")) {
+                    amountField.setText("");
+                    amountField.setForeground(Color.BLACK);
+                }
             }
 
-            JLabel amountLabel = new JLabel("Amount");
-            amountLabel.setForeground(new Color(30, 50, 85));
-            amountLabel.setBounds(20, yPos, 150, 20);
-            add(amountLabel);
-
-            JTextField amountField = new JTextField();
-            amountField.setBounds(20, yPos + 25, 340, 35);
-            amountField.setBackground(new Color(218, 186, 121));
-            amountField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-            amountField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-            amountField.setText("Enter amount");
-            add(amountField);
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (amountField.getText().isEmpty()) {
+                    amountField.setForeground(Color.GRAY);
+                    amountField.setText("Enter amount");
+                }
+            }
+        });
+        add(amountField);
 
             RoundedButton cancelBtn = new RoundedButton("Cancel");
             cancelBtn.setBounds(70, isTransfer ? 215 : 180, 110, 35);

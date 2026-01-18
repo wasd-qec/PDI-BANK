@@ -6,7 +6,8 @@ import java.awt.*;
 public class WithdrawTransactionModal extends JDialog {
 
     public WithdrawTransactionModal(JFrame parent) {
-        super(parent, true);
+        super(parent, false);
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setSize(550, 420);
         setUndecorated(true);
         setLocationRelativeTo(parent);
@@ -88,6 +89,7 @@ public class WithdrawTransactionModal extends JDialog {
         field.setBackground(new Color(218, 186, 121));
         field.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         field.setOpaque(true);
+
 
         field.setText(placeholder);
         field.setForeground(new Color(80, 80, 80));

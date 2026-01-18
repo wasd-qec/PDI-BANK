@@ -6,8 +6,10 @@ import java.awt.*;
 public class HomePageAdminAccount extends JFrame {
 
     public HomePageAdminAccount() {
+        
         setTitle("Home Page");
         setSize(1000, 650);
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null);

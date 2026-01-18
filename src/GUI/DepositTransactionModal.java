@@ -6,11 +6,13 @@ import java.awt.*;
 public class DepositTransactionModal extends JDialog {
 
     public DepositTransactionModal(JFrame parent) {
-        super(parent, true);
+        super(parent, false);
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setSize(550, 420);
         setUndecorated(true);
         setLocationRelativeTo(parent);
         setBackground(new Color(0, 0, 0, 0));
+        
 
         setShape(new java.awt.geom.RoundRectangle2D.Double(0, 0, 550, 420, 35, 35));
 
