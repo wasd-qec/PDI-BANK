@@ -100,11 +100,49 @@ public class HomePageCustomer extends JFrame {
         add(recentLabel);
 
         // TRANSACTION BOXES
-        for (int i = 0; i < 3; i++) {
+        String[][] transactions = {
+            {"DEPOSIT", "TXN-9F01296", "+$5000", "2026-01-07  16:29:13"},
+            {"DEPOSIT", "TXN-17616E2D", "+$1000", "2026-01-01  23:23:03"},
+            {"WITHDRAWAL", "TXN-21FE1BF5", "-$1200", "2026-01-01  00:41:25"}
+        };
+
+        int y = 270;
+        for (String[] trans : transactions) {
             RoundedPanel box = new RoundedPanel(20);
             box.setBackground(new Color(213, 197, 186));
-            box.setBounds(230, 270 + (i * 65), 670, 50);
+            box.setBounds(230, y, 670, 50);
+            box.setLayout(null);
             add(box);
+            
+            JLabel typeLabel = new JLabel(trans[0]);
+            typeLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+            typeLabel.setForeground(new Color(30, 50, 85));
+            typeLabel.setBounds(20, 5, 100, 20);
+            box.add(typeLabel);
+            
+            JLabel txnLabel = new JLabel(trans[1]);
+            txnLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+            txnLabel.setForeground(new Color(80, 80, 80));
+            txnLabel.setBounds(20, 25, 150, 15);
+            box.add(txnLabel);
+            
+            JLabel amountLabel = new JLabel(trans[2]);
+            amountLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+            if (trans[2].startsWith("+")) {
+                amountLabel.setForeground(new Color(34, 139, 34)); // Green for deposit
+            } else {
+                amountLabel.setForeground(new Color(220, 20, 60)); // Red for withdrawal
+            }
+            amountLabel.setBounds(570, 5, 80, 20);
+            box.add(amountLabel);
+            
+            JLabel dateLabel = new JLabel(trans[3]);
+            dateLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+            dateLabel.setForeground(new Color(100, 100, 100));
+            dateLabel.setBounds(520, 25, 140, 15);
+            box.add(dateLabel);
+            
+            y += 65;
         }
 
         setVisible(true);
@@ -297,43 +335,6 @@ public class HomePageCustomer extends JFrame {
         reportDialog.add(submitBtn);
 
         reportDialog.setVisible(true);
-    }
-
-    private void showTransactionDialog() {
-        JDialog transDialog = new JDialog(this, "Transaction History", true);
-        transDialog.setSize(400, 300);
-        transDialog.setLocationRelativeTo(this);
-        transDialog.setResizable(false);
-        transDialog.getContentPane().setBackground(new Color(245, 240, 235));
-        transDialog.setLayout(null);
-
-        JLabel titleLabel = new JLabel("Transaction History");
-        titleLabel.setFont(new Font("Serif", Font.BOLD, 18));
-        titleLabel.setForeground(new Color(30, 50, 85));
-        titleLabel.setBounds(20, 20, 200, 25);
-        transDialog.add(titleLabel);
-
-        String[] columnNames = {"Date", "Type", "Amount"};
-        Object[][] data = {
-            {"2025-01-15", "Deposit", "+$500.00"},
-            {"2025-01-10", "Withdrawal", "-$200.00"},
-            {"2025-01-05", "Transfer", "-$100.00"},
-            {"2024-12-28", "Deposit", "+$1000.00"},
-            {"2024-12-20", "Withdrawal", "-$50.00"}
-        };
-
-        JTable table = new JTable(data, columnNames);
-        table.setEnabled(false);
-        JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(20, 55, 360, 200);
-        transDialog.add(scrollPane);
-
-        RoundedButton closeBtn = new RoundedButton("Close");
-        closeBtn.setBounds(160, 265, 100, 35);
-        closeBtn.addActionListener(e -> transDialog.dispose());
-        transDialog.add(closeBtn);
-
-        transDialog.setVisible(true);
     }
 
     private void showLogoutDialog() {

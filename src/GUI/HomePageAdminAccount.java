@@ -72,12 +72,44 @@ public class HomePageAdminAccount extends JFrame {
         add(accLabel);
 
         // ========== ACCOUNT BOXES ==========
+        String[][] accounts = {
+            {"Both", "ABC002", "$12,500.5"},
+            {"Caro", "ABC003", "$26,599.75"},
+            {"Heng", "ABC001", "-$33,501"},
+            {"Rith", "ABC004", "$32,500"},
+            {"Inaco", "ABC005", "$35,400"}
+        };
+
         int y = 170;
-        for (int i = 0; i < 5; i++) {
+        for (String[] account : accounts) {
             RoundedPanel accBox = new RoundedPanel(20);
             accBox.setBackground(new Color(235, 235, 235));
             accBox.setBounds(240, y, 710, 60);
+            accBox.setLayout(null);
             add(accBox);
+            
+            JLabel nameLabel = new JLabel(account[0]);
+            nameLabel.setFont(new Font("Segoe UI", Font.BOLD, 15));
+            nameLabel.setForeground(new Color(30, 50, 85));
+            nameLabel.setBounds(20, 10, 150, 20);
+            accBox.add(nameLabel);
+            
+            JLabel accNumLabel = new JLabel(account[1]);
+            accNumLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+            accNumLabel.setForeground(new Color(100, 100, 100));
+            accNumLabel.setBounds(20, 35, 150, 15);
+            accBox.add(accNumLabel);
+            
+            JLabel balanceLabel = new JLabel(account[2]);
+            balanceLabel.setFont(new Font("Segoe UI", Font.BOLD, 15));
+            if (account[2].startsWith("-")) {
+                balanceLabel.setForeground(new Color(220, 20, 60)); // Red for negative
+            } else {
+                balanceLabel.setForeground(new Color(34, 139, 34)); // Green for positive
+            }
+            balanceLabel.setBounds(600, 20, 100, 25);
+            accBox.add(balanceLabel);
+            
             y += 70;
         }
 

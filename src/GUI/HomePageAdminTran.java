@@ -72,13 +72,66 @@ public class HomePageAdminTran extends JFrame {
         accLabel.setBounds(240, 130, 200, 40);
         add(accLabel);
 
-        // ========== ACCOUNT BOXES ==========
+        // ========== TRANSACTION BOXES ==========
+        String[][] transactions = {
+            {"Withdrawal", "TXN-dhsasffb", "ABC003", "-$5000", "2026-01-12  16:29:13", "Receiver: ABC001"},
+            {"Deposit", "TXN-9F01296", "ABC001", "+$5000", "2026-01-07  16:29:13", "Receiver: ABC001"},
+            {"Deposit", "TXN-17616E2D", "ABC001", "+$1000", "2026-01-01  23:23:03", "Receiver: ABC003"},
+            {"Withdrawal", "TXN-21FE1BF5", "ABC001", "-$1200", "2026-01-01  00:41:25", "Receiver: ABC001"},
+            {"Transfer", "TXN-TRANSFER1", "ABC002", "-$1299", "2026-01-02  14:30:00", "Receiver: ABC004"}
+        };
+
         int y = 170;
-        for (int i = 0; i < 5; i++) {
+        for (String[] trans : transactions) {
             RoundedPanel accBox = new RoundedPanel(20);
             accBox.setBackground(new Color(235, 235, 235));
             accBox.setBounds(240, y, 710, 60);
+            accBox.setLayout(null);
             add(accBox);
+            
+            JLabel typeLabel = new JLabel(trans[0]);
+            typeLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+            typeLabel.setForeground(new Color(30, 50, 85));
+            typeLabel.setBounds(20, 8, 100, 18);
+            accBox.add(typeLabel);
+            
+            JLabel txnIdLabel = new JLabel("Transaction ID: " + trans[1]);
+            txnIdLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+            txnIdLabel.setForeground(new Color(80, 80, 80));
+            txnIdLabel.setBounds(20, 28, 250, 13);
+            accBox.add(txnIdLabel);
+            
+            JLabel senderLabel = new JLabel("Sender: " + trans[2]);
+            senderLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+            senderLabel.setForeground(new Color(80, 80, 80));
+            senderLabel.setBounds(20, 42, 250, 13);
+            accBox.add(senderLabel);
+            
+            JLabel amountLabel = new JLabel(trans[3]);
+            amountLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+            
+            // Color based on + or -
+            if (trans[3].startsWith("+")) {
+                amountLabel.setForeground(new Color(34, 139, 34)); // Green for deposit
+            } else {
+                amountLabel.setForeground(new Color(220, 20, 60)); // Red for withdrawal
+            }
+            
+            amountLabel.setBounds(630, 8, 70, 18);
+            accBox.add(amountLabel);
+            
+            JLabel dateLabel = new JLabel(trans[4]);
+            dateLabel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+            dateLabel.setForeground(new Color(100, 100, 100));
+            dateLabel.setBounds(540, 28, 170, 12);
+            accBox.add(dateLabel);
+            
+            JLabel receiverLabel = new JLabel(trans[5]);
+            receiverLabel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+            receiverLabel.setForeground(new Color(100, 100, 100));
+            receiverLabel.setBounds(540, 42, 170, 12);
+            accBox.add(receiverLabel);
+            
             y += 70;
         }
 
