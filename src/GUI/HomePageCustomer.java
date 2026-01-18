@@ -1,6 +1,7 @@
 package GUI;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 public class HomePageCustomer extends JFrame {
 
@@ -13,14 +14,14 @@ public class HomePageCustomer extends JFrame {
 
         getContentPane().setBackground(new Color(30, 50, 85));
 
-        // SIDE PANEL
-        JPanel sideBar = new JPanel();
-        sideBar.setBounds(0, 0, 200, 600);
+        // ========== LEFT SIDE PANEL ==========
+        JPanel sideBar = new JPanel(null);
+        sideBar.setBounds(0, 0, 200, 650);
         sideBar.setBackground(new Color(8, 25, 64));
-        sideBar.setLayout(null);
         add(sideBar);
 
-        ImageIcon logo = new ImageIcon("TMB_Logo.png");
+        // LOGO
+        ImageIcon logo = new ImageIcon("PDI-BANK/src/GUI/TMB_Logo.png");
         Image scaledLogo = logo.getImage().getScaledInstance(110, 110, Image.SCALE_SMOOTH);
         JLabel logoLabel = new JLabel(new ImageIcon(scaledLogo));
         logoLabel.setBounds(45, 40, 110, 110);
@@ -345,6 +346,7 @@ public class HomePageCustomer extends JFrame {
         confirmBtn.addActionListener(e -> {
             logoutDialog.dispose();
             dispose();
+            new LoginSelection(); 
         });
         logoutDialog.add(confirmBtn);
 

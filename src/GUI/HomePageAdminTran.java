@@ -21,7 +21,7 @@ public class HomePageAdminTran extends JFrame {
         add(sidePanel);
 
         // LOGO
-        ImageIcon logo = new ImageIcon("TMB_Logo.png");
+        ImageIcon logo = new ImageIcon("PDI-BANK/src/GUI/TMB_Logo.png");
         Image scaledLogo = logo.getImage().getScaledInstance(110, 110, Image.SCALE_SMOOTH);
         JLabel logoLabel = new JLabel(new ImageIcon(scaledLogo));
         logoLabel.setBounds(45, 40, 110, 110);
