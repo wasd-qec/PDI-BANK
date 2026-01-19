@@ -150,7 +150,7 @@ public class HomePageAdminTran extends JFrame {
         });
 
         filterBtn.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Filter Clicked!");
+            new FilterTransactionsDialog(this);
         });
 
         logoutLabel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -232,94 +232,164 @@ public class HomePageAdminTran extends JFrame {
         }
     }
 
-    class TransactionTypeModal extends JDialog {
+    class FilterTransactionsDialog extends JDialog {
+    
+    public FilterTransactionsDialog(JFrame parent) {
+        super(parent, "Filter Transactions", true);
+        setSize(550, 480);
+        setLocationRelativeTo(parent);
+        setResizable(false);
+        setLayout(null);
+        getContentPane().setBackground(new Color(245, 240, 235));
+        
+        // Title
+        JLabel titleLabel = new JLabel("Filter Transactions By:");
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        titleLabel.setForeground(new Color(30, 50, 85));
+        titleLabel.setBounds(30, 20, 300, 25);
+        add(titleLabel);
+        
+        // Min Amount
+        JLabel minAmountLabel = new JLabel("Min Amount:");
+        minAmountLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        minAmountLabel.setForeground(new Color(30, 50, 85));
+        minAmountLabel.setBounds(30, 60, 100, 20);
+        add(minAmountLabel);
 
-        public TransactionTypeModal(JFrame parent) {
-            super(parent, true);
-            setSize(500, 300);
-            setUndecorated(true);
-            setLocationRelativeTo(parent);
-            setBackground(new Color(0, 0, 0, 0)); // transparent
+        RoundedFilterField minAmountField = new RoundedFilterField();
+        minAmountField.setBounds(30, 85, 220, 35);
+        minAmountField.setBackground(new Color(218, 186, 121));
+        minAmountField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        minAmountField.setForeground(Color.BLACK);
+        add(minAmountField);
 
-            // window shape (round)
-            setShape(new java.awt.geom.RoundRectangle2D.Double(0, 0, 500, 300, 35, 35));
+        // Max Amount
+        JLabel maxAmountLabel = new JLabel("Max Amount:");
+        maxAmountLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        maxAmountLabel.setForeground(new Color(30, 50, 85));
+        maxAmountLabel.setBounds(280, 60, 100, 20);
+        add(maxAmountLabel);
 
-            JPanel panel = new JPanel(null) {
-                @Override
-                protected void paintComponent(Graphics g) {
-                    Graphics2D g2 = (Graphics2D) g;
-                    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                    g2.setColor(new Color(245, 238, 228)); // beige
-                    g2.fillRoundRect(0, 0, getWidth(), getHeight(), 35, 35);
-                }
-            };
-            panel.setBounds(0, 0, 500, 300);
-            add(panel);
+        RoundedFilterField maxAmountField = new RoundedFilterField();
+        maxAmountField.setBounds(280, 85, 240, 35);
+        maxAmountField.setBackground(new Color(218, 186, 121));
+        maxAmountField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        maxAmountField.setForeground(Color.BLACK);
+        add(maxAmountField);
+        
+        // Type
+        JLabel typeLabel = new JLabel("Type:");
+        typeLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        typeLabel.setForeground(new Color(30, 50, 85));
+        typeLabel.setBounds(30, 135, 100, 20);
+        add(typeLabel);
 
-            // Title
-            JLabel title = new JLabel("Transaction Type", SwingConstants.CENTER);
-            title.setFont(new Font("Serif", Font.BOLD, 22));
-            title.setBounds(0, 30, 500, 30);
-            title.setForeground(new Color(10, 32, 68));
-            panel.add(title);
+        String[] typeOptions = {"All", "Deposit", "Withdrawal", "Transfer"};
+        JComboBox<String> typeCombo = new JComboBox<>(typeOptions);
+        typeCombo.setBounds(30, 160, 220, 35);
+        typeCombo.setBackground(new Color(218, 186, 121));
+        typeCombo.setForeground(Color.BLACK);
+        typeCombo.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        add(typeCombo);
 
-            // Divider line
-            JPanel line = new JPanel();
-            line.setBackground(new Color(140, 140, 140));
-            line.setBounds(30, 70, 440, 1);
-            panel.add(line);
+        // Sender ID
+        JLabel senderLabel = new JLabel("Sender ID:");
+        senderLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        senderLabel.setForeground(new Color(30, 50, 85));
+        senderLabel.setBounds(280, 210, 100, 20);
+        add(senderLabel);
 
-            // Buttons
-            RoundedButton depositBtn = new RoundedButton("Deposit");
-            depositBtn.setBounds(80, 110, 110, 40);
-            depositBtn.setBackground(new Color(8, 25, 64));
-            depositBtn.setForeground(Color.WHITE);
-            panel.add(depositBtn);
+        RoundedFilterField senderField = new RoundedFilterField();
+        senderField.setBounds(280, 235, 240, 35);
+        senderField.setBackground(new Color(218, 186, 121));
+        senderField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        senderField.setForeground(Color.BLACK);
+        add(senderField);
 
-            depositBtn.addActionListener(e -> {
-                dispose();
-                new DepositTransactionModal(parent);
-            });
+        // Receiver ID
+        JLabel receiverLabel = new JLabel("Receiver ID:");
+        receiverLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        receiverLabel.setForeground(new Color(30, 50, 85));
+        receiverLabel.setBounds(30, 210, 100, 20);
+        add(receiverLabel);
 
-            RoundedButton withdrawBtn = new RoundedButton("Withdraw");
-            withdrawBtn.setBounds(195, 110, 110, 40);
-            withdrawBtn.setBackground(new Color(8, 25, 64));
-            withdrawBtn.setForeground(Color.WHITE);
-            panel.add(withdrawBtn);
+        RoundedFilterField receiverField = new RoundedFilterField();
+        receiverField.setBounds(30, 235, 220, 35);
+        receiverField.setBackground(new Color(218, 186, 121));
+        receiverField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        receiverField.setForeground(Color.BLACK);
+        add(receiverField);
 
-            withdrawBtn.addActionListener(e -> {
-                dispose();
-                new WithdrawTransactionModal(parent);
-            });
+        // Date From
+        JLabel dateFromLabel = new JLabel("Date From:");
+        dateFromLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        dateFromLabel.setForeground(new Color(30, 50, 85));
+        dateFromLabel.setBounds(30, 285, 100, 20);
+        add(dateFromLabel);
 
-            RoundedButton transferBtn = new RoundedButton("Transfer");
-            transferBtn.setBounds(310, 110, 110, 40);
-            transferBtn.setBackground(new Color(8, 25, 64));
-            transferBtn.setForeground(Color.WHITE);
-            panel.add(transferBtn);
+        RoundedFilterField dateFromField = new RoundedFilterField();
+        dateFromField.setBounds(280, 310, 240, 35);
+        dateFromField.setBackground(new Color(218, 186, 121));
+        dateFromField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        dateFromField.setForeground(Color.BLACK);
+        add(dateFromField);
 
-            transferBtn.addActionListener(e -> {
-                dispose();
-                new TransferTransactionModal(parent);
-            });
+        // Date To
+        JLabel dateToLabel = new JLabel("Date To:");
+        dateToLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        dateToLabel.setForeground(new Color(30, 50, 85));
+        dateToLabel.setBounds(280, 285, 100, 20);
+        add(dateToLabel);
 
-            // Cancel label
-            JLabel cancelLabel = new JLabel("Cancel", SwingConstants.CENTER);
-            cancelLabel.setBounds(0, 200, 500, 25);
-            cancelLabel.setForeground(new Color(10, 32, 68));
-            cancelLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-            panel.add(cancelLabel);
+        RoundedFilterField dateToField = new RoundedFilterField();
+        dateToField.setBounds(30, 310, 220, 35);
+        dateToField.setBackground(new Color(218, 186, 121));
+        dateToField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        dateToField.setForeground(Color.BLACK);
+        add(dateToField);
 
-            cancelLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            cancelLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseClicked(java.awt.event.MouseEvent e) {
-                    dispose();
-                }
-            });
+        // Info text
+        JLabel infoLabel = new JLabel("Date format: YYYY-MM-DD. Leave empty to skip filter.");
+        infoLabel.setFont(new Font("Segoe UI", Font.ITALIC, 10));
+        infoLabel.setForeground(new Color(100, 100, 100));
+        infoLabel.setBounds(30, 355, 490, 15);
+        add(infoLabel);
 
-            setVisible(true);
+        // Cancel Button
+        RoundedButton cancelBtn = new RoundedButton("Cancel");
+        cancelBtn.setBounds(220, 375, 120, 38);
+        cancelBtn.setBackground(new Color(108, 130, 173));
+        cancelBtn.setForeground(Color.BLACK);
+        cancelBtn.addActionListener(e -> dispose());
+        add(cancelBtn);
+
+        // OK Button
+        RoundedButton okBtn = new RoundedButton("OK");
+        okBtn.setBounds(360, 375, 120, 38);
+        okBtn.setBackground(new Color(8, 25, 64));
+        okBtn.setForeground(Color.WHITE);
+        okBtn.addActionListener(e -> dispose());
+        add(okBtn);
+        
+        setVisible(true);
+    }
+
+    class RoundedFilterField extends JTextField {
+        public RoundedFilterField() {
+            setOpaque(false);
+            setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        }
+        
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(getBackground());
+            g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 15, 15);
+            super.paintComponent(g);
         }
     }
+}
 
     public static void main(String[] args) {
         new HomePageAdminAccount();
