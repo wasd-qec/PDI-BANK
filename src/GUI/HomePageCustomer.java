@@ -284,55 +284,98 @@ public class HomePageCustomer extends JFrame {
     }
 
     private void showReportDialog() {
-        JDialog reportDialog = new JDialog(this, "Report", true);
-        reportDialog.setSize(360, 220);
+        JDialog reportDialog = new JDialog(this, "Transaction Report", true);
+        reportDialog.setSize(700, 550);
         reportDialog.setLocationRelativeTo(this);
         reportDialog.setResizable(false);
-        reportDialog.getContentPane().setBackground(new Color(245, 240, 235));
+        reportDialog.getContentPane().setBackground(new Color(30, 50, 85));
         reportDialog.setLayout(null);
 
-        JLabel titleLabel = new JLabel("Report");
-        titleLabel.setFont(new Font("Serif", Font.BOLD, 18));
-        titleLabel.setForeground(new Color(30, 50, 85));
-        titleLabel.setBounds(20, 20, 150, 25);
+        JLabel titleLabel = new JLabel("Transaction Report");
+        titleLabel.setFont(new Font("Serif", Font.BOLD, 20));
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setBounds(30, 20, 300, 30);
         reportDialog.add(titleLabel);
 
-        JLabel inputLabel = new JLabel("Report");
-        inputLabel.setForeground(new Color(30, 50, 85));
-        inputLabel.setBounds(20, 55, 150, 20);
-        reportDialog.add(inputLabel);
-
-        JTextField reportField = new JTextField();
-        reportField.setBounds(20, 80, 310, 35);
-        reportField.setBackground(new Color(218, 186, 121));
-        reportField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-        reportField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        reportField.setForeground(Color.GRAY);
-        reportField.setText("Enter your report");
-
-        reportField.addFocusListener(new java.awt.event.FocusAdapter() {
+        // Search Bar
+        JTextField searchBar = new JTextField("Search transaction ID");
+        searchBar.setBounds(30, 60, 640, 35);
+        searchBar.setBackground(new Color(235, 235, 235));
+        searchBar.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        searchBar.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        searchBar.setForeground(Color.GRAY);
+        
+        searchBar.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent e) {
-                if (reportField.getText().equals("Enter your report")) {
-                    reportField.setText("");
-                    reportField.setForeground(Color.BLACK);
+                if (searchBar.getText().equals("Search transaction ID")) {
+                    searchBar.setText("");
+                    searchBar.setForeground(Color.BLACK);
                 }
             }
 
             @Override
             public void focusLost(java.awt.event.FocusEvent e) {
-                if (reportField.getText().isEmpty()) {
-                    reportField.setForeground(Color.GRAY);
-                    reportField.setText("Enter your report");
+                if (searchBar.getText().isEmpty()) {
+                    searchBar.setForeground(Color.GRAY);
+                    searchBar.setText("Search transaction ID");
                 }
             }
         });
-        reportDialog.add(reportField);
+        reportDialog.add(searchBar);
 
-        RoundedButton submitBtn = new RoundedButton("Submit");
-        submitBtn.setBounds(130, 130, 100, 35);
-        submitBtn.addActionListener(e -> reportDialog.dispose());
-        reportDialog.add(submitBtn);
+        // Transaction List
+        String[][] allTransactions = {
+            {"DEPOSIT", "TXN-9F01296", "+$5000", "2026-01-07  16:29:13"},
+            {"DEPOSIT", "TXN-17616E2D", "+$1000", "2026-01-01  23:23:03"},
+            {"WITHDRAWAL", "TXN-21FE1BF5", "-$1200", "2026-01-01  00:41:25"},
+            {"WITHDRAWAL", "TXN-dhsasffb", "-$5000", "2026-01-12  16:29:13"},
+            {"TRANSFER", "TXN-TRANSFER1", "-$1299", "2026-01-02  14:30:00"}
+        };
+
+        int y = 110;
+        for (String[] trans : allTransactions) {
+            RoundedPanel box = new RoundedPanel(15);
+            box.setBackground(new Color(235, 235, 235));
+            box.setBounds(30, y, 640, 55);
+            box.setLayout(null);
+            reportDialog.add(box);
+
+            JLabel typeLabel = new JLabel(trans[0]);
+            typeLabel.setFont(new Font("Segoe UI", Font.BOLD, 13));
+            typeLabel.setForeground(new Color(30, 50, 85));
+            typeLabel.setBounds(15, 5, 100, 20);
+            box.add(typeLabel);
+
+            JLabel txnLabel = new JLabel("ID: " + trans[1]);
+            txnLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+            txnLabel.setForeground(new Color(80, 80, 80));
+            txnLabel.setBounds(15, 28, 180, 15);
+            box.add(txnLabel);
+
+            JLabel amountLabel = new JLabel(trans[2]);
+            amountLabel.setFont(new Font("Segoe UI", Font.BOLD, 13));
+            if (trans[2].startsWith("+")) {
+                amountLabel.setForeground(new Color(34, 139, 34)); // Green
+            } else {
+                amountLabel.setForeground(new Color(220, 20, 60)); // Red
+            }
+            amountLabel.setBounds(550, 5, 80, 20);
+            box.add(amountLabel);
+
+            JLabel dateLabel = new JLabel(trans[3]);
+            dateLabel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+            dateLabel.setForeground(new Color(100, 100, 100));
+            dateLabel.setBounds(480, 28, 150, 15);
+            box.add(dateLabel);
+
+            y += 65;
+        }
+
+        RoundedButton closeBtn = new RoundedButton("Close");
+        closeBtn.setBounds(300, 480, 100, 35);
+        closeBtn.addActionListener(e -> reportDialog.dispose());
+        reportDialog.add(closeBtn);
 
         reportDialog.setVisible(true);
     }

@@ -7,7 +7,7 @@ public class TransactionTypeModal extends JDialog {
 
     public TransactionTypeModal(JFrame parent) {
         super(parent, true);
-        setSize(500, 300);
+        setSize(500, 270);
         setUndecorated(true);
         setLocationRelativeTo(parent);
         setBackground(new Color(0, 0, 0, 0));
@@ -78,13 +78,27 @@ public class TransactionTypeModal extends JDialog {
     }
 
     private JButton styledBtn(String text, int x, int y) {
-        JButton btn = new JButton(text);
-        btn.setBounds(x, y, 110, 40);
-        btn.setBackground(new Color(8, 25, 64));
-        btn.setForeground(Color.WHITE);
+        JButton btn = new JButton(text) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                
+                // Draw dark blue rounded background
+                g2.setColor(new Color(8, 25, 64));
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+                
+                // Draw text
+                super.paintComponent(g);
+            }
+        };
+        btn.setBounds(x, y, 110, 50);
+        btn.setForeground(new Color(218, 186, 121)); // Gold/tan text
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 16));
         btn.setFocusPainted(false);
         btn.setBorderPainted(false);
-        btn.setOpaque(true);
+        btn.setContentAreaFilled(false);
+        btn.setOpaque(false);
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         return btn;
     }
