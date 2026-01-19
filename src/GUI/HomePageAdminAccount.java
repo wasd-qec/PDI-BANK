@@ -96,7 +96,7 @@ public class HomePageAdminAccount extends JFrame {
         });
 
         filterBtn.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Filter Clicked!");
+            new FilterPopup(this).setVisible(true);
         });
 
         logoutLabel.addMouseListener(new java.awt.event.MouseAdapter() {

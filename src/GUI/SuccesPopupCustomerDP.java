@@ -1,9 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class TransactionSuccessPopup extends JDialog {
+public class SuccesPopupCustomerDP extends JDialog {
 
-    public TransactionSuccessPopup(JFrame parent) {
+    public SuccesPopupCustomerDP(JFrame parent) {
         super(parent, true); // modal
         setSize(450, 120);
         setUndecorated(true);
@@ -23,7 +23,7 @@ public class TransactionSuccessPopup extends JDialog {
         panel.setBounds(0, 0, 450, 120);
         add(panel);
 
-        JLabel msg = new JLabel("Transaction created!", SwingConstants.CENTER);
+        JLabel msg = new JLabel("Deposit Successful!", SwingConstants.CENTER);
         msg.setFont(new Font("Serif", Font.BOLD, 22));
         msg.setForeground(new Color(10, 32, 68));
         msg.setBounds(0, 40, 450, 40);
