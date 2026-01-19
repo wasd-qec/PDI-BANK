@@ -285,7 +285,7 @@ public class HomePageCustomer extends JFrame {
 
     private void showReportDialog() {
         JDialog reportDialog = new JDialog(this, "Transaction Report", true);
-        reportDialog.setSize(700, 550);
+        reportDialog.setSize(700, 570);
         reportDialog.setLocationRelativeTo(this);
         reportDialog.setResizable(false);
         reportDialog.getContentPane().setBackground(new Color(30, 50, 85));
@@ -373,7 +373,7 @@ public class HomePageCustomer extends JFrame {
         }
 
         RoundedButton closeBtn = new RoundedButton("Close");
-        closeBtn.setBounds(300, 480, 100, 35);
+        closeBtn.setBounds(300, 460, 100, 35);
         closeBtn.addActionListener(e -> reportDialog.dispose());
         reportDialog.add(closeBtn);
 
@@ -537,6 +537,7 @@ public class HomePageCustomer extends JFrame {
             add(actionBtn);
         }
     }
+
 
     // Rounded Panel
     class RoundedPanel extends JPanel {

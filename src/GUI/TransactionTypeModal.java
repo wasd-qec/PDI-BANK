@@ -48,7 +48,7 @@ public class TransactionTypeModal extends JDialog {
 
         withdrawBtn.addActionListener(e -> {
             dispose();
-            System.out.println("Withdraw chosen"); // or later new WithdrawModal(...)
+            new WithdrawTransactionModal(parent);
         });
 
         transferBtn.addActionListener(e -> {
