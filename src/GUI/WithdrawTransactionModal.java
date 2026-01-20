@@ -2,11 +2,23 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
+import Object.Customer;
+import Object.Transaction;
+import Database.CustomerImple;
+import Database.TransactionImple;
+import Service.TransactionService;
 
 public class WithdrawTransactionModal extends JDialog {
+    private CustomerImple customerImple = new CustomerImple();
+    private TransactionImple transactionImple = new TransactionImple();
+    private TransactionService transactionService;
+    private JFrame parentFrame;
 
     public WithdrawTransactionModal(JFrame parent) {
         super(parent, false);
+        this.parentFrame = parent;
+        this.transactionService = new TransactionService(customerImple, transactionImple);
+        
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setSize(550, 420);
         setUndecorated(true);
@@ -20,7 +32,7 @@ public class WithdrawTransactionModal extends JDialog {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(new Color(245, 238, 228)); // beige bg
+                g2.setColor(new Color(245, 238, 228));
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 35, 35);
             }
         };
@@ -40,14 +52,14 @@ public class WithdrawTransactionModal extends JDialog {
         line.setBounds(40, 80, 470, 1);
         panel.add(line);
 
-        // ----- Recipient account label -----
-        JLabel recLabel = new JLabel("Recipient Account number");
+        // ----- Account number label -----
+        JLabel recLabel = new JLabel("Account Number");
         recLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         recLabel.setForeground(new Color(10, 32, 68));
         recLabel.setBounds(50, 100, 400, 25);
         panel.add(recLabel);
 
-        JTextField recField = styledInput("Enter recipient account number");
+        JTextField recField = styledInput("Enter account number");
         recField.setBounds(50, 130, 450, 45);
         panel.add(recField);
 
@@ -73,8 +85,55 @@ public class WithdrawTransactionModal extends JDialog {
         panel.add(createBtn);
 
         createBtn.addActionListener(e -> {
-            dispose();
-            new TransactionSuccessPopup(parent);
+            String accNo = recField.getText().trim();
+            String amountStr = amtField.getText().trim();
+            
+            if (accNo.isEmpty() || accNo.equals("Enter account number")) {
+                JOptionPane.showMessageDialog(this, "Please enter account number.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            if (amountStr.isEmpty() || amountStr.equals("Enter amount")) {
+                JOptionPane.showMessageDialog(this, "Please enter amount.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            try {
+                double amount = Double.parseDouble(amountStr);
+                if (amount <= 0) {
+                    JOptionPane.showMessageDialog(this, "Amount must be greater than 0.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
+                Customer customer = customerImple.getCustomerByAccNo(accNo);
+                if (customer == null) {
+                    JOptionPane.showMessageDialog(this, "Account not found.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
+                if (!customer.isActive()) {
+                    JOptionPane.showMessageDialog(this, "Account is deactivated.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
+                if (amount > customer.getBalance()) {
+                    JOptionPane.showMessageDialog(this, "Insufficient balance. Current balance: $" + String.format("%.2f", customer.getBalance()), "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
+                Transaction result = transactionService.WithdrawService(customer, amount);
+                if (result != null) {
+                    dispose();
+                    new TransactionSuccessPopup(parentFrame);
+                    if (parentFrame instanceof HomePageAdminTran) {
+                        ((HomePageAdminTran) parentFrame).refreshTransactions();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Transaction failed.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Please enter a valid amount.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         setVisible(true);
@@ -89,7 +148,6 @@ public class WithdrawTransactionModal extends JDialog {
         field.setBackground(new Color(218, 186, 121));
         field.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         field.setOpaque(true);
-
 
         field.setText(placeholder);
         field.setForeground(new Color(80, 80, 80));

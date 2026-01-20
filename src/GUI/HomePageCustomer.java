@@ -1,12 +1,26 @@
 package GUI;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
+import java.util.List;
+import Object.Customer;
+import Object.Transaction;
+import Database.CustomerImple;
+import Database.TransactionImple;
+import Service.TransactionService;
 
 public class HomePageCustomer extends JFrame {
+    private Customer customer;
+    private CustomerImple customerImple = new CustomerImple();
+    private TransactionImple transactionImple = new TransactionImple();
+    private TransactionService transactionService;
+    private JLabel amountText;
+    private JPanel transactionPanel;
 
-    public HomePageCustomer() {
-        setTitle("Home Page");
+    public HomePageCustomer(Customer customer) {
+        this.customer = customer;
+        this.transactionService = new TransactionService(customerImple, transactionImple);
+        
+        setTitle("Home Page - " + customer.getName());
         setSize(950, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -21,7 +35,7 @@ public class HomePageCustomer extends JFrame {
         add(sideBar);
 
         // LOGO
-        ImageIcon logo = new ImageIcon("PDI-BANK/src/GUI/TMB_Logo.png");
+        ImageIcon logo = new ImageIcon("Asset/TMB_Logo.png");
         Image scaledLogo = logo.getImage().getScaledInstance(110, 110, Image.SCALE_SMOOTH);
         JLabel logoLabel = new JLabel(new ImageIcon(scaledLogo));
         logoLabel.setBounds(45, 40, 110, 110);
@@ -68,10 +82,10 @@ public class HomePageCustomer extends JFrame {
         balanceText.setBounds(20, 25, 200, 30);
         balanceBox.add(balanceText);
 
-        JLabel amountText = new JLabel("$XXXXX.XX");
+        amountText = new JLabel(String.format("$%.2f", customer.getBalance()));
         amountText.setForeground(Color.WHITE);
         amountText.setFont(new Font("Serif", Font.BOLD, 22));
-        amountText.setBounds(500, 25, 200, 30);
+        amountText.setBounds(450, 25, 200, 30);
         balanceBox.add(amountText);
 
         // ACTION BUTTONS
@@ -99,53 +113,107 @@ public class HomePageCustomer extends JFrame {
         recentLabel.setBounds(230, 230, 300, 30);
         add(recentLabel);
 
-        // TRANSACTION BOXES
-        String[][] transactions = {
-            {"DEPOSIT", "TXN-9F01296", "+$5000", "2026-01-07  16:29:13"},
-            {"DEPOSIT", "TXN-17616E2D", "+$1000", "2026-01-01  23:23:03"},
-            {"WITHDRAWAL", "TXN-21FE1BF5", "-$1200", "2026-01-01  00:41:25"}
-        };
+        // TRANSACTION PANEL - will be populated dynamically
+        transactionPanel = new JPanel(null);
+        transactionPanel.setBounds(230, 270, 670, 280);
+        transactionPanel.setOpaque(false);
+        add(transactionPanel);
 
-        int y = 270;
-        for (String[] trans : transactions) {
-            RoundedPanel box = new RoundedPanel(20);
-            box.setBackground(new Color(213, 197, 186));
-            box.setBounds(230, y, 670, 50);
-            box.setLayout(null);
-            add(box);
-            
-            JLabel typeLabel = new JLabel(trans[0]);
-            typeLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
-            typeLabel.setForeground(new Color(30, 50, 85));
-            typeLabel.setBounds(20, 5, 100, 20);
-            box.add(typeLabel);
-            
-            JLabel txnLabel = new JLabel(trans[1]);
-            txnLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-            txnLabel.setForeground(new Color(80, 80, 80));
-            txnLabel.setBounds(20, 25, 150, 15);
-            box.add(txnLabel);
-            
-            JLabel amountLabel = new JLabel(trans[2]);
-            amountLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
-            if (trans[2].startsWith("+")) {
-                amountLabel.setForeground(new Color(34, 139, 34)); // Green for deposit
-            } else {
-                amountLabel.setForeground(new Color(220, 20, 60)); // Red for withdrawal
-            }
-            amountLabel.setBounds(570, 5, 80, 20);
-            box.add(amountLabel);
-            
-            JLabel dateLabel = new JLabel(trans[3]);
-            dateLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-            dateLabel.setForeground(new Color(100, 100, 100));
-            dateLabel.setBounds(520, 25, 140, 15);
-            box.add(dateLabel);
-            
-            y += 65;
-        }
+        loadRecentTransactions();
 
         setVisible(true);
+    }
+
+    private void loadRecentTransactions() {
+        transactionPanel.removeAll();
+        
+        List<Transaction> transactions = transactionImple.GetTransactionByCustomer(customer);
+        
+        int y = 0;
+        int count = 0;
+        int maxTransactions = 4; // Show only recent 4 transactions
+        
+        if (transactions != null && !transactions.isEmpty()) {
+            for (Transaction trans : transactions) {
+                if (count >= maxTransactions) break;
+                
+                RoundedPanel box = new RoundedPanel(20);
+                box.setBackground(new Color(213, 197, 186));
+                box.setBounds(0, y, 670, 50);
+                box.setLayout(null);
+                transactionPanel.add(box);
+                
+                JLabel typeLabel = new JLabel(trans.getType());
+                typeLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+                typeLabel.setForeground(new Color(30, 50, 85));
+                typeLabel.setBounds(20, 5, 100, 20);
+                box.add(typeLabel);
+                
+                JLabel txnLabel = new JLabel(trans.getTransactionID());
+                txnLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                txnLabel.setForeground(new Color(80, 80, 80));
+                txnLabel.setBounds(20, 25, 200, 15);
+                box.add(txnLabel);
+                
+                String amountStr;
+                boolean isIncoming = trans.getReceiverID().equals(customer.getAccNo()) || 
+                                    trans.getReceiverID().equals(customer.getID());
+                boolean isOutgoing = trans.getSenderID().equals(customer.getAccNo()) || 
+                                    trans.getSenderID().equals(customer.getID());
+                
+                if (trans.getType().equals("DEPOSIT")) {
+                    amountStr = String.format("+$%.2f", trans.getAmount());
+                } else if (trans.getType().equals("WITHDRAW")) {
+                    amountStr = String.format("-$%.2f", trans.getAmount());
+                } else if (trans.getType().equals("TRANSFER")) {
+                    if (isOutgoing && !isIncoming) {
+                        amountStr = String.format("-$%.2f", trans.getAmount());
+                    } else if (isIncoming && !isOutgoing) {
+                        amountStr = String.format("+$%.2f", trans.getAmount());
+                    } else {
+                        amountStr = String.format("$%.2f", trans.getAmount());
+                    }
+                } else {
+                    amountStr = String.format("$%.2f", trans.getAmount());
+                }
+                
+                JLabel amountLabel = new JLabel(amountStr);
+                amountLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+                if (amountStr.startsWith("+")) {
+                    amountLabel.setForeground(new Color(34, 139, 34)); // Green for deposit
+                } else if (amountStr.startsWith("-")) {
+                    amountLabel.setForeground(new Color(220, 20, 60)); // Red for withdrawal
+                } else {
+                    amountLabel.setForeground(new Color(30, 50, 85));
+                }
+                amountLabel.setBounds(570, 5, 80, 20);
+                box.add(amountLabel);
+                
+                JLabel dateLabel = new JLabel(trans.getTimestamp());
+                dateLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+                dateLabel.setForeground(new Color(100, 100, 100));
+                dateLabel.setBounds(520, 25, 140, 15);
+                box.add(dateLabel);
+                
+                y += 65;
+                count++;
+            }
+        } else {
+            JLabel noTransLabel = new JLabel("No recent transactions");
+            noTransLabel.setForeground(Color.WHITE);
+            noTransLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+            noTransLabel.setBounds(0, 0, 300, 30);
+            transactionPanel.add(noTransLabel);
+        }
+        
+        transactionPanel.revalidate();
+        transactionPanel.repaint();
+    }
+
+    private void refreshCustomerData() {
+        customer = customerImple.getCustomerByAccNo(customer.getAccNo());
+        amountText.setText(String.format("$%.2f", customer.getBalance()));
+        loadRecentTransactions();
     }
 
     private void showDepositDialog() {
@@ -165,7 +233,7 @@ public class HomePageCustomer extends JFrame {
 
     private void showAccountDetailDialog() {
         JDialog detailDialog = new JDialog(this, "Account Detail", true);
-        detailDialog.setSize(350, 300);
+        detailDialog.setSize(350, 320);
         detailDialog.setLocationRelativeTo(this);
         detailDialog.setResizable(false);
         detailDialog.getContentPane().setBackground(new Color(245, 240, 235));
@@ -178,15 +246,15 @@ public class HomePageCustomer extends JFrame {
         detailDialog.add(titleLabel);
 
         String[][] details = {
-            {"Account number", "ABC001"},
-            {"Customer ID", "ABC001"},
-            {"Name", "Hteng"},
-            {"Phone Number", "5551234567"},
-            {"Address", "100 Bank Street, New York"},
-            {"Birth Date", "1985-06-20"},
-            {"Account Created", "2025-03-01"},
-            {"Balance", "$33,501"},
-            {"Status", "Active"}
+            {"Account number", customer.getAccNo()},
+            {"Customer ID", customer.getID()},
+            {"Name", customer.getName()},
+            {"Phone Number", String.valueOf(customer.getPhoneNumber())},
+            {"Address", customer.getAddress()},
+            {"Birth Date", customer.getBirthDate()},
+            {"Account Created", customer.getCreateDate()},
+            {"Balance", String.format("$%.2f", customer.getBalance())},
+            {"Status", customer.isActive() ? "Active" : "Deactivated"}
         };
 
         int yPos = 55;
@@ -197,13 +265,13 @@ public class HomePageCustomer extends JFrame {
             labelName.setBounds(20, yPos, 150, 15);
             detailDialog.add(labelName);
 
-            JLabel labelValue = new JLabel(detail[1]);
+            JLabel labelValue = new JLabel(detail[1] != null ? detail[1] : "N/A");
             labelValue.setForeground(new Color(218, 186, 121));
             labelValue.setFont(new Font("Segoe UI", Font.BOLD, 11));
-            labelValue.setBounds(180, yPos, 140, 15);
+            labelValue.setBounds(180, yPos, 150, 15);
             detailDialog.add(labelValue);
 
-            yPos += 18;
+            yPos += 22;
         }
 
         detailDialog.setVisible(true);
@@ -243,6 +311,8 @@ public class HomePageCustomer extends JFrame {
         RoundedButton confirmBtn = new RoundedButton("Confirm");
         confirmBtn.setBounds(200, 160, 100, 35);
         confirmBtn.addActionListener(e -> {
+            customerImple.DeactivateCustomer(customer.getAccNo());
+            customer.setActive(false);
             confirmDialog.dispose();
             showDeactivateSuccessDialog();
         });
@@ -324,53 +394,32 @@ public class HomePageCustomer extends JFrame {
         });
         reportDialog.add(searchBar);
 
-        // Transaction List
-        String[][] allTransactions = {
-            {"DEPOSIT", "TXN-9F01296", "+$5000", "2026-01-07  16:29:13"},
-            {"DEPOSIT", "TXN-17616E2D", "+$1000", "2026-01-01  23:23:03"},
-            {"WITHDRAWAL", "TXN-21FE1BF5", "-$1200", "2026-01-01  00:41:25"},
-            {"WITHDRAWAL", "TXN-dhsasffb", "-$5000", "2026-01-12  16:29:13"},
-            {"TRANSFER", "TXN-TRANSFER1", "-$1299", "2026-01-02  14:30:00"}
-        };
+        // Scrollable Transaction List Panel
+        JPanel listPanel = new JPanel();
+        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
+        listPanel.setBackground(new Color(30, 50, 85));
 
-        int y = 110;
-        for (String[] trans : allTransactions) {
-            RoundedPanel box = new RoundedPanel(15);
-            box.setBackground(new Color(235, 235, 235));
-            box.setBounds(30, y, 640, 55);
-            box.setLayout(null);
-            reportDialog.add(box);
+        List<Transaction> allTransactions = transactionImple.GetTransactionByCustomer(customer);
 
-            JLabel typeLabel = new JLabel(trans[0]);
-            typeLabel.setFont(new Font("Segoe UI", Font.BOLD, 13));
-            typeLabel.setForeground(new Color(30, 50, 85));
-            typeLabel.setBounds(15, 5, 100, 20);
-            box.add(typeLabel);
-
-            JLabel txnLabel = new JLabel("ID: " + trans[1]);
-            txnLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-            txnLabel.setForeground(new Color(80, 80, 80));
-            txnLabel.setBounds(15, 28, 180, 15);
-            box.add(txnLabel);
-
-            JLabel amountLabel = new JLabel(trans[2]);
-            amountLabel.setFont(new Font("Segoe UI", Font.BOLD, 13));
-            if (trans[2].startsWith("+")) {
-                amountLabel.setForeground(new Color(34, 139, 34)); // Green
-            } else {
-                amountLabel.setForeground(new Color(220, 20, 60)); // Red
+        if (allTransactions != null && !allTransactions.isEmpty()) {
+            for (Transaction trans : allTransactions) {
+                JPanel box = createTransactionBox(trans);
+                listPanel.add(box);
+                listPanel.add(Box.createVerticalStrut(10));
             }
-            amountLabel.setBounds(550, 5, 80, 20);
-            box.add(amountLabel);
-
-            JLabel dateLabel = new JLabel(trans[3]);
-            dateLabel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-            dateLabel.setForeground(new Color(100, 100, 100));
-            dateLabel.setBounds(480, 28, 150, 15);
-            box.add(dateLabel);
-
-            y += 65;
+        } else {
+            JLabel noDataLabel = new JLabel("No transactions found");
+            noDataLabel.setForeground(Color.WHITE);
+            noDataLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            listPanel.add(noDataLabel);
         }
+
+        JScrollPane scrollPane = new JScrollPane(listPanel);
+        scrollPane.setBounds(30, 110, 640, 340);
+        scrollPane.setBorder(null);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        reportDialog.add(scrollPane);
 
         RoundedButton closeBtn = new RoundedButton("Close");
         closeBtn.setBounds(300, 460, 100, 35);
@@ -378,6 +427,67 @@ public class HomePageCustomer extends JFrame {
         reportDialog.add(closeBtn);
 
         reportDialog.setVisible(true);
+    }
+
+    private JPanel createTransactionBox(Transaction trans) {
+        JPanel box = new JPanel(null);
+        box.setPreferredSize(new Dimension(620, 55));
+        box.setMaximumSize(new Dimension(620, 55));
+        box.setBackground(new Color(235, 235, 235));
+
+        JLabel typeLabel = new JLabel(trans.getType());
+        typeLabel.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        typeLabel.setForeground(new Color(30, 50, 85));
+        typeLabel.setBounds(15, 5, 100, 20);
+        box.add(typeLabel);
+
+        JLabel txnLabel = new JLabel("ID: " + trans.getTransactionID());
+        txnLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        txnLabel.setForeground(new Color(80, 80, 80));
+        txnLabel.setBounds(15, 28, 200, 15);
+        box.add(txnLabel);
+
+        String amountStr;
+        boolean isIncoming = trans.getReceiverID().equals(customer.getAccNo()) || 
+                            trans.getReceiverID().equals(customer.getID());
+        boolean isOutgoing = trans.getSenderID().equals(customer.getAccNo()) || 
+                            trans.getSenderID().equals(customer.getID());
+        
+        if (trans.getType().equals("DEPOSIT")) {
+            amountStr = String.format("+$%.2f", trans.getAmount());
+        } else if (trans.getType().equals("WITHDRAW")) {
+            amountStr = String.format("-$%.2f", trans.getAmount());
+        } else if (trans.getType().equals("TRANSFER")) {
+            if (isOutgoing && !isIncoming) {
+                amountStr = String.format("-$%.2f", trans.getAmount());
+            } else if (isIncoming && !isOutgoing) {
+                amountStr = String.format("+$%.2f", trans.getAmount());
+            } else {
+                amountStr = String.format("$%.2f", trans.getAmount());
+            }
+        } else {
+            amountStr = String.format("$%.2f", trans.getAmount());
+        }
+
+        JLabel amountLabel = new JLabel(amountStr);
+        amountLabel.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        if (amountStr.startsWith("+")) {
+            amountLabel.setForeground(new Color(34, 139, 34)); // Green
+        } else if (amountStr.startsWith("-")) {
+            amountLabel.setForeground(new Color(220, 20, 60)); // Red
+        } else {
+            amountLabel.setForeground(new Color(30, 50, 85));
+        }
+        amountLabel.setBounds(530, 5, 80, 20);
+        box.add(amountLabel);
+
+        JLabel dateLabel = new JLabel(trans.getTimestamp());
+        dateLabel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+        dateLabel.setForeground(new Color(100, 100, 100));
+        dateLabel.setBounds(460, 28, 150, 15);
+        box.add(dateLabel);
+
+        return box;
     }
 
     private void showLogoutDialog() {
@@ -437,10 +547,15 @@ public class HomePageCustomer extends JFrame {
         successDialog.setVisible(true);
     }
 
-    // Transaction Dialog
+    // Transaction Dialog with backend integration
     class TransactionDialog extends JDialog {
+        private JTextField recipientField;
+        private JTextField amountField;
+        private String type;
+
         TransactionDialog(JFrame parent, String type, boolean isTransfer) {
             super(parent, type, true);
+            this.type = type;
             setSize(400, isTransfer ? 320 : 270);
             setLocationRelativeTo(parent);
             setResizable(false);
@@ -456,72 +571,32 @@ public class HomePageCustomer extends JFrame {
             int yPos = 55;
 
             if (isTransfer) {
-            JLabel recipientLabel = new JLabel("Recipient Account number");
-            recipientLabel.setForeground(new Color(30, 50, 85));
-            recipientLabel.setBounds(20, yPos, 200, 20);
-            add(recipientLabel);
+                JLabel recipientLabel = new JLabel("Recipient Account number");
+                recipientLabel.setForeground(new Color(30, 50, 85));
+                recipientLabel.setBounds(20, yPos, 200, 20);
+                add(recipientLabel);
 
-            JTextField recipientField = new JTextField();
-            recipientField.setBounds(20, yPos + 25, 340, 35);
-            recipientField.setBackground(new Color(218, 186, 121));
-            recipientField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-            recipientField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-            recipientField.setForeground(Color.GRAY);
-            recipientField.setText("Enter recipient account number");
-            
-            recipientField.addFocusListener(new java.awt.event.FocusAdapter() {
-                @Override
-                public void focusGained(java.awt.event.FocusEvent e) {
-                    if (recipientField.getText().equals("Enter recipient account number")) {
-                        recipientField.setText("");
-                        recipientField.setForeground(Color.BLACK);
-                    }
-                }
+                recipientField = new JTextField();
+                recipientField.setBounds(20, yPos + 25, 340, 35);
+                recipientField.setBackground(new Color(218, 186, 121));
+                recipientField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+                recipientField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                add(recipientField);
 
-                @Override
-                public void focusLost(java.awt.event.FocusEvent e) {
-                    if (recipientField.getText().isEmpty()) {
-                        recipientField.setForeground(Color.GRAY);
-                        recipientField.setText("Enter recipient account number");
-                    }
-                }
-            });
-            add(recipientField);
-
-            yPos += 70;
-        }
-
-        JLabel amountLabel = new JLabel("Amount");
-        amountLabel.setForeground(new Color(30, 50, 85));
-        amountLabel.setBounds(20, yPos, 150, 20);
-        add(amountLabel);
-
-        JTextField amountField = new JTextField();
-        amountField.setBounds(20, yPos + 25, 340, 35);
-        amountField.setBackground(new Color(218, 186, 121));
-        amountField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-        amountField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        amountField.setForeground(Color.GRAY);
-        amountField.setText("Enter amount");
-
-        amountField.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
-            public void focusGained(java.awt.event.FocusEvent e) {
-                if (amountField.getText().equals("Enter amount")) {
-                    amountField.setText("");
-                    amountField.setForeground(Color.BLACK);
-                }
+                yPos += 70;
             }
 
-            @Override
-            public void focusLost(java.awt.event.FocusEvent e) {
-                if (amountField.getText().isEmpty()) {
-                    amountField.setForeground(Color.GRAY);
-                    amountField.setText("Enter amount");
-                }
-            }
-        });
-        add(amountField);
+            JLabel amountLabel = new JLabel("Amount");
+            amountLabel.setForeground(new Color(30, 50, 85));
+            amountLabel.setBounds(20, yPos, 150, 20);
+            add(amountLabel);
+
+            amountField = new JTextField();
+            amountField.setBounds(20, yPos + 25, 340, 35);
+            amountField.setBackground(new Color(218, 186, 121));
+            amountField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+            amountField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+            add(amountField);
 
             RoundedButton cancelBtn = new RoundedButton("Cancel");
             cancelBtn.setBounds(70, isTransfer ? 215 : 180, 110, 35);
@@ -530,14 +605,80 @@ public class HomePageCustomer extends JFrame {
 
             RoundedButton actionBtn = new RoundedButton(type);
             actionBtn.setBounds(220, isTransfer ? 215 : 180, 110, 35);
-            actionBtn.addActionListener(e -> {
-                dispose();
-                showSuccessMessage(type);
-            });
+            actionBtn.addActionListener(e -> processTransaction(isTransfer));
             add(actionBtn);
         }
-    }
 
+        private void processTransaction(boolean isTransfer) {
+            try {
+                String amountStr = amountField.getText().trim();
+                if (amountStr.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Please enter an amount.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                double amount = Double.parseDouble(amountStr);
+                if (amount <= 0) {
+                    JOptionPane.showMessageDialog(this, "Amount must be greater than 0.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                Transaction result = null;
+
+                if (type.equals("Deposit")) {
+                    result = transactionService.DepositService(customer, amount);
+                } else if (type.equals("Withdraw")) {
+                    if (amount > customer.getBalance()) {
+                        JOptionPane.showMessageDialog(this, "Insufficient balance.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    result = transactionService.WithdrawService(customer, amount);
+                } else if (type.equals("Transfer")) {
+                    String recipientAccNo = recipientField.getText().trim();
+                    if (recipientAccNo.isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "Please enter recipient account number.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    
+                    if (recipientAccNo.equals(customer.getAccNo())) {
+                        JOptionPane.showMessageDialog(this, "Cannot transfer to your own account.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    Customer receiver = customerImple.getCustomerByAccNo(recipientAccNo);
+                    if (receiver == null) {
+                        JOptionPane.showMessageDialog(this, "Recipient account not found.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    if (!receiver.isActive()) {
+                        JOptionPane.showMessageDialog(this, "Recipient account is deactivated.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    if (amount > customer.getBalance()) {
+                        JOptionPane.showMessageDialog(this, "Insufficient balance.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    result = transactionService.processTransfer(customer, receiver, amount);
+                }
+
+                if (result != null) {
+                    dispose();
+                    refreshCustomerData();
+                    showSuccessMessage(type);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Transaction failed. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Please enter a valid amount.", "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Transaction failed: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
 
     // Rounded Panel
     class RoundedPanel extends JPanel {
@@ -579,9 +720,5 @@ public class HomePageCustomer extends JFrame {
             super.paintComponent(g);
             g2.dispose();
         }
-    }
-
-    public static void main(String[] args) {
-        new HomePageCustomer();
     }
 }

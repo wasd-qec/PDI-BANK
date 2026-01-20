@@ -1,9 +1,14 @@
 package GUI;
 import javax.swing.*;
 import java.awt.*;
+import Database.CustomerImple;
+import Security.PasswordEncryption;
+import Object.Customer;
 
 
 public class SignInCustomer extends JFrame {
+    private CustomerImple customerImple = new CustomerImple();
+    private PasswordEncryption pe = new PasswordEncryption();
 
     public SignInCustomer() {
         setTitle("Sign In");
@@ -86,8 +91,42 @@ public class SignInCustomer extends JFrame {
         });
 
         signInBtn.addActionListener(e -> {
-            dispose();
-            new HomePageCustomer();
+            String accountNumber = usernameField.getText().trim();
+            String password = new String(passwordField.getPassword());
+            
+            if (accountNumber.isEmpty() || password.isEmpty()) {
+                JOptionPane.showMessageDialog(this, 
+                    "Please enter both account number and password.", 
+                    "Login Error", 
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            String storedPassword = customerImple.getPasswordByAccNo(accountNumber);
+            if (storedPassword != null && pe.verifyPassword(password, storedPassword)) {
+                Customer customer = customerImple.getCustomerByAccNo(accountNumber);
+                if (customer != null) {
+                    if (!customer.isActive()) {
+                        JOptionPane.showMessageDialog(this, 
+                            "Your account has been deactivated. Please contact our nearest branch.", 
+                            "Account Deactivated", 
+                            JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                    dispose();
+                    new HomePageCustomer(customer);
+                } else {
+                    JOptionPane.showMessageDialog(this, 
+                        "Error loading account information.", 
+                        "Error", 
+                        JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "Invalid account number or password.", 
+                    "Login Failed", 
+                    JOptionPane.ERROR_MESSAGE);
+            }
         });
 
     }

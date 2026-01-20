@@ -2,8 +2,12 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
+import Database.Admin;
+import Security.PasswordEncryption;
 
 public class SignInAdmin extends JFrame {
+    private Admin adminDB = new Admin();
+    private PasswordEncryption pe = new PasswordEncryption();
 
     public SignInAdmin() {
         setTitle("Sign In");
@@ -86,8 +90,27 @@ public class SignInAdmin extends JFrame {
         });
 
         signInBtn.addActionListener(e -> {
-            dispose();
-            new HomePageAdminAccount();
+            String username = usernameField.getText().trim();
+            String password = new String(passwordField.getPassword());
+            
+            if (username.isEmpty() || password.isEmpty()) {
+                JOptionPane.showMessageDialog(this, 
+                    "Please enter both username and password.", 
+                    "Login Error", 
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            String storedPassword = adminDB.getPasswordByAccNo(username);
+            if (storedPassword != null && pe.verifyPassword(password, storedPassword)) {
+                dispose();
+                new HomePageAdminAccount();
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "Invalid username or password.", 
+                    "Login Failed", 
+                    JOptionPane.ERROR_MESSAGE);
+            }
         });
 
     }
