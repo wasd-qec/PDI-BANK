@@ -149,10 +149,11 @@ public class Report {
 
     // Get total deposit amount for a specific customer
     public double getCustomerTotalDeposit(Customer customer) {
-        String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE ReceiverID = ? AND Type = 'Deposit'";
+        String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE (ReceiverID = ? OR ReceiverID = ?) AND Type = 'Deposit'";
         try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, customer.getID());
+            pstmt.setString(2, customer.getAccNo());
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 return rs.getDouble("total");
@@ -165,10 +166,11 @@ public class Report {
 
     // Get total withdrawal amount for a specific customer
     public double getCustomerTotalWithdrawal(Customer customer) {
-        String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE SenderID = ? AND Type = 'Withdrawal'";
+        String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE (SenderID = ? OR SenderID = ?) AND Type = 'Withdrawal'";
         try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, customer.getID());
+            pstmt.setString(2, customer.getAccNo());
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 return rs.getDouble("total");
@@ -181,10 +183,11 @@ public class Report {
 
     // Get total transfer out amount for a specific customer (money sent)
     public double getCustomerTotalTransferOut(Customer customer) {
-        String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE SenderID = ? AND Type = 'Transfer'";
+        String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE (SenderID = ? OR SenderID = ?) AND Type = 'Transfer'";
         try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, customer.getID());
+            pstmt.setString(2, customer.getAccNo());
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 return rs.getDouble("total");
@@ -197,10 +200,11 @@ public class Report {
 
     // Get total transfer in amount for a specific customer (money received)
     public double getCustomerTotalTransferIn(Customer customer) {
-        String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE ReceiverID = ? AND Type = 'Transfer'";
+        String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE (ReceiverID = ? OR ReceiverID = ?) AND Type = 'Transfer'";
         try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, customer.getID());
+            pstmt.setString(2, customer.getAccNo());
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 return rs.getDouble("total");
@@ -224,5 +228,77 @@ public class Report {
         System.out.println("---------------------------------");
         System.out.println("Current Balance:    $" + String.format("%.2f", customer.getBalance()));
         System.out.println("=================================");
+    }
+
+    // Get total deposit amount for a specific customer within a date range (inclusive)
+    public double getCustomerTotalDeposit(Customer customer, String startTimestamp, String endTimestamp) {
+        String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE (ReceiverID = ?) AND Type = 'DEPOSIT' AND Timestamp BETWEEN ? AND ?";
+        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, customer.getAccNo());
+            pstmt.setString(2, startTimestamp);
+            pstmt.setString(3, endTimestamp);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("total");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error calculating customer deposits (range): " + e.getMessage());
+        }
+        return 0.0;
+    }
+
+    // Get total withdrawal amount for a specific customer within a date range
+    public double getCustomerTotalWithdrawal(Customer customer, String startTimestamp, String endTimestamp) {
+        String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE (SenderID = ?) AND Type = 'WITHDRAWAL' AND Timestamp BETWEEN ? AND ?";
+        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, customer.getAccNo());
+            pstmt.setString(2, startTimestamp);
+            pstmt.setString(3, endTimestamp);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("total");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error calculating customer withdrawals (range): " + e.getMessage());
+        }
+        return 0.0;
+    }
+
+    // Get total transfer out amount for a specific customer within a date range
+    public double getCustomerTotalTransferOut(Customer customer, String startTimestamp, String endTimestamp) {
+        String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE (SenderID = ?) AND Type = 'TRANSFER' AND Timestamp BETWEEN ? AND ?";
+        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, customer.getAccNo());
+            pstmt.setString(2, startTimestamp);
+            pstmt.setString(3, endTimestamp);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("total");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error calculating customer transfer out (range): " + e.getMessage());
+        }
+        return 0.0;
+    }
+
+    // Get total transfer in amount for a specific customer within a date range
+    public double getCustomerTotalTransferIn(Customer customer, String startTimestamp, String endTimestamp) {
+        String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE (ReceiverID = ?) AND Type = 'TRANSFER' AND Timestamp BETWEEN ? AND ?";
+        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, customer.getAccNo());
+            pstmt.setString(2, startTimestamp);
+            pstmt.setString(3, endTimestamp);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("total");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error calculating customer transfer in (range): " + e.getMessage());
+        }
+        return 0.0;
     }
 }

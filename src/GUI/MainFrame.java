@@ -8,6 +8,11 @@ public class MainFrame extends JFrame {
     CardLayout cardLayout;
     JPanel mainPanel;
 
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new MainFrame().setVisible(true);
+        });
+    }
     public MainFrame() {
         setTitle("ABA Login System");
         setSize(700, 500);
@@ -32,9 +37,5 @@ public class MainFrame extends JFrame {
         cardLayout.show(mainPanel, "selection");
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new MainFrame().setVisible(true);
-        });
-    }
+    
 }

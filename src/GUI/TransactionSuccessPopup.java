@@ -6,13 +6,15 @@ import java.awt.*;
 public class TransactionSuccessPopup extends JDialog {
 
     public TransactionSuccessPopup(JFrame parent) {
-        super(parent, true);
-        setSize(400, 100);
+        super(parent, false); // Changed to false for non-blocking dialog
+        setSize(450, 170);
         setUndecorated(true);
         setLocationRelativeTo(parent);
         setBackground(new Color(0, 0, 0, 0));
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-        setShape(new java.awt.geom.RoundRectangle2D.Double(0, 0, 450, 120, 35, 35));
+        // Set shape to match actual dialog size
+        setShape(new java.awt.geom.RoundRectangle2D.Double(0, 0, 450, 170, 35, 35));
 
         JPanel panel = new JPanel(null) {
             @Override
@@ -29,19 +31,19 @@ public class TransactionSuccessPopup extends JDialog {
         JLabel msg = new JLabel("Transaction created!");
         msg.setHorizontalAlignment(SwingConstants.CENTER);
         msg.setVerticalAlignment(SwingConstants.CENTER);
-
         msg.setFont(new Font("Serif", Font.BOLD, 22));
         msg.setForeground(new Color(10, 32, 68));
         msg.setBounds(0, 50, 450, 40);
         panel.add(msg);
 
+        // Only call setVisible once
         setVisible(true);
 
-        // auto close after 1.8 seconds
-        Timer timer = new Timer(1400, e -> dispose());
+        // Auto close after 1.8 seconds using SwingUtilities to avoid blocking
+        Timer timer = new Timer(1800, e -> {
+            dispose();
+        });
         timer.setRepeats(false);
         timer.start();
-
-        setVisible(true);
     }
 }
