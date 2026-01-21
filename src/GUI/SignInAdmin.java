@@ -33,7 +33,7 @@ public class SignInAdmin extends JFrame {
         add(card);
 
         // --- LOGO ---
-        ImageIcon logo = new ImageIcon("PDI-BANK/src/GUI/TMB_Logo.png");
+        ImageIcon logo = new ImageIcon("src\\GUI\\TMB_Logo.png");
         Image scaledImg = logo.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
         JLabel logoLabel = new JLabel(new ImageIcon(scaledImg));
         logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -65,14 +65,6 @@ public class SignInAdmin extends JFrame {
         passwordField.setFont(new Font("SansSerif", Font.PLAIN, 14));
         card.add(Box.createVerticalStrut(10));
         card.add(passwordField);
-
-        // --- FORGOT PASSWORD LINK ---
-        JLabel forgotPass = new JLabel("Forget password");
-        forgotPass.setForeground(Color.WHITE);
-        forgotPass.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        forgotPass.setAlignmentX(Component.CENTER_ALIGNMENT);
-        card.add(Box.createVerticalStrut(15));
-        card.add(forgotPass);
 
         // --- SIGN IN BUTTON ---
         RoundedButton signInBtn = new RoundedButton("Sign In");
