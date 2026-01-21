@@ -219,7 +219,8 @@ public class HomePageAdminAccount extends JFrame {
     private JPanel createAccountBox(Customer account) {
         JPanel accBox = new JPanel(null);
         accBox.setPreferredSize(new Dimension(690, 60));
-        accBox.setMaximumSize(new Dimension(690, 60));
+        accBox.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
+        accBox.setAlignmentX(Component.LEFT_ALIGNMENT);
         accBox.setBackground(new Color(235, 235, 235));
         
         JLabel nameLabel = new JLabel(account.getName());

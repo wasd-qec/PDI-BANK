@@ -37,7 +37,7 @@ public class HomePageAdminTran extends JFrame {
         add(sidePanel);
 
         // LOGO
-        ImageIcon logo = new ImageIcon("Asset/TMB_Logo.png");
+        ImageIcon logo = new ImageIcon("src\\GUI\\TMB_Logo.png");
         Image scaledLogo = logo.getImage().getScaledInstance(110, 110, Image.SCALE_SMOOTH);
         JLabel logoLabel = new JLabel(new ImageIcon(scaledLogo));
         logoLabel.setBounds(45, 40, 110, 110);
@@ -214,7 +214,7 @@ public class HomePageAdminTran extends JFrame {
     private JPanel createTransactionBox(Transaction trans) {
         JPanel transBox = new JPanel(null);
         transBox.setPreferredSize(new Dimension(690, 60));
-        transBox.setMaximumSize(new Dimension(690, 60));
+        transBox.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
         transBox.setBackground(new Color(235, 235, 235));
         
         JLabel typeLabel = new JLabel(trans.getType());
