@@ -27,7 +27,7 @@ public class SignInCustomer extends JFrame {
 
         // --- BLUE CARD PANEL ---
         RoundedPanel card = new RoundedPanel(35);
-        card.setBounds(160, 40, 350, 400);
+        card.setBounds(160, 40, 350, 300);
         card.setBackground(new Color(8, 25, 64));
         card.setOpaque(false);
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
@@ -67,13 +67,6 @@ public class SignInCustomer extends JFrame {
         card.add(Box.createVerticalStrut(10));
         card.add(passwordField);
 
-        // --- FORGOT PASSWORD LINK ---
-        JLabel forgotPass = new JLabel("Forget password");
-        forgotPass.setForeground(Color.WHITE);
-        forgotPass.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        forgotPass.setAlignmentX(Component.CENTER_ALIGNMENT);
-        card.add(Box.createVerticalStrut(15));
-        card.add(forgotPass);
 
         // --- SIGN IN BUTTON ---
         RoundedButton signInBtn = new RoundedButton("Sign In");

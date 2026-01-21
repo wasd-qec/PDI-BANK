@@ -1,11 +1,15 @@
 package GUI;
 import javax.swing.*;
 import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import Object.Customer;
 import Object.Transaction;
 import Database.CustomerImple;
 import Database.TransactionImple;
+import Database.Report;
 import Service.TransactionService;
 
 public class HomePageCustomer extends JFrame {
@@ -30,12 +34,12 @@ public class HomePageCustomer extends JFrame {
 
         // ========== LEFT SIDE PANEL ==========
         JPanel sideBar = new JPanel(null);
-        sideBar.setBounds(0, 0, 200, 650);
+        sideBar.setBounds(0, 0, 200, 600);
         sideBar.setBackground(new Color(8, 25, 64));
         add(sideBar);
 
         // LOGO
-        ImageIcon logo = new ImageIcon("Asset/TMB_Logo.png");
+        ImageIcon logo = new ImageIcon("src\\GUI\\TMB_Logo.png");
         Image scaledLogo = logo.getImage().getScaledInstance(110, 110, Image.SCALE_SMOOTH);
         JLabel logoLabel = new JLabel(new ImageIcon(scaledLogo));
         logoLabel.setBounds(45, 40, 110, 110);
@@ -113,11 +117,20 @@ public class HomePageCustomer extends JFrame {
         recentLabel.setBounds(230, 230, 300, 30);
         add(recentLabel);
 
-        // TRANSACTION PANEL - will be populated dynamically
-        transactionPanel = new JPanel(null);
-        transactionPanel.setBounds(230, 270, 670, 280);
+        // TRANSACTION PANEL - will be populated dynamically (scrollable)
+        transactionPanel = new JPanel();
+        transactionPanel.setLayout(new BoxLayout(transactionPanel, BoxLayout.Y_AXIS));
         transactionPanel.setOpaque(false);
-        add(transactionPanel);
+        transactionPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JScrollPane transactionScroll = new JScrollPane(transactionPanel);
+        transactionScroll.setBounds(230, 270, 670, 280);
+        transactionScroll.setBorder(null);
+        transactionScroll.getVerticalScrollBar().setUnitIncrement(16);
+        transactionScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        transactionScroll.getViewport().setOpaque(false);
+        transactionScroll.setOpaque(false);
+        add(transactionScroll);
 
         loadRecentTransactions();
 
@@ -126,22 +139,17 @@ public class HomePageCustomer extends JFrame {
 
     private void loadRecentTransactions() {
         transactionPanel.removeAll();
-        
+
         List<Transaction> transactions = transactionImple.GetTransactionByCustomer(customer);
-        
-        int y = 0;
-        int count = 0;
-        int maxTransactions = 4; // Show only recent 4 transactions
-        
+
         if (transactions != null && !transactions.isEmpty()) {
             for (Transaction trans : transactions) {
-                if (count >= maxTransactions) break;
-                
                 RoundedPanel box = new RoundedPanel(20);
                 box.setBackground(new Color(213, 197, 186));
-                box.setBounds(0, y, 670, 50);
+                box.setPreferredSize(new Dimension(650, 50));
+                box.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
                 box.setLayout(null);
-                transactionPanel.add(box);
+                box.setAlignmentX(Component.LEFT_ALIGNMENT);
                 
                 JLabel typeLabel = new JLabel(trans.getType());
                 typeLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -194,18 +202,18 @@ public class HomePageCustomer extends JFrame {
                 dateLabel.setForeground(new Color(100, 100, 100));
                 dateLabel.setBounds(520, 25, 140, 15);
                 box.add(dateLabel);
-                
-                y += 65;
-                count++;
+
+                transactionPanel.add(box);
+                transactionPanel.add(Box.createVerticalStrut(10));
             }
         } else {
             JLabel noTransLabel = new JLabel("No recent transactions");
             noTransLabel.setForeground(Color.WHITE);
             noTransLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-            noTransLabel.setBounds(0, 0, 300, 30);
+            noTransLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             transactionPanel.add(noTransLabel);
         }
-        
+
         transactionPanel.revalidate();
         transactionPanel.repaint();
     }
@@ -367,62 +375,170 @@ public class HomePageCustomer extends JFrame {
         titleLabel.setBounds(30, 20, 300, 30);
         reportDialog.add(titleLabel);
 
-        // Search Bar
-        JTextField searchBar = new JTextField("Search transaction ID");
-        searchBar.setBounds(30, 60, 640, 35);
-        searchBar.setBackground(new Color(235, 235, 235));
-        searchBar.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-        searchBar.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        searchBar.setForeground(Color.GRAY);
-        
-        searchBar.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
-            public void focusGained(java.awt.event.FocusEvent e) {
-                if (searchBar.getText().equals("Search transaction ID")) {
-                    searchBar.setText("");
-                    searchBar.setForeground(Color.BLACK);
-                }
-            }
+        // (search bar removed)
 
-            @Override
-            public void focusLost(java.awt.event.FocusEvent e) {
-                if (searchBar.getText().isEmpty()) {
-                    searchBar.setForeground(Color.GRAY);
-                    searchBar.setText("Search transaction ID");
-                }
-            }
+        // Summary similar to Report.printCustomerAccountSummary
+        Report report = new Report();
+        double totalDeposit = report.getCustomerTotalDeposit(customer);
+        double totalWithdrawal = report.getCustomerTotalWithdrawal(customer);
+        double totalTransferIn = report.getCustomerTotalTransferIn(customer);
+        double totalTransferOut = report.getCustomerTotalTransferOut(customer);
+        double moneyIn = totalDeposit + totalTransferIn;
+        double moneyOut = totalWithdrawal + totalTransferOut;
+
+        // Date range pickers (start / end)
+        SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar cal = Calendar.getInstance();
+        Date endDate = cal.getTime();
+        cal.add(Calendar.DAY_OF_MONTH, -30);
+        Date startDate = cal.getTime();
+
+        JSpinner startSpinner = new JSpinner(new SpinnerDateModel(startDate, null, null, Calendar.DAY_OF_MONTH));
+        startSpinner.setEditor(new JSpinner.DateEditor(startSpinner, "yyyy-MM-dd"));
+        startSpinner.setBounds(30, 60, 150, 25);
+        reportDialog.add(startSpinner);
+        JSpinner endSpinner = new JSpinner(new SpinnerDateModel(endDate, null, null, Calendar.DAY_OF_MONTH));
+        endSpinner.setEditor(new JSpinner.DateEditor(endSpinner, "yyyy-MM-dd"));
+        endSpinner.setBounds(200, 60, 150, 25);
+        reportDialog.add(endSpinner);
+        RoundedButton applyBtn = new RoundedButton("Apply");
+        applyBtn.setBounds(370, 60, 100, 25);
+        reportDialog.add(applyBtn);
+
+        RoundedPanel summaryPanel = new RoundedPanel(12);
+        summaryPanel.setBackground(new Color(245, 240, 235));
+        summaryPanel.setBounds(30, 110, 640, 70);
+        summaryPanel.setLayout(null);
+        reportDialog.add(summaryPanel);
+
+        JLabel inLabel = new JLabel("Money In");
+        inLabel.setFont(new Font("Serif", Font.BOLD, 14));
+        inLabel.setForeground(new Color(30, 50, 85));
+        inLabel.setBounds(20, 12, 120, 20);
+        summaryPanel.add(inLabel);
+
+        JLabel inValue = new JLabel(String.format("$%.2f", moneyIn));
+        inValue.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        inValue.setForeground(new Color(34, 139, 34));
+        inValue.setBounds(20, 34, 200, 20);
+        summaryPanel.add(inValue);
+
+        JLabel outLabel = new JLabel("Money Out");
+        outLabel.setFont(new Font("Serif", Font.BOLD, 14));
+        outLabel.setForeground(new Color(30, 50, 85));
+        outLabel.setBounds(240, 12, 120, 20);
+        summaryPanel.add(outLabel);
+
+        JLabel outValue = new JLabel(String.format("$%.2f", moneyOut));
+        outValue.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        outValue.setForeground(new Color(220, 20, 60));
+        outValue.setBounds(240, 34, 200, 20);
+        summaryPanel.add(outValue);
+
+        JLabel balLabel = new JLabel("Current Balance");
+        balLabel.setFont(new Font("Serif", Font.BOLD, 14));
+        balLabel.setForeground(new Color(30, 50, 85));
+        balLabel.setBounds(460, 12, 140, 20);
+        summaryPanel.add(balLabel);
+
+        JLabel balValue = new JLabel(String.format("$%.2f", customer.getBalance()));
+        balValue.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        balValue.setForeground(new Color(30, 50, 85));
+        balValue.setBounds(460, 34, 160, 20);
+        summaryPanel.add(balValue);
+
+
+        // Display per-customer totals returned by Report (no extra calculation)
+        JPanel valuesPanel = new JPanel(null);
+        valuesPanel.setBackground(new Color(245, 240, 235));
+        valuesPanel.setBounds(30, 190, 640, 220);
+        reportDialog.add(valuesPanel);
+
+        JLabel depLabel = new JLabel("Total Deposits:");
+        depLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        depLabel.setForeground(new Color(30, 50, 85));
+        depLabel.setBounds(20, 20, 200, 20);
+        valuesPanel.add(depLabel);
+
+        JLabel depVal = new JLabel(String.format("$%.2f", totalDeposit));
+        depVal.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        depVal.setForeground(new Color(34, 139, 34));
+        depVal.setBounds(220, 20, 200, 20);
+        valuesPanel.add(depVal);
+
+        JLabel wdrLabel = new JLabel("Total Withdrawals:");
+        wdrLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        wdrLabel.setForeground(new Color(30, 50, 85));
+        wdrLabel.setBounds(20, 55, 200, 20);
+        valuesPanel.add(wdrLabel);
+
+        JLabel wdrVal = new JLabel(String.format("$%.2f", totalWithdrawal));
+        wdrVal.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        wdrVal.setForeground(new Color(220, 20, 60));
+        wdrVal.setBounds(220, 55, 200, 20);
+        valuesPanel.add(wdrVal);
+
+        JLabel tinLabel = new JLabel("Transfer In:");
+        tinLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        tinLabel.setForeground(new Color(30, 50, 85));
+        tinLabel.setBounds(20, 90, 200, 20);
+        valuesPanel.add(tinLabel);
+
+        JLabel tinVal = new JLabel(String.format("$%.2f", totalTransferIn));
+        tinVal.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        tinVal.setForeground(new Color(34, 139, 34));
+        tinVal.setBounds(220, 90, 200, 20);
+        valuesPanel.add(tinVal);
+
+        JLabel toutLabel = new JLabel("Transfer Out:");
+        toutLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        toutLabel.setForeground(new Color(30, 50, 85));
+        toutLabel.setBounds(20, 125, 200, 20);
+        valuesPanel.add(toutLabel);
+
+        JLabel toutVal = new JLabel(String.format("$%.2f", totalTransferOut));
+        toutVal.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        toutVal.setForeground(new Color(220, 20, 60));
+        toutVal.setBounds(220, 125, 200, 20);
+        valuesPanel.add(toutVal);
+
+        JLabel balLabel2 = new JLabel("Current Balance:");
+        balLabel2.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        balLabel2.setForeground(new Color(30, 50, 85));
+        balLabel2.setBounds(20, 160, 200, 20);
+        valuesPanel.add(balLabel2);
+
+        JLabel balVal2 = new JLabel(String.format("$%.2f", customer.getBalance()));
+        balVal2.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        balVal2.setForeground(new Color(30, 50, 85));
+        balVal2.setBounds(220, 160, 200, 20);
+        valuesPanel.add(balVal2);
+
+        // Apply button listener: update values using selected date range
+        applyBtn.addActionListener(e -> {
+            Date s = (Date) startSpinner.getValue();
+            Date en = (Date) endSpinner.getValue();
+            String sStr = dateFmt.format(s) + " 00:00:00";
+            String eStr = dateFmt.format(en) + " 23:59:59";
+
+            double depR = report.getCustomerTotalDeposit(customer, sStr, eStr);
+            double wdrR = report.getCustomerTotalWithdrawal(customer, sStr, eStr);
+            double tinR = report.getCustomerTotalTransferIn(customer, sStr, eStr);
+            double toutR = report.getCustomerTotalTransferOut(customer, sStr, eStr);
+
+            depVal.setText(String.format("$%.2f", depR));
+            wdrVal.setText(String.format("$%.2f", wdrR));
+            tinVal.setText(String.format("$%.2f", tinR));
+            toutVal.setText(String.format("$%.2f", toutR));
+
+            double inR = depR + tinR;
+            double outR = wdrR + toutR;
+            inValue.setText(String.format("$%.2f", inR));
+            outValue.setText(String.format("$%.2f", outR));
         });
-        reportDialog.add(searchBar);
-
-        // Scrollable Transaction List Panel
-        JPanel listPanel = new JPanel();
-        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
-        listPanel.setBackground(new Color(30, 50, 85));
-
-        List<Transaction> allTransactions = transactionImple.GetTransactionByCustomer(customer);
-
-        if (allTransactions != null && !allTransactions.isEmpty()) {
-            for (Transaction trans : allTransactions) {
-                JPanel box = createTransactionBox(trans);
-                listPanel.add(box);
-                listPanel.add(Box.createVerticalStrut(10));
-            }
-        } else {
-            JLabel noDataLabel = new JLabel("No transactions found");
-            noDataLabel.setForeground(Color.WHITE);
-            noDataLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-            listPanel.add(noDataLabel);
-        }
-
-        JScrollPane scrollPane = new JScrollPane(listPanel);
-        scrollPane.setBounds(30, 110, 640, 340);
-        scrollPane.setBorder(null);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        reportDialog.add(scrollPane);
 
         RoundedButton closeBtn = new RoundedButton("Close");
-        closeBtn.setBounds(300, 460, 100, 35);
+        closeBtn.setBounds(300, 430, 100, 35);
         closeBtn.addActionListener(e -> reportDialog.dispose());
         reportDialog.add(closeBtn);
 

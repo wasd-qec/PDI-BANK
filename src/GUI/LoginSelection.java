@@ -16,7 +16,7 @@ public class LoginSelection extends JFrame {
 
         RoundedPanel card = new RoundedPanel(30);
         card.setBackground(new Color(8, 25, 64));
-        card.setBounds(100, 50, 350, 330);
+        card.setBounds(100, 50, 350, 300);
         card.setOpaque(false);
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         add(card);
