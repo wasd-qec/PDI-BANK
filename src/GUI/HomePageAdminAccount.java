@@ -33,7 +33,7 @@ public class HomePageAdminAccount extends JFrame {
         add(sidePanel);
 
         // LOGO
-        ImageIcon logo = new ImageIcon("Asset/TMB_Logo.png");
+        ImageIcon logo = new ImageIcon("src\\GUI\\TMB_Logo.png");
         Image scaledLogo = logo.getImage().getScaledInstance(110, 110, Image.SCALE_SMOOTH);
         JLabel logoLabel = new JLabel(new ImageIcon(scaledLogo));
         logoLabel.setBounds(45, 40, 110, 110);
@@ -219,7 +219,8 @@ public class HomePageAdminAccount extends JFrame {
     private JPanel createAccountBox(Customer account) {
         JPanel accBox = new JPanel(null);
         accBox.setPreferredSize(new Dimension(690, 60));
-        accBox.setMaximumSize(new Dimension(690, 60));
+        accBox.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
+        accBox.setAlignmentX(Component.LEFT_ALIGNMENT);
         accBox.setBackground(new Color(235, 235, 235));
         
         JLabel nameLabel = new JLabel(account.getName());

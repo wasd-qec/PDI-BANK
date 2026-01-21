@@ -4,5 +4,5 @@ ABC002    Both    1250
 ABC003    Caro    1190                
 ABC004    Rith    1150                
 ABC005    Roth    1212
-
+ABC007    burgerking 1240
 admin admin123

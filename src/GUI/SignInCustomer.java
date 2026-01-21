@@ -27,14 +27,14 @@ public class SignInCustomer extends JFrame {
 
         // --- BLUE CARD PANEL ---
         RoundedPanel card = new RoundedPanel(35);
-        card.setBounds(160, 40, 350, 300);
+        card.setBounds(160, 40, 350, 400);
         card.setBackground(new Color(8, 25, 64));
         card.setOpaque(false);
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         add(card);
 
         // --- LOGO ---
-        ImageIcon logo = new ImageIcon("PDI-BANK/src/GUI/TMB_Logo.png");
+        ImageIcon logo = new ImageIcon("src\\GUI\\TMB_Logo.png");
         Image scaledImg = logo.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
         JLabel logoLabel = new JLabel(new ImageIcon(scaledImg));
         logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
