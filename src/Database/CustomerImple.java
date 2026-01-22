@@ -179,14 +179,12 @@ public class CustomerImple implements CustomerInter {
         }
     }
     public void updateCustomerInfo(Customer customer){
-        String sql = "UPDATE users SET name = ?, PhoneNumber = ?, address = ?, BirthDate = ? WHERE id = ?";
+        String sql = "UPDATE users SET PhoneNumber = ?, address = ? WHERE accNo = ?";
         try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, customer.getName());
-            pstmt.setInt(2, customer.getPhoneNumber());
-            pstmt.setString(3, customer.getAddress());
-            pstmt.setString(4, customer.getBirthDate());
-            pstmt.setString(5, customer.getID());
+            pstmt.setInt(1, customer.getPhoneNumber());
+            pstmt.setString(2, customer.getAddress());
+            pstmt.setString(3, customer.getAccNo());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());

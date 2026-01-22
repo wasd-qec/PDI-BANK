@@ -247,7 +247,7 @@ public class HomePageCustomer extends JFrame {
 
     private void showAccountDetailDialog() {
         JDialog detailDialog = new JDialog(this, "Account Detail", true);
-        detailDialog.setSize(350, 320);
+        detailDialog.setSize(400, 380);
         detailDialog.setLocationRelativeTo(this);
         detailDialog.setResizable(false);
         detailDialog.getContentPane().setBackground(new Color(245, 240, 235));
@@ -319,7 +319,7 @@ public class HomePageCustomer extends JFrame {
         phoneLabel.setBounds(20, 60, 150, 15);
         editDialog.add(phoneLabel);
 
-        JTextField phoneField = new JTextField("5551234567");
+        JTextField phoneField = new JTextField(String.valueOf(customer.getPhoneNumber()));
         phoneField.setBounds(20, 80, 340, 30);
         phoneField.setBackground(new Color(218, 186, 121));
         phoneField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
@@ -334,7 +334,7 @@ public class HomePageCustomer extends JFrame {
         addressLabel.setBounds(20, 120, 150, 15);
         editDialog.add(addressLabel);
 
-        JTextField addressField = new JTextField("100 Bank Street, New York");
+        JTextField addressField = new JTextField(customer.getAddress());
         addressField.setBounds(20, 140, 340, 30);
         addressField.setBackground(new Color(218, 186, 121));
         addressField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
@@ -353,13 +353,40 @@ public class HomePageCustomer extends JFrame {
         saveBtn.setBackground(new Color(8, 25, 64));
         saveBtn.setBounds(200, 200, 100, 35);
         saveBtn.addActionListener(e -> {
-            // Here you would typically save the changes to database
-            String newPhone = phoneField.getText();
-            String newAddress = addressField.getText();
-            
-            // Show success message
-            editDialog.dispose();
-            showSuccessMessage("Profile Updated");
+            try {
+                String newPhone = phoneField.getText().trim();
+                String newAddress = addressField.getText().trim();
+                
+                // Validation
+                if (newPhone.isEmpty() || newAddress.isEmpty()) {
+                    JOptionPane.showMessageDialog(editDialog, "All fields are required!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
+                // Validate phone number is numeric
+                int phoneNumber;
+                try {
+                    phoneNumber = Integer.parseInt(newPhone);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(editDialog, "Phone number must be numeric!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
+                // Update customer object
+                customer.setPhoneNumber(phoneNumber);
+                customer.setAddress(newAddress);
+                
+                // Save to database
+                customerImple.updateCustomerInfo(customer);
+                
+                // Refresh customer data from database
+                customer = customerImple.getCustomerByAccNo(customer.getAccNo());
+                
+                editDialog.dispose();
+                showSuccessMessage("Profile Updated");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(editDialog, "Failed to update profile: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
         });
         editDialog.add(saveBtn);
 
