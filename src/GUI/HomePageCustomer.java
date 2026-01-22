@@ -61,6 +61,12 @@ public class HomePageCustomer extends JFrame {
         reportBT.addActionListener(e -> showReportDialog());
         sideBar.add(reportBT);
 
+        RoundedButton changePasswordBT = new RoundedButton("Change Password");
+        changePasswordBT.setBounds(30, 315, 140, 35);
+        changePasswordBT.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        changePasswordBT.addActionListener(e -> showChangePasswordDialog());
+        sideBar.add(changePasswordBT);
+
         JLabel logoutLabel = new JLabel("Log out");
         logoutLabel.setForeground(Color.WHITE);
         logoutLabel.setBounds(30, 520, 100, 30);
@@ -281,8 +287,87 @@ public class HomePageCustomer extends JFrame {
 
             yPos += 22;
         }
-
+        RoundedButton editBtn = new RoundedButton("Edit");
+        editBtn.setBackground(new Color(218, 186, 121));
+        editBtn.setBounds(145, 270, 130, 35);
+        editBtn.addActionListener(e -> {
+            detailDialog.dispose();
+            showEditProfileDialog();
+        });
+        detailDialog.add(editBtn);
         detailDialog.setVisible(true);
+    }
+
+    private void showEditProfileDialog() {
+        JDialog editDialog = new JDialog(this, "Edit Profile", true);
+        editDialog.setSize(400, 300);
+        editDialog.setLocationRelativeTo(this);
+        editDialog.setResizable(false);
+        editDialog.getContentPane().setBackground(new Color(245, 240, 235));
+        editDialog.setLayout(null);
+
+        JLabel titleLabel = new JLabel("Edit Profile");
+        titleLabel.setFont(new Font("Serif", Font.BOLD, 18));
+        titleLabel.setForeground(new Color(30, 50, 85));
+        titleLabel.setBounds(20, 20, 150, 25);
+        editDialog.add(titleLabel);
+
+        // Phone Number
+        JLabel phoneLabel = new JLabel("Phone Number");
+        phoneLabel.setForeground(new Color(30, 50, 85));
+        phoneLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        phoneLabel.setBounds(20, 60, 150, 15);
+        editDialog.add(phoneLabel);
+
+        JTextField phoneField = new JTextField("5551234567");
+        phoneField.setBounds(20, 80, 340, 30);
+        phoneField.setBackground(new Color(218, 186, 121));
+        phoneField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        phoneField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        phoneField.setForeground(Color.BLACK);
+        editDialog.add(phoneField);
+
+        // Address
+        JLabel addressLabel = new JLabel("Address");
+        addressLabel.setForeground(new Color(30, 50, 85));
+        addressLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        addressLabel.setBounds(20, 120, 150, 15);
+        editDialog.add(addressLabel);
+
+        JTextField addressField = new JTextField("100 Bank Street, New York");
+        addressField.setBounds(20, 140, 340, 30);
+        addressField.setBackground(new Color(218, 186, 121));
+        addressField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        addressField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        addressField.setForeground(Color.BLACK);
+        editDialog.add(addressField);
+
+        RoundedButton cancelBtn = new RoundedButton("Cancel");
+        cancelBtn.setBounds(80, 200, 100, 35);
+        cancelBtn.setBackground(new Color(108, 130, 173));
+        cancelBtn.setForeground(Color.BLACK);
+        cancelBtn.addActionListener(e -> editDialog.dispose());
+        editDialog.add(cancelBtn);
+
+        RoundedButton saveBtn = new RoundedButton("Save");
+        saveBtn.setBackground(new Color(8, 25, 64));
+        saveBtn.setBounds(200, 200, 100, 35);
+        saveBtn.addActionListener(e -> {
+            // Here you would typically save the changes to database
+            String newPhone = phoneField.getText();
+            String newAddress = addressField.getText();
+            
+            // Show success message
+            editDialog.dispose();
+            showSuccessMessage("Profile Updated");
+        });
+        editDialog.add(saveBtn);
+
+        editDialog.setVisible(true);
+    }
+
+    private void showChangePasswordDialog() {
+       new ChangePasswordDialog(this, customer).setVisible(true);
     }
 
     private void showDeactivateDialog() {
