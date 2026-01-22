@@ -101,6 +101,57 @@ public class Report {
         return 0.0;
     }
 
+    // Get total deposit amount within a date range
+    public double getTotalDeposit(String startTimestamp, String endTimestamp) {
+        String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE Type = 'DEPOSIT' AND Timestamp BETWEEN ? AND ?";
+        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, startTimestamp);
+            pstmt.setString(2, endTimestamp);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("total");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error calculating total deposits (range): " + e.getMessage());
+        }
+        return 0.0;
+    }
+
+    // Get total withdrawal amount within a date range
+    public double getTotalWithdrawal(String startTimestamp, String endTimestamp) {
+        String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE Type = 'WITHDRAWAL' AND Timestamp BETWEEN ? AND ?";
+        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, startTimestamp);
+            pstmt.setString(2, endTimestamp);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("total");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error calculating total withdrawals (range): " + e.getMessage());
+        }
+        return 0.0;
+    }
+
+    // Get total transfer amount within a date range
+    public double getTotalTransfer(String startTimestamp, String endTimestamp) {
+        String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE Type = 'TRANSFER' AND Timestamp BETWEEN ? AND ?";
+        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, startTimestamp);
+            pstmt.setString(2, endTimestamp);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("total");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error calculating total transfers (range): " + e.getMessage());
+        }
+        return 0.0;
+    }
+
     // Get total balance across all users
     public double getTotalBalance() {
         String sql = "SELECT COALESCE(SUM(balance), 0) AS total FROM users";
