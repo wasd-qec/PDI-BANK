@@ -2,30 +2,31 @@ package Search;
 
 import Object.Customer;
 import Object.Transaction;
-import Database.CustomerImple;
-import Database.TransactionImple;
+import Factory.ServiceFactory;
+import Repository.ICustomerRepository;
+import Repository.ITransactionRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class SearchService {
 
-    private final CustomerImple customerRepository;
-    private final TransactionImple transactionRepository;
+    private final ICustomerRepository customerRepository;
+    private final ITransactionRepository transactionRepository;
 
     public SearchService() {
-        this.customerRepository = new CustomerImple();
-        this.transactionRepository = new TransactionImple();
+        this.customerRepository = ServiceFactory.getCustomerRepository();
+        this.transactionRepository = ServiceFactory.getTransactionRepository();
     }
 
-    public SearchService(CustomerImple customerRepository, TransactionImple transactionRepository) {
+    public SearchService(ICustomerRepository customerRepository, ITransactionRepository transactionRepository) {
         this.customerRepository = customerRepository;
         this.transactionRepository = transactionRepository;
     }
 
     public Customer searchCustomerById(String id) {
         // Search through all customers for matching ID
-        List<Customer> customers = customerRepository.getAllCustomers();
+        List<Customer> customers = customerRepository.findAll();
         return customers.stream()
             .filter(c -> c.getID() != null && c.getID().equals(id))
             .findFirst()
@@ -33,11 +34,11 @@ public class SearchService {
     }
 
     public Customer searchCustomerByAccNo(String accNo) {
-        return customerRepository.getCustomerByAccNo(accNo);
+        return customerRepository.findByAccNo(accNo).orElse(null);
     }
 
     public List<Customer> searchCustomers(CustomerSearchCriteria criteria) {
-        List<Customer> customers = customerRepository.getAllCustomers();
+        List<Customer> customers = customerRepository.findAll();
 
         return customers.stream()
             .filter(c -> matchesCustomerSearchCriteria(c, criteria))
@@ -47,11 +48,11 @@ public class SearchService {
 
     public List<Customer> quickSearchCustomers(String searchTerm) {
         if (searchTerm == null || searchTerm.trim().isEmpty()) {
-            return customerRepository.getAllCustomers();
+            return customerRepository.findAll();
         }
 
         String term = searchTerm.toLowerCase().trim();
-        List<Customer> customers = customerRepository.getAllCustomers();
+        List<Customer> customers = customerRepository.findAll();
 
         return customers.stream()
             .filter(c -> 
@@ -64,7 +65,7 @@ public class SearchService {
     }
 
     public List<Customer> filterCustomers(CustomerSearchCriteria criteria) {
-        List<Customer> customers = customerRepository.getAllCustomers();
+        List<Customer> customers = customerRepository.findAll();
 
         return customers.stream()
             .filter(c -> matchesCustomerFilterCriteria(c, criteria))
@@ -155,7 +156,7 @@ public class SearchService {
     }
 
     public Transaction searchTransactionById(String transactionId) {
-        List<Transaction> transactions = transactionRepository.ShowAllTransaction();
+        List<Transaction> transactions = transactionRepository.findAll();
         return transactions.stream()
             .filter(t -> t.getTransactionID() != null && t.getTransactionID().equals(transactionId))
             .findFirst()
@@ -163,7 +164,7 @@ public class SearchService {
     }
 
     public List<Transaction> searchTransactions(TransactionSearchCriteria criteria) {
-        List<Transaction> transactions = transactionRepository.ShowAllTransaction();
+        List<Transaction> transactions = transactionRepository.findAll();
 
         return transactions.stream()
             .filter(t -> matchesTransactionSearchCriteria(t, criteria))
@@ -173,11 +174,11 @@ public class SearchService {
 
     public List<Transaction> quickSearchTransactions(String transactionId) {
         if (transactionId == null || transactionId.trim().isEmpty()) {
-            return transactionRepository.ShowAllTransaction();
+            return transactionRepository.findAll();
         }
 
         String term = transactionId.toLowerCase().trim();
-        List<Transaction> transactions = transactionRepository.ShowAllTransaction();
+        List<Transaction> transactions = transactionRepository.findAll();
 
         return transactions.stream()
             .filter(t -> t.getTransactionID() != null && 
@@ -186,7 +187,7 @@ public class SearchService {
     }
 
     public List<Transaction> filterTransactions(TransactionSearchCriteria criteria) {
-        List<Transaction> transactions = transactionRepository.ShowAllTransaction();
+        List<Transaction> transactions = transactionRepository.findAll();
 
         return transactions.stream()
             .filter(t -> matchesTransactionFilterCriteria(t, criteria))
@@ -194,7 +195,7 @@ public class SearchService {
     }
 
     public List<Transaction> getTransactionsByCustomer(Customer customer) {
-        return transactionRepository.GetTransactionByCustomer(customer);
+        return transactionRepository.findByCustomer(customer);
     }
 
     private boolean matchesTransactionSearchCriteria(Transaction transaction, TransactionSearchCriteria criteria) {

@@ -1,131 +1,93 @@
 package Search;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-
-import Config.DatabaseConfig;
 import Object.Customer;
+import Factory.ServiceFactory;
+import Repository.ICustomerRepository;
 
 public class SearchCustomer {
+	private final ICustomerRepository customerRepository = ServiceFactory.getCustomerRepository();
+
 	public Customer findByAccNo(String accNo) {
-		String sql = "SELECT * FROM users WHERE accNo = ?";
-		try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
-			 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setString(1, accNo);
-			ResultSet rs = pstmt.executeQuery();
-			if (rs.next()) {
-				return mapResultSetToCustomer(rs);
-			}
-		} catch (SQLException e) {
-			System.out.println("Error finding customer by accNo: " + e.getMessage());
-		}
-		return null;
+		return customerRepository.findByAccNo(accNo).orElse(null);
 	}
 
-	public List<Customer> findByName(String namePattern) {
-		List<Customer> customers = new ArrayList<>();
-		String sql = "SELECT * FROM users WHERE name LIKE ? ORDER BY name";
-		try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
-			 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setString(1, "%" + namePattern + "%");
-			ResultSet rs = pstmt.executeQuery();
-			while (rs.next()) {
-				customers.add(mapResultSetToCustomer(rs));
+	public java.util.List<Customer> findByName(String namePattern) {
+		java.util.List<Customer> all = customerRepository.findAll();
+		java.util.List<Customer> results = new java.util.ArrayList<>();
+		if (namePattern == null || namePattern.trim().isEmpty()) return all;
+		String p = namePattern.toLowerCase();
+		for (Customer c : all) {
+			if (c.getName() != null && c.getName().toLowerCase().contains(p)) {
+				results.add(c);
 			}
-		} catch (SQLException e) {
-			System.out.println("Error searching customers by name: " + e.getMessage());
 		}
-		return customers;
+		return results;
 	}
 
-	public List<Customer> filter(CustomerSearchCriteria criteria) {
-		List<Customer> customers = new ArrayList<>();
-		StringBuilder sql = new StringBuilder("SELECT * FROM users WHERE 1=1");
-		List<Object> params = new ArrayList<>();
+	public java.util.List<Customer> filter(CustomerSearchCriteria criteria) {
+		java.util.List<Customer> all = customerRepository.findAll();
+		java.util.List<Customer> filtered = new java.util.ArrayList<>();
+		for (Customer c : all) {
+			if (matchesCustomerSearchCriteria(c, criteria) && matchesCustomerFilterCriteria(c, criteria)) {
+				filtered.add(c);
+			}
+		}
+		return filtered;
+	}
 
-		// Exact search fields
+	// reuse existing matching helpers from old SearchService logic
+	private boolean matchesCustomerSearchCriteria(Customer customer, CustomerSearchCriteria criteria) {
+		if (!criteria.hasSearchTerms()) return true;
+
+		boolean matches = true;
+
 		if (criteria.getAccNo() != null && !criteria.getAccNo().isEmpty()) {
-			sql.append(" AND accNo = ?");
-			params.add(criteria.getAccNo());
+			matches = matches && customer.getAccNo() != null && customer.getAccNo().toLowerCase().contains(criteria.getAccNo().toLowerCase());
 		}
 		if (criteria.getId() != null && !criteria.getId().isEmpty()) {
-			sql.append(" AND id = ?");
-			params.add(criteria.getId());
+			matches = matches && customer.getID() != null && customer.getID().toLowerCase().contains(criteria.getId().toLowerCase());
 		}
 		if (criteria.getName() != null && !criteria.getName().isEmpty()) {
-			sql.append(" AND name = ?");
-			params.add(criteria.getName());
+			matches = matches && customer.getName() != null && customer.getName().toLowerCase().contains(criteria.getName().toLowerCase());
 		}
 		if (criteria.getPhoneNumber() != null && !criteria.getPhoneNumber().isEmpty()) {
-			sql.append(" AND PhoneNumber = ?");
-			params.add(Integer.parseInt(criteria.getPhoneNumber()));
+			matches = matches && String.valueOf(customer.getPhoneNumber()).contains(criteria.getPhoneNumber());
 		}
 
-		// Filter fields (partial match / range)
-		if (criteria.getNameFilter() != null && !criteria.getNameFilter().isEmpty()) {
-			sql.append(" AND name LIKE ?");
-			params.add("%" + criteria.getNameFilter() + "%");
-		}
-		if (criteria.getAddressFilter() != null && !criteria.getAddressFilter().isEmpty()) {
-			sql.append(" AND address LIKE ?");
-			params.add("%" + criteria.getAddressFilter() + "%");
-		}
-		if (criteria.getMinBalance() != null) {
-			sql.append(" AND balance >= ?");
-			params.add(criteria.getMinBalance());
-		}
-		if (criteria.getMaxBalance() != null) {
-			sql.append(" AND balance <= ?");
-			params.add(criteria.getMaxBalance());
-		}
-		if (criteria.getActive() != null) {
-			sql.append(" AND Active = ?");
-			params.add(criteria.getActive());
-		}
-		if (criteria.getCreateDateFrom() != null && !criteria.getCreateDateFrom().isEmpty()) {
-			sql.append(" AND CreateDate >= ?");
-			params.add(criteria.getCreateDateFrom());
-		}
-		if (criteria.getCreateDateTo() != null && !criteria.getCreateDateTo().isEmpty()) {
-			sql.append(" AND CreateDate <= ?");
-			params.add(criteria.getCreateDateTo());
-		}
-
-		sql.append(" ORDER BY name");
-
-		try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
-			 PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
-			for (int i = 0; i < params.size(); i++) {
-				pstmt.setObject(i + 1, params.get(i));
-			}
-			ResultSet rs = pstmt.executeQuery();
-			while (rs.next()) {
-				customers.add(mapResultSetToCustomer(rs));
-			}
-		} catch (SQLException e) {
-			System.out.println("Error filtering customers: " + e.getMessage());
-		}
-		return customers;
+		return matches;
 	}
 
-	private Customer mapResultSetToCustomer(ResultSet rs) throws SQLException {
-		return new Customer(
-			rs.getString("name"),
-			rs.getString("password"),
-			rs.getString("id"),
-			rs.getString("accNo"),
-			rs.getDouble("balance"),
-			rs.getInt("PhoneNumber"),
-			rs.getString("address"),
-			rs.getString("BirthDate"),
-			rs.getString("CreateDate"),
-			rs.getBoolean("Active")
-		);
+	private boolean matchesCustomerFilterCriteria(Customer customer, CustomerSearchCriteria criteria) {
+		if (!criteria.hasFilters()) return true;
+
+		if (criteria.getNameFilter() != null && !criteria.getNameFilter().isEmpty()) {
+			if (customer.getName() == null || !customer.getName().toLowerCase().contains(criteria.getNameFilter().toLowerCase())) return false;
+		}
+
+		if (criteria.getCreateDateFrom() != null && !criteria.getCreateDateFrom().isEmpty()) {
+			if (customer.getCreateDate() == null || customer.getCreateDate().compareTo(criteria.getCreateDateFrom()) < 0) return false;
+		}
+
+		if (criteria.getCreateDateTo() != null && !criteria.getCreateDateTo().isEmpty()) {
+			if (customer.getCreateDate() == null || customer.getCreateDate().compareTo(criteria.getCreateDateTo()) > 0) return false;
+		}
+
+		if (criteria.getMinBalance() != null) {
+			if (customer.getBalance() < criteria.getMinBalance()) return false;
+		}
+
+		if (criteria.getMaxBalance() != null) {
+			if (customer.getBalance() > criteria.getMaxBalance()) return false;
+		}
+
+		if (criteria.getActive() != null) {
+			if (customer.isActive() != criteria.getActive()) return false;
+		}
+
+		if (criteria.getAddressFilter() != null && !criteria.getAddressFilter().isEmpty()) {
+			if (customer.getAddress() == null || !customer.getAddress().toLowerCase().contains(criteria.getAddressFilter().toLowerCase())) return false;
+		}
+
+		return true;
 	}
 }
