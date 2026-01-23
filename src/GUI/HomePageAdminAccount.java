@@ -323,8 +323,17 @@ public class HomePageAdminAccount extends JFrame {
         }
 
         // Action buttons
+        RoundedButton editBtn = new RoundedButton("Edit");
+        editBtn.setBounds(10, 330, 100, 35);
+        editBtn.setBackground(new Color(108, 130, 173));
+        editBtn.addActionListener(e -> {
+            detailDialog.dispose();
+            showEditProfileDialog(account);
+        });
+        detailDialog.add(editBtn);
+
         RoundedButton activateBtn = new RoundedButton(account.isActive() ? "Deactivate" : "Activate");
-        activateBtn.setBounds(100, 330, 120, 35);
+        activateBtn.setBounds(140, 330, 110, 35);
         activateBtn.setBackground(account.isActive() ? new Color(220, 20, 60) : new Color(34, 139, 34));
         activateBtn.addActionListener(e -> {
             if (account.isActive()) {
@@ -340,11 +349,29 @@ public class HomePageAdminAccount extends JFrame {
         });
         detailDialog.add(activateBtn);
 
-        RoundedButton closeBtn = new RoundedButton("Close");
-        closeBtn.setBounds(240, 330, 100, 35);
-        closeBtn.addActionListener(e -> detailDialog.dispose());
-        detailDialog.add(closeBtn);
-
+        RoundedButton deleteBtn = new RoundedButton("Delete");
+        deleteBtn.setBounds(280, 330, 100, 35);
+        deleteBtn.setBackground(new Color(220, 20, 60));
+        deleteBtn.addActionListener(e -> {
+            int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Are you sure you want to delete this customer account?\nThis action cannot be undone.",
+                "Confirm Delete",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+            );
+            if (confirm == JOptionPane.YES_OPTION) {
+                customerImple.delete(account.getID());
+                detailDialog.dispose();
+                loadCustomers();
+                JOptionPane.showMessageDialog(this,
+                    "Customer account deleted successfully!",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+        detailDialog.add(deleteBtn);
+        
         detailDialog.setVisible(true);
     }
 
@@ -682,7 +709,144 @@ public class HomePageAdminAccount extends JFrame {
             }
         }
     }
+    private void showEditProfileDialog(Customer customer) {
+        JDialog editDialog = new JDialog(this, "Edit Profile", true);
+        editDialog.setSize(420, 420);
+        editDialog.setLocationRelativeTo(this);
+        editDialog.setResizable(false);
+        editDialog.getContentPane().setBackground(new Color(245, 240, 235));
+        editDialog.setLayout(null);
 
+        JLabel titleLabel = new JLabel("Edit Profile");
+        titleLabel.setFont(new Font("Serif", Font.BOLD, 18));
+        titleLabel.setForeground(new Color(30, 50, 85));
+        titleLabel.setBounds(20, 20, 200, 25);
+        editDialog.add(titleLabel);
+
+        // Name
+        JLabel nameLabel = new JLabel("Name");
+        nameLabel.setForeground(new Color(30, 50, 85));
+        nameLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        nameLabel.setBounds(20, 60, 150, 15);
+        editDialog.add(nameLabel);
+
+        JTextField nameField = new JTextField(customer.getName());
+        nameField.setBounds(20, 80, 380, 30);
+        nameField.setBackground(new Color(218, 186, 121));
+        nameField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        editDialog.add(nameField);
+
+        // ID
+        JLabel idLabel = new JLabel("Customer ID");
+        idLabel.setForeground(new Color(30, 50, 85));
+        idLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        idLabel.setBounds(20, 120, 150, 15);
+        editDialog.add(idLabel);
+
+        JTextField idField = new JTextField(customer.getID());
+        idField.setBounds(20, 140, 180, 30);
+        idField.setBackground(new Color(218, 186, 121));
+        idField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        editDialog.add(idField);
+
+        // Birth Date
+        JLabel birthLabel = new JLabel("Birth Date (YYYY-MM-DD)");
+        birthLabel.setForeground(new Color(30, 50, 85));
+        birthLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        birthLabel.setBounds(220, 120, 180, 15);
+        editDialog.add(birthLabel);
+
+        JTextField birthField = new JTextField(customer.getBirthDate() != null ? customer.getBirthDate() : "");
+        birthField.setBounds(220, 140, 180, 30);
+        birthField.setBackground(new Color(218, 186, 121));
+        birthField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        editDialog.add(birthField);
+
+        // Phone Number
+        JLabel phoneLabel = new JLabel("Phone Number");
+        phoneLabel.setForeground(new Color(30, 50, 85));
+        phoneLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        phoneLabel.setBounds(20, 180, 150, 15);
+        editDialog.add(phoneLabel);
+
+        JTextField phoneField = new JTextField(String.valueOf(customer.getPhoneNumber()));
+        phoneField.setBounds(20, 200, 380, 30);
+        phoneField.setBackground(new Color(218, 186, 121));
+        phoneField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        editDialog.add(phoneField);
+
+        // Address
+        JLabel addressLabel = new JLabel("Address");
+        addressLabel.setForeground(new Color(30, 50, 85));
+        addressLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        addressLabel.setBounds(20, 240, 150, 15);
+        editDialog.add(addressLabel);
+
+        JTextField addressField = new JTextField(customer.getAddress() != null ? customer.getAddress() : "");
+        addressField.setBounds(20, 260, 380, 30);
+        addressField.setBackground(new Color(218, 186, 121));
+        addressField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        editDialog.add(addressField);
+
+        RoundedButton cancelBtn = new RoundedButton("Cancel");
+        cancelBtn.setBounds(80, 310, 100, 35);
+        cancelBtn.setBackground(new Color(108, 130, 173));
+        cancelBtn.setForeground(Color.BLACK);
+        cancelBtn.addActionListener(e -> editDialog.dispose());
+        editDialog.add(cancelBtn);
+
+        RoundedButton saveBtn = new RoundedButton("Save");
+        saveBtn.setBackground(new Color(8, 25, 64));
+        saveBtn.setBounds(240, 310, 100, 35);
+        saveBtn.addActionListener(e -> {
+            try {
+                String newName = nameField.getText().trim();
+                String newId = idField.getText().trim();
+                String newBirth = birthField.getText().trim();
+                String newPhone = phoneField.getText().trim();
+                String newAddress = addressField.getText().trim();
+
+                // Validation
+                if (newName.isEmpty() || newId.isEmpty() || newPhone.isEmpty() || newAddress.isEmpty()) {
+                    JOptionPane.showMessageDialog(editDialog, "All fields are required!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Validate phone number is numeric
+                int phoneNumber;
+                try {
+                    phoneNumber = Integer.parseInt(newPhone);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(editDialog, "Phone number must be numeric!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Update customer object
+                customer.setName(newName);
+                customer.setID(newId);
+                customer.setBirthDate(newBirth);
+                customer.setPhoneNumber(phoneNumber);
+                customer.setAddress(newAddress);
+
+                // Save to database using updateCustomerPro
+                customerImple.updateCustomerPro(customer);
+
+                // Optionally refresh customer data from database (avoid reassigning lambda-captured var)
+                Customer refreshed = customerImple.getCustomerByAccNo(customer.getAccNo());
+
+                // Refresh UI
+                loadCustomers();
+
+                editDialog.dispose();
+                JOptionPane.showMessageDialog(this, "Profile Updated", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(editDialog, "Failed to update profile: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        editDialog.add(saveBtn);
+
+        editDialog.setVisible(true);
+    }
     class FilterCustomersDialog extends JDialog {
     
         public FilterCustomersDialog(JFrame parent) {
