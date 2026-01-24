@@ -7,7 +7,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import Object.Transaction;
-import Object.Customer;
 import Database.CustomerImple;
 import Database.Report;
 import Database.TransactionImple;
