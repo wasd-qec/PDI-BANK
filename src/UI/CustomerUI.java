@@ -4,8 +4,9 @@ import java.util.Scanner;
 
 import Security.PasswordEncryption;
 import Database.CustomerImple;
-import Database.TransactionImple;
+import Database.TransactionInter;
 import Database.Report;
+import Database.TransactionImple;
 import Service.TransactionService;
 import Object.Customer;
 import Object.Transaction;
@@ -15,7 +16,7 @@ public class CustomerUI {
     UIcomponent ui = new UIcomponent();
     Scanner scanner = new Scanner(System.in);
     CustomerImple customerIN = new CustomerImple();
-    TransactionImple transactionImple = new TransactionImple();
+    TransactionInter transactionImple = new TransactionImple();
     TransactionService transactionService = new TransactionService(customerIN, transactionImple);
     Report report = new Report();
     

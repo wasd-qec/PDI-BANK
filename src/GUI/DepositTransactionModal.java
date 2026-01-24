@@ -6,11 +6,12 @@ import Object.Customer;
 import Object.Transaction;
 import Database.CustomerImple;
 import Database.TransactionImple;
+import Database.TransactionInter;
 import Service.TransactionService;
 
 public class DepositTransactionModal extends JDialog {
     private CustomerImple customerImple = new CustomerImple();
-    private TransactionImple transactionImple = new TransactionImple();
+    private TransactionInter transactionImple = new TransactionImple();
     private TransactionService transactionService;
     private JFrame parentFrame;
 

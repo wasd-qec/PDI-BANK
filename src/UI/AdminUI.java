@@ -6,7 +6,7 @@ import Database.CustomerImple;
 import java.util.Scanner;
 import java.util.List;
 import Database.Admin;
-import Database.TransactionImple;
+import Database.TransactionInter;
 import Object.Transaction;
 import Service.CustomerService;
 import Search.SearchCustomer;
@@ -14,11 +14,12 @@ import Search.SearchTransaction;
 import Search.CustomerSearchCriteria;
 import Search.TransactionSearchCriteria;
 import Database.Report;
+import Database.TransactionImple;
 
 public class AdminUI {
     Scanner scanner = new Scanner(System.in);
     Admin adminIN = new Admin();
-    TransactionImple transactionimple = new TransactionImple();
+    TransactionInter transactionimple = new TransactionImple();
     CustomerImple customerIN = new CustomerImple();
     SearchCustomer searchCustomer = new SearchCustomer();
     SearchTransaction searchTransaction = new SearchTransaction();

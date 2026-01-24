@@ -8,14 +8,15 @@ import java.util.List;
 import Object.Customer;
 import Object.Transaction;
 import Database.CustomerImple;
-import Database.TransactionImple;
+import Database.TransactionInter;
 import Database.Report;
+import Database.TransactionImple;
 import Service.TransactionService;
 
 public class HomePageCustomer extends JFrame {
     private Customer customer;
     private CustomerImple customerImple = new CustomerImple();
-    private TransactionImple transactionImple = new TransactionImple();
+    private TransactionInter transactionImple = new TransactionImple();
     private TransactionService transactionService;
     private JLabel amountText;
     private JPanel transactionPanel;

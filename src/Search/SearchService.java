@@ -4,6 +4,7 @@ import Object.Customer;
 import Object.Transaction;
 import Database.CustomerImple;
 import Database.TransactionImple;
+import Database.TransactionInter;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,14 +12,14 @@ import java.util.stream.Collectors;
 public class SearchService {
 
     private final CustomerImple customerRepository;
-    private final TransactionImple transactionRepository;
+    private final TransactionInter transactionRepository;
 
     public SearchService() {
         this.customerRepository = new CustomerImple();
         this.transactionRepository = new TransactionImple();
     }
 
-    public SearchService(CustomerImple customerRepository, TransactionImple transactionRepository) {
+    public SearchService(CustomerImple customerRepository, TransactionInter transactionRepository) {
         this.customerRepository = customerRepository;
         this.transactionRepository = transactionRepository;
     }

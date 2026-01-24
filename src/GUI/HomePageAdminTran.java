@@ -10,12 +10,13 @@ import Object.Transaction;
 import Database.CustomerImple;
 import Database.Report;
 import Database.TransactionImple;
+import Database.TransactionInter;
 import Service.TransactionService;
 import Search.SearchTransaction;
 import Search.TransactionSearchCriteria;
 
 public class HomePageAdminTran extends JFrame {
-    private TransactionImple transactionImple = new TransactionImple();
+    private TransactionInter transactionImple = new TransactionImple();
     private CustomerImple customerImple = new CustomerImple();
     private TransactionService transactionService;
     private SearchTransaction searchTransaction = new SearchTransaction();
