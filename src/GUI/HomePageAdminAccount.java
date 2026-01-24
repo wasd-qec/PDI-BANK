@@ -784,7 +784,7 @@ public class HomePageAdminAccount extends JFrame {
         editDialog.add(addressField);
 
         RoundedButton cancelBtn = new RoundedButton("Cancel");
-        cancelBtn.setBounds(80, 310, 100, 35);
+        cancelBtn.setBounds(10, 310, 100, 35);
         cancelBtn.setBackground(new Color(108, 130, 173));
         cancelBtn.setForeground(Color.BLACK);
         cancelBtn.addActionListener(e -> editDialog.dispose());
@@ -792,7 +792,7 @@ public class HomePageAdminAccount extends JFrame {
 
         RoundedButton saveBtn = new RoundedButton("Save");
         saveBtn.setBackground(new Color(8, 25, 64));
-        saveBtn.setBounds(240, 310, 100, 35);
+        saveBtn.setBounds(140, 310, 100, 35);
         saveBtn.addActionListener(e -> {
             try {
                 String newName = nameField.getText().trim();
@@ -833,6 +833,43 @@ public class HomePageAdminAccount extends JFrame {
             }
         });
         editDialog.add(saveBtn);
+        
+        RoundedButton ResetPasswordBtn = new RoundedButton("Reset Password");
+        ResetPasswordBtn.setBounds(270, 310, 100, 35);
+        ResetPasswordBtn.setBackground(new Color(108, 130, 173));
+        ResetPasswordBtn.setForeground(Color.BLACK);
+        ResetPasswordBtn.addActionListener(e -> {
+            JPanel passPanel = new JPanel(new GridLayout(0, 1));
+            JPasswordField passFieldNew = new JPasswordField();
+            JPasswordField passFieldConfirm = new JPasswordField();
+            passPanel.add(new JLabel("Enter new password:"));
+            passPanel.add(passFieldNew);
+            passPanel.add(new JLabel("Confirm new password:"));
+            passPanel.add(passFieldConfirm);
+
+            int option = JOptionPane.showConfirmDialog(editDialog, passPanel, "Reset Password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            if (option == JOptionPane.OK_OPTION) {
+                String newPass = new String(passFieldNew.getPassword());
+                String confirmPass = new String(passFieldConfirm.getPassword());
+                if (newPass.isEmpty()) {
+                    JOptionPane.showMessageDialog(editDialog, "Password cannot be empty.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if (!newPass.equals(confirmPass)) {
+                    JOptionPane.showMessageDialog(editDialog, "Passwords do not match.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                try {
+                    Security.PasswordEncryption encrypt = new Security.PasswordEncryption();
+                    String Password = encrypt.encryptPassword(newPass);
+                    customerImple.updatePassword(customer.getAccNo(), Password);
+                    JOptionPane.showMessageDialog(editDialog, "Password reset successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(editDialog, "Failed to reset password: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        editDialog.add(ResetPasswordBtn);
 
         editDialog.setVisible(true);
     }

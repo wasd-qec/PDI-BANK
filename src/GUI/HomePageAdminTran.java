@@ -3,9 +3,6 @@ package GUI;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-// Unused imports removed
-// import java.util.Calendar;
-// import java.util.Date;
 import Object.Transaction;
 import Object.TransactionSearchCriteria;
 import Database.SearchTransaction;
