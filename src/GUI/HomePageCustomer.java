@@ -656,68 +656,6 @@ public class HomePageCustomer extends JFrame {
 
         reportDialog.setVisible(true);
     }
-
-    // private JPanel createTransactionBox(Transaction trans) {
-    //     JPanel box = new JPanel(null);
-    //     box.setPreferredSize(new Dimension(620, 55));
-    //     box.setMaximumSize(new Dimension(620, 55));
-    //     box.setBackground(new Color(235, 235, 235));
-
-    //     JLabel typeLabel = new JLabel(trans.getType());
-    //     typeLabel.setFont(new Font("Segoe UI", Font.BOLD, 13));
-    //     typeLabel.setForeground(new Color(30, 50, 85));
-    //     typeLabel.setBounds(15, 5, 100, 20);
-    //     box.add(typeLabel);
-
-    //     JLabel txnLabel = new JLabel("ID: " + trans.getTransactionID());
-    //     txnLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-    //     txnLabel.setForeground(new Color(80, 80, 80));
-    //     txnLabel.setBounds(15, 28, 200, 15);
-    //     box.add(txnLabel);
-
-    //     String amountStr;
-    //     boolean isIncoming = trans.getReceiverID().equals(customer.getAccNo()) || 
-    //                         trans.getReceiverID().equals(customer.getID());
-    //     boolean isOutgoing = trans.getSenderID().equals(customer.getAccNo()) || 
-    //                         trans.getSenderID().equals(customer.getID());
-        
-    //     if (trans.getType().equals("DEPOSIT")) {
-    //         amountStr = String.format("+$%.2f", trans.getAmount());
-    //     } else if (trans.getType().equals("WITHDRAW")) {
-    //         amountStr = String.format("-$%.2f", trans.getAmount());
-    //     } else if (trans.getType().equals("TRANSFER")) {
-    //         if (isOutgoing && !isIncoming) {
-    //             amountStr = String.format("-$%.2f", trans.getAmount());
-    //         } else if (isIncoming && !isOutgoing) {
-    //             amountStr = String.format("+$%.2f", trans.getAmount());
-    //         } else {
-    //             amountStr = String.format("$%.2f", trans.getAmount());
-    //         }
-    //     } else {
-    //         amountStr = String.format("$%.2f", trans.getAmount());
-    //     }
-
-    //     JLabel amountLabel = new JLabel(amountStr);
-    //     amountLabel.setFont(new Font("Segoe UI", Font.BOLD, 13));
-    //     if (amountStr.startsWith("+")) {
-    //         amountLabel.setForeground(new Color(34, 139, 34)); // Green
-    //     } else if (amountStr.startsWith("-")) {
-    //         amountLabel.setForeground(new Color(220, 20, 60)); // Red
-    //     } else {
-    //         amountLabel.setForeground(new Color(30, 50, 85));
-    //     }
-    //     amountLabel.setBounds(530, 5, 80, 20);
-    //     box.add(amountLabel);
-
-    //     JLabel dateLabel = new JLabel(trans.getTimestamp());
-    //     dateLabel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-    //     dateLabel.setForeground(new Color(100, 100, 100));
-    //     dateLabel.setBounds(460, 28, 150, 15);
-    //     box.add(dateLabel);
-
-    //     return box;
-    // }
-
     private void showLogoutDialog() {
         JDialog logoutDialog = new JDialog(this, "Logout", true);
         logoutDialog.setSize(380, 200);

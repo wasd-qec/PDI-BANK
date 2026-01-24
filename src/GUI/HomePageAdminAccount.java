@@ -7,14 +7,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import Object.Customer;
-import Database.CustomerImple;
 import Database.Report;
 import Service.CustomerService;
 import Search.SearchCustomer;
 import Search.CustomerSearchCriteria;
 
 public class HomePageAdminAccount extends JFrame {
-    private CustomerImple customerImple = new CustomerImple();
+    private Database.CustomerInter customerImple = new Database.CustomerImple();
     private CustomerService customerService = new CustomerService();
     private SearchCustomer searchCustomer = new SearchCustomer();
     private JPanel accountsPanel;
