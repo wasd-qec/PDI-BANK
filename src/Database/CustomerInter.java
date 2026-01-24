@@ -11,7 +11,13 @@ public interface CustomerInter {
     void delete(String customerId);
     List<Customer> getAllCustomers();
     void updateBalance(Customer customer);
-    public boolean existsid(String id);
+    boolean existsid(String id);
     boolean existsAccNo(String accNo);
+    boolean IsActive(String accNo);
+    void DeactivateCustomer(String accNo);
+    void ActivateCustomer(String accNo);
+    void updateCustomerInfo(Customer customer);
+    void updateCustomerPro(Customer customer);
+    void updatePassword(String accNo, String newPassword);
 
 }
