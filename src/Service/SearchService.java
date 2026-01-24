@@ -1,10 +1,11 @@
-package Search;
+package Service;
 
 import Object.Customer;
+import Object.CustomerSearchCriteria;
 import Object.Transaction;
+import Object.TransactionSearchCriteria;
 import Database.CustomerImple;
-import Database.TransactionImple;
-import Database.TransactionInter;
+import Database.TransactionInterface;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,14 +13,14 @@ import java.util.stream.Collectors;
 public class SearchService {
 
     private final CustomerImple customerRepository;
-    private final TransactionInter transactionRepository;
+    private final TransactionInterface transactionRepository;
 
     public SearchService() {
         this.customerRepository = new CustomerImple();
-        this.transactionRepository = new TransactionImple();
+        this.transactionRepository = new TransactionImplement();
     }
 
-    public SearchService(CustomerImple customerRepository, TransactionInter transactionRepository) {
+    public SearchService(CustomerImple customerRepository, TransactionInterface transactionRepository) {
         this.customerRepository = customerRepository;
         this.transactionRepository = transactionRepository;
     }

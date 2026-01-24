@@ -4,7 +4,7 @@ import java.util.List;
 import Object.Customer;
 import Object.Transaction;
 
-public interface TransactionInter{
+public interface TransactionInterface{
     void saveTransaction(Transaction transaction);
     List<Transaction> ShowAllTransaction();
     boolean exists(String transactionId);

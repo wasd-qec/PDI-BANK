@@ -1,4 +1,4 @@
-package Search;
+package Database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,6 +10,7 @@ import java.util.List;
 
 import Config.DatabaseConfig;
 import Object.Customer;
+import Object.CustomerSearchCriteria;
 
 public class SearchCustomer {
 	public Customer findByAccNo(String accNo) {

@@ -2,7 +2,7 @@ package GUI;
 import javax.swing.*;
 import java.awt.*;
 import Object.Customer;
-import Database.CustomerImple;
+import Database.CustomerHandling;
 import Security.PasswordEncryption;
 
 public class ChangePasswordDialog extends JDialog {
@@ -10,12 +10,12 @@ public class ChangePasswordDialog extends JDialog {
     private JPasswordField newPasswordField;
     private JPasswordField confirmPasswordField;
     private Customer customer;
-    private CustomerImple customerImple;
+    private CustomerHandling customerHandling;
 
     public ChangePasswordDialog(JFrame parent, Customer customer) {
         super(parent, "Change Password", true);
         this.customer = customer;
-        this.customerImple = new CustomerImple();
+        this.customerHandling = new CustomerHandling();
         setSize(430, 400);
         setLocationRelativeTo(parent);
         setResizable(false);
@@ -116,7 +116,7 @@ public class ChangePasswordDialog extends JDialog {
         }
 
         // Verify old password against database
-        String storedPassword = customerImple.getPasswordByAccNo(customer.getAccNo());
+        String storedPassword = customerHandling.getPasswordByAccNo(customer.getAccNo());
         PasswordEncryption passwordEncryption = new PasswordEncryption();
         
         if (storedPassword == null) {
@@ -132,7 +132,7 @@ public class ChangePasswordDialog extends JDialog {
         // Update password in database
         try {
             String encryptedNewPassword = passwordEncryption.encryptPassword(newPassword);
-            customerImple.updatePassword(customer.getAccNo(), encryptedNewPassword);
+            customerHandling.updatePassword(customer.getAccNo(), encryptedNewPassword);
             
             dispose();
             showSuccessDialog("Password changed successfully!");

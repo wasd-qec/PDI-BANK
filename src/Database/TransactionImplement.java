@@ -12,7 +12,7 @@ import java.sql.Statement;
 import Object.Customer;
 
 
-public class TransactionImple implements TransactionInter{
+public class TransactionImplement implements TransactionInterface{
     
     public void saveTransaction(Transaction transaction) {
       String sql = "INSERT INTO burger(TransactionID, ReceiverID, SenderID, Amount, Type, Timestamp)" +

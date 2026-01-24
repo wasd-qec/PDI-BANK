@@ -7,16 +7,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import Object.Transaction;
+import Object.TransactionSearchCriteria;
 import Database.CustomerImple;
 import Database.Report;
-import Database.TransactionImple;
-import Database.TransactionInter;
+import Database.SearchTransaction;
+import Database.TransactionImplement;
+import Database.TransactionInterface;
 import Service.TransactionService;
-import Search.SearchTransaction;
-import Search.TransactionSearchCriteria;
 
 public class HomePageAdminTran extends JFrame {
-    private TransactionInter transactionImple = new TransactionImple();
+    private TransactionInterface transactionImple = new TransactionImplement();
     private CustomerImple customerImple = new CustomerImple();
     private TransactionService transactionService;
     private SearchTransaction searchTransaction = new SearchTransaction();

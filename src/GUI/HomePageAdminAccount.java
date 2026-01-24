@@ -7,10 +7,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import Object.Customer;
+import Object.CustomerSearchCriteria;
 import Database.Report;
+import Database.SearchCustomer;
 import Service.CustomerService;
-import Search.SearchCustomer;
-import Search.CustomerSearchCriteria;
 
 public class HomePageAdminAccount extends JFrame {
     private Database.CustomerInter customerImple = new Database.CustomerImple();

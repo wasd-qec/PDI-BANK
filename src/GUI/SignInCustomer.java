@@ -1,13 +1,13 @@
 package GUI;
 import javax.swing.*;
 import java.awt.*;
-import Database.CustomerImple;
+import Database.CustomerHandling;
 import Security.PasswordEncryption;
 import Object.Customer;
 
 
 public class SignInCustomer extends JFrame {
-    private CustomerImple customerImple = new CustomerImple();
+    private CustomerHandling customerHandling = new CustomerHandling();
     private PasswordEncryption pe = new PasswordEncryption();
 
     public SignInCustomer() {
@@ -95,9 +95,9 @@ public class SignInCustomer extends JFrame {
                 return;
             }
             
-            String storedPassword = customerImple.getPasswordByAccNo(accountNumber);
+            String storedPassword = customerHandling.getPasswordByAccNo(accountNumber);
             if (storedPassword != null && pe.verifyPassword(password, storedPassword)) {
-                Customer customer = customerImple.getCustomerByAccNo(accountNumber);
+                Customer customer = customerHandling.getCustomerByAccNo(accountNumber);
                 if (customer != null) {
                     if (!customer.isActive()) {
                         JOptionPane.showMessageDialog(this, 

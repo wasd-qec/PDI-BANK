@@ -7,23 +7,23 @@ import java.util.Calendar;
 import java.util.List;
 import Object.Customer;
 import Object.Transaction;
-import Database.CustomerImple;
-import Database.TransactionInter;
-import Database.Report;
-import Database.TransactionImple;
+import Database.CustomerHandling;
+import Database.TransactionInterface;
+import Database.ReportInterfaceUser;
+import Database.TransactionImplement;
 import Service.TransactionService;
 
 public class HomePageCustomer extends JFrame {
     private Customer customer;
-    private CustomerImple customerImple = new CustomerImple();
-    private TransactionInter transactionImple = new TransactionImple();
+    private CustomerHandling customerHandling = new CustomerHandling();
+    private TransactionInterface transactionHandling = new TransactionImplement();
     private TransactionService transactionService;
     private JLabel amountText;
     private JPanel transactionPanel;
 
     public HomePageCustomer(Customer customer) {
         this.customer = customer;
-        this.transactionService = new TransactionService(customerImple, transactionImple);
+        this.transactionService = new TransactionService(customerHandling, transactionHandling);
         
         setTitle("Home Page - " + customer.getName());
         setSize(950, 600);
@@ -147,7 +147,7 @@ public class HomePageCustomer extends JFrame {
     private void loadRecentTransactions() {
         transactionPanel.removeAll();
 
-        List<Transaction> transactions = transactionImple.GetTransactionByCustomer(customer);
+        List<Transaction> transactions = transactionHandling.GetTransactionByCustomer(customer);
 
         if (transactions != null && !transactions.isEmpty()) {
             for (Transaction trans : transactions) {
@@ -226,7 +226,7 @@ public class HomePageCustomer extends JFrame {
     }
 
     private void refreshCustomerData() {
-        customer = customerImple.getCustomerByAccNo(customer.getAccNo());
+        customer = customerHandling.getCustomerByAccNo(customer.getAccNo());
         amountText.setText(String.format("$%.2f", customer.getBalance()));
         loadRecentTransactions();
     }
@@ -378,10 +378,10 @@ public class HomePageCustomer extends JFrame {
                 customer.setAddress(newAddress);
                 
                 // Save to database
-                customerImple.updateCustomerInfo(customer);
+                customerHandling.UpdateCustomer(customer);
                 
                 // Refresh customer data from database
-                customer = customerImple.getCustomerByAccNo(customer.getAccNo());
+                customer = customerHandling.getCustomerByAccNo(customer.getAccNo());
                 
                 editDialog.dispose();
                 showSuccessMessage("Profile Updated");
