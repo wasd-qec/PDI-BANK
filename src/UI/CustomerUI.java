@@ -3,9 +3,9 @@ package UI;
 import java.util.Scanner;
 
 import Security.PasswordEncryption;
-import Database.CustomerImple;
-import Database.TransactionImple;
-import Database.Report;
+import Database.CustomerHandling;
+import Database.TransactionInterface;
+import Database.TransactionImplement;
 import Service.TransactionService;
 import Object.Customer;
 import Object.Transaction;
@@ -14,10 +14,10 @@ import java.util.List;
 public class CustomerUI {
     UIcomponent ui = new UIcomponent();
     Scanner scanner = new Scanner(System.in);
-    CustomerImple customerIN = new CustomerImple();
-    TransactionImple transactionImple = new TransactionImple();
+    CustomerHandling customerIN = new CustomerHandling();
+    TransactionInterface transactionImple = new TransactionImplement();
     TransactionService transactionService = new TransactionService(customerIN, transactionImple);
-    Report report = new Report();
+    Database.ReportForUser report = new Database.ReportForUser();
     
     public Customer LoginPrompt() {
         

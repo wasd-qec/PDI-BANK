@@ -2,8 +2,8 @@ package Service;
 
 import Object.Customer;
 import Object.Transaction;
-import Database.CustomerInter;
-import Database.TransactionInter;
+import Database.CustomerHandling;
+import Database.TransactionInterface;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import java.time.format.DateTimeFormatter;
@@ -12,10 +12,10 @@ import java.time.format.DateTimeFormatter;
 
 public class TransactionService {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    private CustomerInter customerDB;
-    private TransactionInter transactionDB;
+    private CustomerHandling customerDB;
+    private TransactionInterface transactionDB;
     
-    public TransactionService(CustomerInter customerDB, TransactionInter transactionDB) {
+    public TransactionService(CustomerHandling customerDB, TransactionInterface transactionDB) {
         this.customerDB = customerDB;
         this.transactionDB = transactionDB;
     }

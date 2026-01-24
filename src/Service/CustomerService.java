@@ -5,17 +5,17 @@ import java.util.Scanner;
 import Security.PasswordEncryption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import Database.CustomerImple;
+import Database.CustomerHandling;
 
 
 public class CustomerService {
     Scanner scanner = new Scanner(System.in);
     PasswordEncryption pe = new PasswordEncryption();
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    CustomerImple customerImple = new CustomerImple();
+    CustomerHandling customerHandling = new CustomerHandling();
     
     public boolean isAccountActive(String accNo) {
-        Customer customer = customerImple.getCustomerByAccNo(accNo);
+        Customer customer = customerHandling.getCustomerByAccNo(accNo);
         return customer != null && customer.isActive();
     }
     public Customer createCustomerAccount(String ID, String AccNo, String Name,
@@ -44,12 +44,12 @@ public class CustomerService {
     public void updatePassword(Customer customer, String newPassword) {
         try {
             String hashedPassword = pe.encryptPassword(newPassword);
-            customerImple.updatePassword(customer.getAccNo(), hashedPassword);
+            customerHandling.updatePassword(customer.getAccNo(), hashedPassword);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     public Customer getCustomerByAccNo(String accNo) {
-        return customerImple.getCustomerByAccNo(accNo);
+        return customerHandling.getCustomerByAccNo(accNo);
     }
 }

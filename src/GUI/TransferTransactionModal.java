@@ -4,20 +4,21 @@ import javax.swing.*;
 import java.awt.*;
 import Object.Customer;
 import Object.Transaction;
-import Database.CustomerImple;
-import Database.TransactionImple;
+import Database.CustomerHandling;
+import Database.TransactionImplement;
+import Database.TransactionInterface;
 import Service.TransactionService;
 
 public class TransferTransactionModal extends JDialog {
-    private CustomerImple customerImple = new CustomerImple();
-    private TransactionImple transactionImple = new TransactionImple();
+    private CustomerHandling customerHandling = new CustomerHandling();
+    private TransactionInterface transactionHandling = new TransactionImplement();
     private TransactionService transactionService;
     private JFrame parentFrame;
 
     public TransferTransactionModal(JFrame parent) {
         super(parent, false);
         this.parentFrame = parent;
-        this.transactionService = new TransactionService(customerImple, transactionImple);
+        this.transactionService = new TransactionService(customerHandling, transactionHandling);
         
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setSize(550, 520);
@@ -127,7 +128,7 @@ public class TransferTransactionModal extends JDialog {
                     return;
                 }
                 
-                Customer sender = customerImple.getCustomerByAccNo(senderAccNo);
+                Customer sender = customerHandling.getCustomerByAccNo(senderAccNo);
                 if (sender == null) {
                     JOptionPane.showMessageDialog(this, "Sender account not found.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -138,7 +139,7 @@ public class TransferTransactionModal extends JDialog {
                     return;
                 }
                 
-                Customer receiver = customerImple.getCustomerByAccNo(receiverAccNo);
+                Customer receiver = customerHandling.getCustomerByAccNo(receiverAccNo);
                 if (receiver == null) {
                     JOptionPane.showMessageDialog(this, "Receiver account not found.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;

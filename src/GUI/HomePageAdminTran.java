@@ -2,29 +2,18 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import Object.Transaction;
-import Object.Customer;
-import Database.CustomerImple;
-import Database.Report;
-import Database.TransactionImple;
-import Service.TransactionService;
-import Search.SearchTransaction;
-import Search.TransactionSearchCriteria;
+import Object.TransactionSearchCriteria;
+import Database.SearchTransaction;
 
 public class HomePageAdminTran extends JFrame {
-    private TransactionImple transactionImple = new TransactionImple();
-    private CustomerImple customerImple = new CustomerImple();
-    private TransactionService transactionService;
+    private Database.TransactionInterface transactionImple = new Database.TransactionImplement();
     private SearchTransaction searchTransaction = new SearchTransaction();
     private JPanel transactionsPanel;
     private RoundedTextField searchBar;
 
     public HomePageAdminTran() {
-        this.transactionService = new TransactionService(customerImple, transactionImple);
         
         setTitle("Admin - Transaction Management");
         setSize(1000, 650);
@@ -540,170 +529,7 @@ public class HomePageAdminTran extends JFrame {
         }
     }
     private void showReportDialog() {
-        JDialog reportDialog = new JDialog(this, "Transaction Report", true);
-        reportDialog.setSize(700, 570);
-        reportDialog.setLocationRelativeTo(this);
-        reportDialog.setResizable(false);
-        reportDialog.getContentPane().setBackground(new Color(30, 50, 85));
-        reportDialog.setLayout(null);
-
-        JLabel titleLabel = new JLabel("Transaction Report");
-        titleLabel.setFont(new Font("Serif", Font.BOLD, 20));
-        titleLabel.setForeground(Color.WHITE);
-        titleLabel.setBounds(30, 20, 300, 30);
-        reportDialog.add(titleLabel);
-
-        // (search bar removed)
-
-        // Summary similar to Report.printCustomerAccountSummary
-        Report report = new Report();
-        double totalDeposit = report.getTotalDeposit();
-        double totalWithdrawal = report.getTotalWithdrawal();
-        double totalTransfer = report.getTotalTransfer();
-
-        int totalUsers = report.getTotalUsers();
-        int DeactivatedUsers = report.getDeactivatedUsers();
-        int ActiveUsers = report.getActiveUsers();
-
-        // Date range pickers (start / end)
-        SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar cal = Calendar.getInstance();
-        Date endDate = cal.getTime();
-        cal.add(Calendar.DAY_OF_MONTH, -30);
-        Date startDate = cal.getTime();
-
-        JSpinner startSpinner = new JSpinner(new SpinnerDateModel(startDate, null, null, Calendar.DAY_OF_MONTH));
-        startSpinner.setEditor(new JSpinner.DateEditor(startSpinner, "yyyy-MM-dd"));
-        startSpinner.setBounds(30, 60, 150, 25);
-        reportDialog.add(startSpinner);
-        JSpinner endSpinner = new JSpinner(new SpinnerDateModel(endDate, null, null, Calendar.DAY_OF_MONTH));
-        endSpinner.setEditor(new JSpinner.DateEditor(endSpinner, "yyyy-MM-dd"));
-        endSpinner.setBounds(200, 60, 150, 25);
-        reportDialog.add(endSpinner);
-        RoundedButton applyBtn = new RoundedButton("Apply");
-        applyBtn.setBounds(370, 60, 100, 25);
-        reportDialog.add(applyBtn);
-
-        RoundedPanel summaryPanel = new RoundedPanel(12);
-        summaryPanel.setBackground(new Color(245, 240, 235));
-        summaryPanel.setBounds(30, 110, 640, 70);
-        summaryPanel.setLayout(null);
-        reportDialog.add(summaryPanel);
-
-        JLabel inLabel = new JLabel("Active Users");
-        inLabel.setFont(new Font("Serif", Font.BOLD, 14));
-        inLabel.setForeground(new Color(30, 50, 85));
-        inLabel.setBounds(20, 12, 120, 20);
-        summaryPanel.add(inLabel);
-
-        JLabel inValue = new JLabel(String.format("%d", ActiveUsers));
-        inValue.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        inValue.setForeground(new Color(34, 139, 34));
-        inValue.setBounds(20, 34, 200, 20);
-        summaryPanel.add(inValue);
-
-        JLabel outLabel = new JLabel("Deactivated Users");
-        outLabel.setFont(new Font("Serif", Font.BOLD, 14));
-        outLabel.setForeground(new Color(30, 50, 85));
-        outLabel.setBounds(240, 12, 120, 20);
-        summaryPanel.add(outLabel);
-
-        JLabel outValue = new JLabel(String.format("%d", DeactivatedUsers));
-        outValue.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        outValue.setForeground(new Color(220, 20, 60));
-        outValue.setBounds(240, 34, 200, 20);
-        summaryPanel.add(outValue);
-
-        JLabel balLabel = new JLabel("Total Users");
-        balLabel.setFont(new Font("Serif", Font.BOLD, 14));
-        balLabel.setForeground(new Color(30, 50, 85));
-        balLabel.setBounds(460, 12, 140, 20);
-        summaryPanel.add(balLabel);
-
-        JLabel balValue = new JLabel(String.format("%d", totalUsers));
-        balValue.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        balValue.setForeground(new Color(30, 50, 85));
-        balValue.setBounds(460, 34, 160, 20);
-        summaryPanel.add(balValue);
-
-
-        // Display per-customer totals returned by Report (no extra calculation)
-        JPanel valuesPanel = new JPanel(null);
-        valuesPanel.setBackground(new Color(245, 240, 235));
-        valuesPanel.setBounds(30, 190, 640, 220);
-        reportDialog.add(valuesPanel);
-
-        JLabel depLabel = new JLabel("Total Deposits:");
-        depLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        depLabel.setForeground(new Color(30, 50, 85));
-        depLabel.setBounds(20, 20, 200, 20);
-        valuesPanel.add(depLabel);
-
-        JLabel depVal = new JLabel(String.format("$%.2f", totalDeposit));
-        depVal.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        depVal.setForeground(new Color(34, 139, 34));
-        depVal.setBounds(220, 20, 200, 20);
-        valuesPanel.add(depVal);
-
-        JLabel wdrLabel = new JLabel("Total Withdrawals:");
-        wdrLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        wdrLabel.setForeground(new Color(30, 50, 85));
-        wdrLabel.setBounds(20, 55, 200, 20);
-        valuesPanel.add(wdrLabel);
-
-        JLabel wdrVal = new JLabel(String.format("$%.2f", totalWithdrawal));
-        wdrVal.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        wdrVal.setForeground(new Color(220, 20, 60));
-        wdrVal.setBounds(220, 55, 200, 20);
-        valuesPanel.add(wdrVal);
-
-        JLabel tinLabel = new JLabel("Transfer :");
-        tinLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        tinLabel.setForeground(new Color(30, 50, 85));
-        tinLabel.setBounds(20, 90, 200, 20);
-        valuesPanel.add(tinLabel);
-
-        JLabel tinVal = new JLabel(String.format("$%.2f", totalTransfer));
-        tinVal.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        tinVal.setForeground(new Color(34, 139, 34));
-        tinVal.setBounds(220, 90, 200, 20);
-        valuesPanel.add(tinVal);
-
-
-        JLabel balLabel2 = new JLabel("Current Balance:");
-        balLabel2.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        balLabel2.setForeground(new Color(30, 50, 85));
-        balLabel2.setBounds(20, 160, 200, 20);
-        valuesPanel.add(balLabel2);
-
-        JLabel balVal2 = new JLabel(String.format("$%.2f", report.getTotalBalance()));
-        balVal2.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        balVal2.setForeground(new Color(30, 50, 85));
-        balVal2.setBounds(220, 160, 200, 20);
-        valuesPanel.add(balVal2);
-
-        // Apply button listener: update values using selected date range
-        applyBtn.addActionListener(e -> {
-            Date s = (Date) startSpinner.getValue();
-            Date en = (Date) endSpinner.getValue();
-            String sStr = dateFmt.format(s) + " 00:00:00";
-            String eStr = dateFmt.format(en) + " 23:59:59";
-
-            double depR = report.getTotalDeposit(sStr, eStr);
-            double wdrR = report.getTotalWithdrawal(sStr, eStr);
-            double tinR = report.getTotalTransfer(sStr, eStr);
-
-            depVal.setText(String.format("$%.2f", depR));
-            wdrVal.setText(String.format("$%.2f", wdrR));
-            tinVal.setText(String.format("$%.2f", tinR));
-        });
-
-        RoundedButton closeBtn = new RoundedButton("Close");
-        closeBtn.setBounds(300, 430, 100, 35);
-        closeBtn.addActionListener(e -> reportDialog.dispose());
-        reportDialog.add(closeBtn);
-
-        reportDialog.setVisible(true);
+        new AdminReportDialog(this);
     }
     public static void main(String[] args) {
         new HomePageAdminTran();
