@@ -3,27 +3,24 @@ package UI;
 import Object.Customer;
 import Object.CustomerSearchCriteria;
 import Security.PasswordEncryption;
-import Database.CustomerImple;
 import java.util.Scanner;
 import java.util.List;
 import Database.Admin;
-import Database.TransactionInterface;
 import Object.Transaction;
 import Object.TransactionSearchCriteria;
 import Service.CustomerService;
-import Database.Report;
+import Database.ReportForAdmin;
 import Database.SearchCustomer;
 import Database.SearchTransaction;
-import Database.TransactionImplement;
 
 public class AdminUI {
     Scanner scanner = new Scanner(System.in);
     Admin adminIN = new Admin();
-    TransactionInterface transactionimple = new TransactionImplement();
-    CustomerImple customerIN = new CustomerImple();
+    Database.TransactionInterface transactionimple = new Database.TransactionImplement();
+    Database.AdminHandles customerIN = new Database.AdminHandles();
     SearchCustomer searchCustomer = new SearchCustomer();
     SearchTransaction searchTransaction = new SearchTransaction();
-    Report report = new Report();
+    ReportForAdmin report = new ReportForAdmin();
     
     public void AdminLoginPrompt() {
         PasswordEncryption pe = new PasswordEncryption();

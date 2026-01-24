@@ -8,6 +8,7 @@ import java.util.List;
 import Object.Customer;
 import Object.Transaction;
 import Database.CustomerHandling;
+import Database.ReportForUser;
 import Database.TransactionInterface;
 import Database.ReportInterfaceUser;
 import Database.TransactionImplement;
@@ -378,7 +379,7 @@ public class HomePageCustomer extends JFrame {
                 customer.setAddress(newAddress);
                 
                 // Save to database
-                customerHandling.UpdateCustomer(customer);
+                customerHandling.updateCustomer(customer);
                 
                 // Refresh customer data from database
                 customer = customerHandling.getCustomerByAccNo(customer.getAccNo());
@@ -432,7 +433,7 @@ public class HomePageCustomer extends JFrame {
         RoundedButton confirmBtn = new RoundedButton("Confirm");
         confirmBtn.setBounds(200, 160, 100, 35);
         confirmBtn.addActionListener(e -> {
-            customerImple.DeactivateCustomer(customer.getAccNo());
+            customerHandling.DeactivateCustomer(customer.getAccNo());
             customer.setActive(false);
             confirmDialog.dispose();
             showDeactivateSuccessDialog();
@@ -491,7 +492,7 @@ public class HomePageCustomer extends JFrame {
         // (search bar removed)
 
         // Summary similar to Report.printCustomerAccountSummary
-        Report report = new Report();
+        ReportInterfaceUser report = new ReportForUser();
         double totalDeposit = report.getCustomerTotalDeposit(customer);
         double totalWithdrawal = report.getCustomerTotalWithdrawal(customer);
         double totalTransferIn = report.getCustomerTotalTransferIn(customer);
@@ -812,7 +813,7 @@ public class HomePageCustomer extends JFrame {
                         return;
                     }
 
-                    Customer receiver = customerImple.getCustomerByAccNo(recipientAccNo);
+                    Customer receiver = customerHandling.getCustomerByAccNo(recipientAccNo);
                     if (receiver == null) {
                         JOptionPane.showMessageDialog(this, "Recipient account not found.", "Error", JOptionPane.ERROR_MESSAGE);
                         return;
