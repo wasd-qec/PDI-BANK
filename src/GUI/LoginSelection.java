@@ -21,7 +21,7 @@ public class LoginSelection extends JFrame {
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         add(card);
 
-        ImageIcon logo = new ImageIcon("PDI-BANK/src/GUI/TMB_Logo.png");
+        ImageIcon logo = new ImageIcon("src/GUI/TMB_Logo.png");
         Image scaled = logo.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
         JLabel logoLabel = new JLabel(new ImageIcon(scaled));
         logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
