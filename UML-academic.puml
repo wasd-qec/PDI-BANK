@@ -1,0 +1,185 @@
+@startuml
+title PDI-BANK System — Academic Class Diagram
+skinparam classFontSize 14
+skinparam shadowing false
+skinparam linetype ortho
+
+' Core Domain Package
+package "Domain" {
+  class Customer {
+    - id : String
+    - accNo : String  
+    - name : String
+    - balance : double
+    - active : boolean
+    + deposit(amount: double) : Boolean
+    + withdraw(amount: double) : Boolean
+    + toString() : String
+  }
+
+  class Transaction {
+    - transactionId : String
+    - senderAccNo : String
+    - receiverAccNo : String
+    - amount : double
+    - type : String
+    - timestamp : String
+    + Transaction(...)
+    + getters/setters()
+  }
+}
+
+' Search/Criteria Support
+package "Criteria" {
+  class CustomerSearchCriteria {
+    - accNo : String
+    - id : String
+    - name : String
+    - minBalance : Double
+    - maxBalance : Double
+    + hasSearchTerms() : boolean
+    + hasFilters() : boolean
+  }
+
+  class TransactionSearchCriteria {
+    - transactionId : String
+    - minAmount : Double
+    - maxAmount : Double
+    - type : String
+    - dateFrom : String
+    - dateTo : String
+    + hasSearchTerm() : boolean
+    + hasFilters() : boolean
+  }
+}
+
+' Database/Persistence Layer
+package "Database" {
+  class CustomerHandling {
+    + getPasswordByAccNo(accNo: String) : String
+    + getCustomerByAccNo(accNo: String) : Customer
+    + updateBalance(customer: Customer) : void
+    + updateCustomer(customer: Customer) : void
+    + existsAccNo(accNo: String) : boolean
+    + isActive(accNo: String) : boolean
+  }
+
+  class AdminHandles {
+    + save(customer: Customer) : void
+    + getAllCustomers() : List<Customer>
+    + delete(customerId: String) : void
+    + activateCustomer(accNo: String) : void
+  }
+
+  interface TransactionInterface {
+    + saveTransaction(transaction: Transaction) : void
+    + showAllTransaction() : List<Transaction>
+    + exists(transactionId: String) : boolean
+    + getTransactionByCustomer(customer: Customer) : List<Transaction>
+  }
+
+  class TransactionImplement {
+    + saveTransaction(transaction: Transaction) : void
+    + showAllTransaction() : List<Transaction>
+    + exists(transactionId: String) : boolean
+    + getTransactionByCustomer(customer: Customer) : List<Transaction>
+  }
+}
+
+' Service Layer
+package "Service" {
+  class CustomerService {
+    - pe : PasswordEncryption
+    - customerHandling : CustomerHandling
+    + isAccountActive(accNo: String) : boolean
+    + createCustomerAccount(id, accNo, name, password, phone, address, balance, birthdate) : Customer
+    + updatePassword(customer: Customer, newPassword: String) : void
+    + getCustomerByAccNo(accNo: String) : Customer
+  }
+
+  class TransactionService {
+    - customerDB : CustomerHandling
+    - transactionDB : TransactionInterface
+    + TransactionService(customerDB, transactionDB)
+    + processTransfer(sender, receiver, amount) : Transaction
+    + depositService(customer, amount) : Transaction
+    + withdrawService(customer, amount) : Transaction
+  }
+
+  class SearchService {
+    - customerRepository : AdminHandles
+    - transactionRepository : TransactionInterface
+    + searchCustomers(criteria: CustomerSearchCriteria) : List<Customer>
+    + searchTransactions(criteria: TransactionSearchCriteria) : List<Transaction>
+    + searchCustomerById(id: String) : Customer
+  }
+}
+
+' Security
+package "Security" {
+  class PasswordEncryption {
+    + encryptPassword(password: String) : String
+    + verifyPassword(plainPassword: String, encryptedPassword: String) : boolean
+  }
+}
+
+' Reporting
+package "Reporting" {
+  interface ReportInterfaceUser {
+    + getCustomerTotalDeposit(customer: Customer) : double
+    + getCustomerTotalWithdrawal(customer: Customer) : double
+    + printCustomerAccountSummary(customer: Customer) : void
+  }
+
+  class ReportForUser {
+    + getCustomerTotalDeposit(customer: Customer) : double
+    + getCustomerTotalWithdrawal(customer: Customer) : double
+    + printCustomerAccountSummary(customer: Customer) : void
+  }
+
+  interface ReportInterfaceAdmin {
+    + getTotalDeposit() : double
+    + getTotalWithdrawal() : double
+    + getTotalTransfer() : double
+    + getTotalTransactions() : int
+    + getTotalBalance() : double
+    + getTotalUsers() : int
+    + getActiveUsers() : int
+    + getDeactivatedUsers() : int
+    + printSummaryReport() : void
+  }
+
+  class ReportForAdmin {
+    + getTotalDeposit() : double
+    + getTotalWithdrawal() : double
+    + getTotalTransfer() : double
+    + getTotalTransactions() : int
+    + getTotalBalance() : double
+    + getTotalUsers() : int
+    + getActiveUsers() : int
+    + getDeactivatedUsers() : int
+    + printSummaryReport() : void
+  }
+}
+
+' Relationships
+AdminHandles --|> CustomerHandling : extends
+TransactionImplement ..|> TransactionInterface : implements
+ReportForUser ..|> ReportInterfaceUser : implements
+ReportForAdmin ..|> ReportInterfaceAdmin : implements
+
+Customer "1" --o "*" Transaction : participates in
+CustomerService --> CustomerHandling : uses
+CustomerService --> PasswordEncryption : uses
+TransactionService --> CustomerHandling : uses
+TransactionService --> TransactionInterface : uses
+SearchService --> AdminHandles : uses  
+SearchService --> TransactionInterface : uses
+ReportForUser --> TransactionInterface : uses
+ReportForAdmin --> TransactionInterface : uses
+ReportForAdmin --> AdminHandles : uses
+
+CustomerSearchCriteria ..> Customer : filters
+TransactionSearchCriteria ..> Transaction : filters
+
+@enduml
