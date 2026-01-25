@@ -26,26 +26,28 @@ public class LoginSelection extends JFrame {
         JLabel logoLabel = new JLabel(new ImageIcon(scaled));
         logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        card.add(Box.createVerticalStrut(20));
+        card.add(Box.createVerticalStrut(30));  // Increased from 20
         card.add(logoLabel);
 
         JLabel title = new JLabel("Login Selection");
         title.setForeground(Color.WHITE);
         title.setFont(new Font("Serif", Font.BOLD, 28));
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        card.add(Box.createVerticalStrut(10));
+        card.add(Box.createVerticalStrut(20));  // Increased from 10
         card.add(title);
 
         RoundedButton customerBtn = new RoundedButton("Customer");
         customerBtn.setMaximumSize(new Dimension(180, 40));
+        customerBtn.setBounds(100, 300, 180, 40);
         customerBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        card.add(Box.createVerticalStrut(25));
+        card.add(Box.createVerticalStrut(40));  // Increased from 25
         card.add(customerBtn);
 
         RoundedButton adminBtn = new RoundedButton("Admin");
         adminBtn.setMaximumSize(new Dimension(180, 40));
+        adminBtn.setBounds(100, 400, 180, 40);
         adminBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        card.add(Box.createVerticalStrut(15));
+        card.add(Box.createVerticalStrut(20));  // Increased from 15
         card.add(adminBtn);
 
         // ====== BUTTON EVENTS ======

@@ -77,11 +77,13 @@ public class DepositTransactionModal extends JDialog {
 
         // ----- Buttons row -----
         JButton cancelBtn = styledDarkBtn("Cancel");
+        cancelBtn.setBackground(new Color(108, 130, 173));
         cancelBtn.setBounds(180, 300, 90, 40);
         cancelBtn.addActionListener(e -> dispose());
         panel.add(cancelBtn);
 
         JButton createBtn = styledDarkBtn("Create");
+        createBtn.setBackground(new Color(8, 25, 64));
         createBtn.setBounds(290, 300, 90, 40);
         panel.add(createBtn);
 
@@ -167,15 +169,24 @@ public class DepositTransactionModal extends JDialog {
     }
 
     private JButton styledDarkBtn(String text) {
-        JButton btn = new JButton(text);
-        btn.setBackground(new Color(8, 25, 64));
+        JButton btn = new JButton(text) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(getBackground());
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
         btn.setBorderPainted(false);
-        btn.setOpaque(true);
+        btn.setContentAreaFilled(false);
+        btn.setOpaque(false);
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btn.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
         return btn;
     }
 }

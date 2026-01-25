@@ -142,8 +142,7 @@ public class HomePageAdminAccount extends JFrame {
         logoutLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                dispose();
-                new LoginSelection();
+                showLogoutDialog();
             }
         });
 
@@ -586,7 +585,7 @@ public class HomePageAdminAccount extends JFrame {
             // Cancel Button
             RoundedButton cancelBtn = new RoundedButton("Cancel");
             cancelBtn.setBounds(200, yPos, 110, 35);
-            cancelBtn.setBackground(new Color(70, 90, 130));
+            cancelBtn.setBackground(new Color(108, 130, 173));
             cancelBtn.setForeground(Color.WHITE);
             cancelBtn.addActionListener(e -> dispose());
             add(cancelBtn);
@@ -1041,6 +1040,45 @@ public class HomePageAdminAccount extends JFrame {
             
             setVisible(true);
         }
+    }
+
+    private void showLogoutDialog() {
+        JDialog logoutDialog = new JDialog(this, "Logout", true);
+        logoutDialog.setSize(380, 200);
+        logoutDialog.setLocationRelativeTo(this);
+        logoutDialog.setResizable(false);
+        logoutDialog.getContentPane().setBackground(new Color(245, 240, 235));
+        logoutDialog.setLayout(null);
+
+        JLabel titleLabel = new JLabel("Logout");
+        titleLabel.setFont(new Font("Serif", Font.BOLD, 18));
+        titleLabel.setForeground(new Color(30, 50, 85));
+        titleLabel.setBounds(20, 20, 150, 25);
+        logoutDialog.add(titleLabel);
+
+        JLabel messageLabel = new JLabel("Are you sure you want to log out?");
+        messageLabel.setForeground(new Color(30, 50, 85));
+        messageLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        messageLabel.setBounds(20, 55, 310, 30);
+        logoutDialog.add(messageLabel);
+
+        RoundedButton cancelBtn = new RoundedButton("Cancel");
+        cancelBtn.setBackground(new Color(108, 130, 173));
+        cancelBtn.setBounds(60, 105, 100, 35);
+        cancelBtn.addActionListener(e -> logoutDialog.dispose());
+        logoutDialog.add(cancelBtn);
+
+        RoundedButton confirmBtn = new RoundedButton("Log out");
+        confirmBtn.setBackground(new Color(255, 0, 0));
+        confirmBtn.setBounds(190, 105, 100, 35);
+        confirmBtn.addActionListener(e -> {
+            logoutDialog.dispose();
+            dispose();
+            new LoginSelection(); 
+        });
+        logoutDialog.add(confirmBtn);
+
+        logoutDialog.setVisible(true);
     }
 
     public static void main(String[] args) {

@@ -290,7 +290,7 @@ public class HomePageCustomer extends JFrame {
             yPos += 22;
         }
         RoundedButton editBtn = new RoundedButton("Edit");
-        editBtn.setBackground(new Color(218, 186, 121));
+        editBtn.setBackground(new Color(8, 25, 64));
         editBtn.setBounds(145, 270, 130, 35);
         editBtn.addActionListener(e -> {
             detailDialog.dispose();
@@ -427,10 +427,13 @@ public class HomePageCustomer extends JFrame {
 
         RoundedButton cancelBtn = new RoundedButton("Cancel");
         cancelBtn.setBounds(70, 160, 100, 35);
+        cancelBtn.setBackground(new Color(108, 130, 173));
+        cancelBtn.setForeground(Color.BLACK);
         cancelBtn.addActionListener(e -> confirmDialog.dispose());
         confirmDialog.add(cancelBtn);
 
-        RoundedButton confirmBtn = new RoundedButton("Confirm");
+        RoundedButton confirmBtn = new RoundedButton("Deactivate");
+        confirmBtn.setBackground(new Color(255, 0, 0));
         confirmBtn.setBounds(200, 160, 100, 35);
         confirmBtn.addActionListener(e -> {
             customerHandling.DeactivateCustomer(customer.getAccNo());
@@ -464,6 +467,7 @@ public class HomePageCustomer extends JFrame {
         successDialog.add(messageLabel);
 
         RoundedButton confirmBtn = new RoundedButton("Confirm");
+        confirmBtn.setBackground(new Color(8, 25, 64));
         confirmBtn.setBounds(175, 165, 100, 35);
         confirmBtn.addActionListener(e -> {
             successDialog.dispose();
@@ -628,7 +632,7 @@ public class HomePageCustomer extends JFrame {
         balVal2.setBounds(220, 160, 200, 20);
         valuesPanel.add(balVal2);
 
-        // Apply button listener: update values using selected date range
+        applyBtn.setBackground(new Color(255, 0, 0));
         applyBtn.addActionListener(e -> {
             Date s = (Date) startSpinner.getValue();
             Date en = (Date) endSpinner.getValue();
@@ -653,6 +657,7 @@ public class HomePageCustomer extends JFrame {
 
         RoundedButton closeBtn = new RoundedButton("Close");
         closeBtn.setBounds(300, 430, 100, 35);
+        closeBtn.setBackground(new Color(8, 25, 64));
         closeBtn.addActionListener(e -> reportDialog.dispose());
         reportDialog.add(closeBtn);
 
@@ -679,11 +684,13 @@ public class HomePageCustomer extends JFrame {
         logoutDialog.add(messageLabel);
 
         RoundedButton cancelBtn = new RoundedButton("Cancel");
+        cancelBtn.setBackground(new Color(108, 130, 173));
         cancelBtn.setBounds(60, 105, 100, 35);
         cancelBtn.addActionListener(e -> logoutDialog.dispose());
         logoutDialog.add(cancelBtn);
 
-        RoundedButton confirmBtn = new RoundedButton("Confirm");
+        RoundedButton confirmBtn = new RoundedButton("Log out");
+        confirmBtn.setBackground(new Color(255, 0, 0));
         confirmBtn.setBounds(190, 105, 100, 35);
         confirmBtn.addActionListener(e -> {
             logoutDialog.dispose();
@@ -767,12 +774,14 @@ public class HomePageCustomer extends JFrame {
             add(amountField);
 
             RoundedButton cancelBtn = new RoundedButton("Cancel");
-            cancelBtn.setBounds(70, isTransfer ? 215 : 180, 110, 35);
+            cancelBtn.setBackground(new Color(108, 130, 173));
+            cancelBtn.setBounds(70, isTransfer ? 215 : 160, 110, 35);
             cancelBtn.addActionListener(e -> dispose());
             add(cancelBtn);
 
             RoundedButton actionBtn = new RoundedButton(type);
-            actionBtn.setBounds(220, isTransfer ? 215 : 180, 110, 35);
+            actionBtn.setBackground(new Color(8, 25, 64));
+            actionBtn.setBounds(220, isTransfer ? 215 : 160, 110, 35);
             actionBtn.addActionListener(e -> processTransaction(isTransfer));
             add(actionBtn);
         }
@@ -867,7 +876,6 @@ public class HomePageCustomer extends JFrame {
         }
     }
 
-    // Rounded Button
     class RoundedButton extends JButton {
         RoundedButton(String text) {
             super(text);

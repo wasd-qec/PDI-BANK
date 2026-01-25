@@ -56,7 +56,7 @@ public class SignInCustomer extends JFrame {
         usernameField.setBackground(new Color(35, 55, 112));
         usernameField.setForeground(Color.WHITE);
         usernameField.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        card.add(Box.createVerticalStrut(25));
+        card.add(Box.createVerticalStrut(30));
         card.add(usernameField);
 
         RoundedPasswordField passwordField = new RoundedPasswordField(15, "Password");
@@ -64,7 +64,7 @@ public class SignInCustomer extends JFrame {
         passwordField.setBackground(new Color(35, 55, 112));
         passwordField.setForeground(Color.WHITE);
         passwordField.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        card.add(Box.createVerticalStrut(10));
+        card.add(Box.createVerticalStrut(15));
         card.add(passwordField);
 
 
@@ -73,7 +73,7 @@ public class SignInCustomer extends JFrame {
         signInBtn.setMaximumSize(new Dimension(120, 35));
         signInBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         signInBtn.setBackground(new Color(218, 186, 121));
-        card.add(Box.createVerticalStrut(15));
+        card.add(Box.createVerticalStrut(40));
         card.add(signInBtn);
 
         setVisible(true);

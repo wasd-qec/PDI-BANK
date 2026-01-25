@@ -183,6 +183,7 @@ public class AdminReportDialog extends JDialog {
 
         // Close Button
         RoundedButton closeBtn = new RoundedButton("Close");
+        closeBtn.setBackground(new Color(108, 130, 173));
         closeBtn.setBounds(300, 430, 100, 35);
         closeBtn.addActionListener(e -> dispose());
         add(closeBtn);
@@ -214,8 +215,9 @@ public class AdminReportDialog extends JDialog {
             setOpaque(false);
             setBorderPainted(false);
             setContentAreaFilled(false);
+            setBackground(new Color(255, 0, 0));
             setForeground(Color.WHITE);
-            setFont(new Font("Segoe UI", Font.BOLD, 14));
+            setFont(new Font("Segoe UI", Font.BOLD, 13));
         }
 
         protected void paintComponent(Graphics g) {

@@ -42,8 +42,8 @@ public class TransactionTypeModal extends JDialog {
         JButton transferBtn = styledBtn("Transfer", 310, 110);
 
         depositBtn.addActionListener(e -> {
-            dispose(); // close this modal
-            new DepositTransactionModal(parent); // open the next modal
+            dispose(); 
+            new DepositTransactionModal(parent); 
         });
 
         withdrawBtn.addActionListener(e -> {
@@ -84,11 +84,9 @@ public class TransactionTypeModal extends JDialog {
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 
-                // Draw dark blue rounded background
                 g2.setColor(new Color(8, 25, 64));
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
                 
-                // Draw text
                 super.paintComponent(g);
             }
         };
