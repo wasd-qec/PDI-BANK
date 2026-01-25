@@ -27,7 +27,6 @@ public class SearchService {
     }
 
     public Customer searchCustomerById(String id) {
-        // Search through all customers for matching ID
         List<Customer> customers = customerRepository.getAllCustomers();
         return customers.stream()
             .filter(c -> c.getID() != null && c.getID().equals(id))

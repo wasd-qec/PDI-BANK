@@ -25,57 +25,48 @@ public class HomePageAdminAccount extends JFrame {
 
         getContentPane().setBackground(new Color(40, 65, 105));
 
-        // ========== LEFT SIDE PANEL ==========
         JPanel sidePanel = new JPanel(null);
         sidePanel.setBounds(0, 0, 200, 650);
         sidePanel.setBackground(new Color(8, 25, 64));
         add(sidePanel);
 
-        // LOGO
         ImageIcon logo = new ImageIcon("src\\GUI\\TMB_Logo.png");
         Image scaledLogo = logo.getImage().getScaledInstance(110, 110, Image.SCALE_SMOOTH);
         JLabel logoLabel = new JLabel(new ImageIcon(scaledLogo));
         logoLabel.setBounds(45, 40, 110, 110);
         sidePanel.add(logoLabel);
 
-        // ACCOUNT BUTTON
         RoundedButton accountBtn = new RoundedButton("Account");
         accountBtn.setBounds(28, 200, 145, 40);
         accountBtn.setBackground(new Color(218, 186, 121));
         sidePanel.add(accountBtn);
 
-        // TRANSACTION BUTTON
         RoundedButton transactionBtn = new RoundedButton("Transaction");
         transactionBtn.setBounds(28, 250, 145, 40);
         transactionBtn.setBackground(new Color(108, 130, 173));
         sidePanel.add(transactionBtn);
 
-        // Report BUTTON
         RoundedButton reportBtn = new RoundedButton("Report");
         reportBtn.setBounds(28, 300, 145, 40);
         reportBtn.setBackground(new Color(108, 130, 173));
         sidePanel.add(reportBtn);
 
-        // LOG OUT
         JLabel logoutLabel = new JLabel("Log out");
         logoutLabel.setForeground(Color.WHITE);
         logoutLabel.setBounds(30, 580, 100, 30);
         sidePanel.add(logoutLabel);
 
-        // ========== SEARCH BAR ==========
         searchBar = new RoundedTextField(20, "Search account number");
         searchBar.setBounds(240, 30, 600, 40);
         searchBar.setBackground(new Color(235, 235, 235));
         add(searchBar);
 
-        // SEARCH BUTTON
         RoundedButton searchBtn = new RoundedButton("Search");
         searchBtn.setBounds(850, 30, 100, 40);
         searchBtn.setBackground(new Color(108, 130, 173));
         searchBtn.addActionListener(e -> performSearch());
         add(searchBtn);
 
-        // ========== TOP BUTTONS ==========
         RoundedButton createAccBtn = new RoundedButton("Create account");
         createAccBtn.setBounds(240, 80, 150, 40);
         createAccBtn.setBackground(new Color(218, 186, 121));
@@ -92,14 +83,12 @@ public class HomePageAdminAccount extends JFrame {
         refreshBtn.addActionListener(e -> loadCustomers());
         add(refreshBtn);
 
-        // ========== ACCOUNTS TITLE ==========
         JLabel accLabel = new JLabel("Accounts");
         accLabel.setForeground(Color.WHITE);
         accLabel.setFont(new Font("Serif", Font.BOLD, 20));
         accLabel.setBounds(240, 130, 200, 40);
         add(accLabel);
 
-        // ========== SCROLLABLE ACCOUNTS PANEL ==========
         accountsPanel = new JPanel();
         accountsPanel.setLayout(new BoxLayout(accountsPanel, BoxLayout.Y_AXIS));
         accountsPanel.setBackground(new Color(40, 65, 105));
@@ -111,15 +100,12 @@ public class HomePageAdminAccount extends JFrame {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         add(scrollPane);
 
-        // Load initial data
         loadCustomers();
 
         logoutLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         logoutLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
-        // ========== CLICK ACTIONS ==========
         accountBtn.addActionListener(e -> {
-            // Already on accounts page
         });
 
         transactionBtn.addActionListener(e -> {
@@ -204,7 +190,6 @@ public class HomePageAdminAccount extends JFrame {
             JPanel accBox = createAccountBox(customer);
             accountsPanel.add(accBox);
         } else {
-            // Try searching by name
             List<Customer> customers = searchCustomer.findByName(searchText);
             if (!customers.isEmpty()) {
                 for (Customer c : customers) {
@@ -243,7 +228,6 @@ public class HomePageAdminAccount extends JFrame {
         accNumLabel.setBounds(20, 35, 150, 15);
         accBox.add(accNumLabel);
 
-        // Status indicator
         JLabel statusLabel = new JLabel(account.isActive() ? "Active" : "Inactive");
         statusLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
         statusLabel.setForeground(account.isActive() ? new Color(34, 139, 34) : new Color(220, 20, 60));
@@ -254,14 +238,13 @@ public class HomePageAdminAccount extends JFrame {
         JLabel balanceLabel = new JLabel(balanceStr);
         balanceLabel.setFont(new Font("Segoe UI", Font.BOLD, 15));
         if (account.getBalance() < 0) {
-            balanceLabel.setForeground(new Color(220, 20, 60)); // Red for negative
+            balanceLabel.setForeground(new Color(220, 20, 60)); 
         } else {
-            balanceLabel.setForeground(new Color(34, 139, 34)); // Green for positive
+            balanceLabel.setForeground(new Color(34, 139, 34)); 
         }
         balanceLabel.setBounds(480, 20, 100, 25);
         accBox.add(balanceLabel);
 
-        // Action buttons
         JButton viewBtn = new JButton("View");
         viewBtn.setBounds(590, 15, 70, 30);
         viewBtn.setBackground(new Color(108, 130, 173));
@@ -316,7 +299,6 @@ public class HomePageAdminAccount extends JFrame {
             yPos += 28;
         }
 
-        // Action buttons
         RoundedButton editBtn = new RoundedButton("Edit");
         editBtn.setBounds(10, 330, 100, 35);
         editBtn.setBackground(new Color(108, 130, 173));
@@ -369,7 +351,6 @@ public class HomePageAdminAccount extends JFrame {
         detailDialog.setVisible(true);
     }
 
-    // ========== RoundedPanel ==========
     class RoundedPanel extends JPanel {
         private int radius;
 
@@ -387,7 +368,6 @@ public class HomePageAdminAccount extends JFrame {
         }
     }
 
-    // ========== RoundedButton ==========
     class RoundedButton extends JButton {
         RoundedButton(String text) {
             super(text);
@@ -409,7 +389,6 @@ public class HomePageAdminAccount extends JFrame {
         }
     }
 
-    // ========== RoundedTextField (search bar) ==========
     class RoundedTextField extends JTextField {
         private String placeholder;
         private int radius;
@@ -471,7 +450,6 @@ public class HomePageAdminAccount extends JFrame {
             setLayout(null);
             getContentPane().setBackground(Color.WHITE);
 
-            // Title
             JLabel title = new JLabel("Creating Account");
             title.setFont(new Font("Serif", Font.BOLD, 28));
             title.setForeground(new Color(30, 50, 85));
@@ -479,7 +457,6 @@ public class HomePageAdminAccount extends JFrame {
             title.setBounds(0, 15, 500, 40);
             add(title);
 
-            // Divider line
             JPanel line = new JPanel();
             line.setBackground(new Color(30, 50, 85));
             line.setBounds(30, 62, 440, 1);
@@ -490,7 +467,6 @@ public class HomePageAdminAccount extends JFrame {
             int labelHeight = 18;
             int gap = 55;
 
-            // Customer ID
             JLabel idLabel = new JLabel("Customer ID");
             idLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             idLabel.setForeground(new Color(30, 50, 85));
@@ -500,7 +476,6 @@ public class HomePageAdminAccount extends JFrame {
             idField.setBounds(30, yPos + labelHeight, 210, fieldHeight);
             add(idField);
 
-            // Account Number
             JLabel accLabel = new JLabel("Account Number");
             accLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             accLabel.setForeground(new Color(30, 50, 85));
@@ -512,7 +487,6 @@ public class HomePageAdminAccount extends JFrame {
 
             yPos += gap;
 
-            // Username
             JLabel userLabel = new JLabel("Username");
             userLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             userLabel.setForeground(new Color(30, 50, 85));
@@ -524,7 +498,6 @@ public class HomePageAdminAccount extends JFrame {
 
             yPos += gap;
 
-            // Password
             JLabel passLabel = new JLabel("Password");
             passLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             passLabel.setForeground(new Color(30, 50, 85));
@@ -536,7 +509,6 @@ public class HomePageAdminAccount extends JFrame {
 
             yPos += gap;
 
-            // Phone Number
             JLabel phoneLabel = new JLabel("Phone Number");
             phoneLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             phoneLabel.setForeground(new Color(30, 50, 85));
@@ -546,7 +518,6 @@ public class HomePageAdminAccount extends JFrame {
             phoneField.setBounds(30, yPos + labelHeight, 210, fieldHeight);
             add(phoneField);
 
-            // Initial Balance
             JLabel balanceLabel = new JLabel("Initial Balance");
             balanceLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             balanceLabel.setForeground(new Color(30, 50, 85));
@@ -558,7 +529,6 @@ public class HomePageAdminAccount extends JFrame {
 
             yPos += gap;
 
-            // Address
             JLabel addressLabel = new JLabel("Address");
             addressLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             addressLabel.setForeground(new Color(30, 50, 85));
@@ -570,7 +540,6 @@ public class HomePageAdminAccount extends JFrame {
 
             yPos += gap;
 
-            // Birth Date
             JLabel birthLabel = new JLabel("Birth Date (YYYY-MM-DD)");
             birthLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             birthLabel.setForeground(new Color(30, 50, 85));
@@ -582,7 +551,6 @@ public class HomePageAdminAccount extends JFrame {
 
             yPos += gap + 15;
 
-            // Cancel Button
             RoundedButton cancelBtn = new RoundedButton("Cancel");
             cancelBtn.setBounds(200, yPos, 110, 35);
             cancelBtn.setBackground(new Color(108, 130, 173));
@@ -590,7 +558,6 @@ public class HomePageAdminAccount extends JFrame {
             cancelBtn.addActionListener(e -> dispose());
             add(cancelBtn);
 
-            // Create Button
             RoundedButton createBtn = new RoundedButton("Create");
             createBtn.setBounds(320, yPos, 110, 35);
             createBtn.setBackground(new Color(8, 25, 64));
@@ -640,7 +607,6 @@ public class HomePageAdminAccount extends JFrame {
                 String birthDate = birthField.getText().trim();
                 String balanceStr = balanceField.getText().trim();
 
-                // Validation
                 if (id.isEmpty() || id.equals("Enter customer ID")) {
                     JOptionPane.showMessageDialog(this, "Please enter customer ID.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -658,7 +624,6 @@ public class HomePageAdminAccount extends JFrame {
                     return;
                 }
 
-                // Check if ID or AccNo already exists
                 if (customerImple.existsid(id)) {
                     JOptionPane.showMessageDialog(this, "Customer ID already exists.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -717,7 +682,6 @@ public class HomePageAdminAccount extends JFrame {
         titleLabel.setBounds(20, 20, 200, 25);
         editDialog.add(titleLabel);
 
-        // Name
         JLabel nameLabel = new JLabel("Name");
         nameLabel.setForeground(new Color(30, 50, 85));
         nameLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
@@ -730,7 +694,6 @@ public class HomePageAdminAccount extends JFrame {
         nameField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         editDialog.add(nameField);
 
-        // ID
         JLabel idLabel = new JLabel("Customer ID");
         idLabel.setForeground(new Color(30, 50, 85));
         idLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
@@ -743,7 +706,6 @@ public class HomePageAdminAccount extends JFrame {
         idField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         editDialog.add(idField);
 
-        // Birth Date
         JLabel birthLabel = new JLabel("Birth Date (YYYY-MM-DD)");
         birthLabel.setForeground(new Color(30, 50, 85));
         birthLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
@@ -756,7 +718,6 @@ public class HomePageAdminAccount extends JFrame {
         birthField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         editDialog.add(birthField);
 
-        // Phone Number
         JLabel phoneLabel = new JLabel("Phone Number");
         phoneLabel.setForeground(new Color(30, 50, 85));
         phoneLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
@@ -769,7 +730,6 @@ public class HomePageAdminAccount extends JFrame {
         phoneField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         editDialog.add(phoneField);
 
-        // Address
         JLabel addressLabel = new JLabel("Address");
         addressLabel.setForeground(new Color(30, 50, 85));
         addressLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
@@ -800,13 +760,11 @@ public class HomePageAdminAccount extends JFrame {
                 String newPhone = phoneField.getText().trim();
                 String newAddress = addressField.getText().trim();
 
-                // Validation
                 if (newName.isEmpty() || newId.isEmpty() || newPhone.isEmpty() || newAddress.isEmpty()) {
                     JOptionPane.showMessageDialog(editDialog, "All fields are required!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
-                // Validate phone number is numeric
                 int phoneNumber;
                 try {
                     phoneNumber = Integer.parseInt(newPhone);
@@ -815,7 +773,6 @@ public class HomePageAdminAccount extends JFrame {
                     return;
                 }
 
-                // Update customer object
                 customer.setName(newName);
                 customer.setID(newId);
                 customer.setBirthDate(newBirth);
@@ -882,14 +839,12 @@ public class HomePageAdminAccount extends JFrame {
             setLayout(null);
             getContentPane().setBackground(new Color(245, 240, 235));
             
-            // Title
             JLabel titleLabel = new JLabel("Filter Customers By:");
             titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 16));
             titleLabel.setForeground(new Color(30, 50, 85));
             titleLabel.setBounds(30, 20, 300, 25);
             add(titleLabel);
             
-            // Name
             JLabel nameLabel = new JLabel("Name:");
             nameLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             nameLabel.setForeground(new Color(30, 50, 85));
@@ -902,7 +857,6 @@ public class HomePageAdminAccount extends JFrame {
             nameField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
             add(nameField);
 
-            // Status
             JLabel statusLabel = new JLabel("Status:");
             statusLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             statusLabel.setForeground(new Color(30, 50, 85));
@@ -915,7 +869,6 @@ public class HomePageAdminAccount extends JFrame {
             statusCombo.setBackground(new Color(218, 186, 121));
             add(statusCombo);
 
-            // Created From
             JLabel createdLabel = new JLabel("Created From:");
             createdLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             createdLabel.setForeground(new Color(30, 50, 85));
@@ -928,7 +881,6 @@ public class HomePageAdminAccount extends JFrame {
             createdFromField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
             add(createdFromField);
 
-            // Created To
             JLabel toLabel = new JLabel("To:");
             toLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             toLabel.setForeground(new Color(30, 50, 85));
@@ -941,7 +893,6 @@ public class HomePageAdminAccount extends JFrame {
             createdToField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
             add(createdToField);
 
-            // Min Balance
             JLabel minBalanceLabel = new JLabel("Min Balance:");
             minBalanceLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             minBalanceLabel.setForeground(new Color(30, 50, 85));
@@ -954,7 +905,6 @@ public class HomePageAdminAccount extends JFrame {
             minBalanceField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
             add(minBalanceField);
 
-            // Max Balance
             JLabel maxBalanceLabel = new JLabel("Max Balance:");
             maxBalanceLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             maxBalanceLabel.setForeground(new Color(30, 50, 85));
@@ -967,7 +917,6 @@ public class HomePageAdminAccount extends JFrame {
             maxBalanceField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
             add(maxBalanceField);
 
-            // Address
             JLabel addressLabel = new JLabel("Address:");
             addressLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             addressLabel.setForeground(new Color(30, 50, 85));
@@ -980,21 +929,18 @@ public class HomePageAdminAccount extends JFrame {
             addressField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
             add(addressField);
 
-            // Info text
             JLabel infoLabel = new JLabel("Date format: YYYY-MM-DD. Leave empty to skip filter.");
             infoLabel.setFont(new Font("Segoe UI", Font.ITALIC, 10));
             infoLabel.setForeground(new Color(100, 100, 100));
             infoLabel.setBounds(30, 355, 490, 15);
             add(infoLabel);
 
-            // Cancel Button
             RoundedButton cancelBtn = new RoundedButton("Cancel");
             cancelBtn.setBounds(220, 385, 120, 38);
             cancelBtn.setBackground(new Color(108, 130, 173));
             cancelBtn.addActionListener(e -> dispose());
             add(cancelBtn);
 
-            // OK Button
             RoundedButton okBtn = new RoundedButton("OK");
             okBtn.setBounds(360, 385, 120, 38);
             okBtn.setBackground(new Color(8, 25, 64));

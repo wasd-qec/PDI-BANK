@@ -26,7 +26,6 @@ public class ReportForUser implements ReportInterfaceUser {
         return 0.0;
     }
 
-    // Get total withdrawal amount for a specific customer
     public double getCustomerTotalWithdrawal(Customer customer) {
         String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE (SenderID = ? OR SenderID = ?) AND Type = 'Withdrawal'";
         try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
@@ -43,7 +42,6 @@ public class ReportForUser implements ReportInterfaceUser {
         return 0.0;
     }
 
-    // Get total transfer out amount for a specific customer (money sent)
     public double getCustomerTotalTransferOut(Customer customer) {
         String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE (SenderID = ? OR SenderID = ?) AND Type = 'Transfer'";
         try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
@@ -60,7 +58,6 @@ public class ReportForUser implements ReportInterfaceUser {
         return 0.0;
     }
 
-    // Get total transfer in amount for a specific customer (money received)
     public double getCustomerTotalTransferIn(Customer customer) {
         String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE (ReceiverID = ? OR ReceiverID = ?) AND Type = 'Transfer'";
         try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
@@ -77,7 +74,6 @@ public class ReportForUser implements ReportInterfaceUser {
         return 0.0;
     }
 
-    // Print customer account summary
     public void printCustomerAccountSummary(Customer customer) {
         System.out.println("======== ACCOUNT SUMMARY ========");
         System.out.println("Account Number:   " + customer.getAccNo());
@@ -92,7 +88,7 @@ public class ReportForUser implements ReportInterfaceUser {
         System.out.println("=================================");
     }
 
-    // Get total deposit amount for a specific customer within a date range (inclusive)
+
     public double getCustomerTotalDeposit(Customer customer, String startTimestamp, String endTimestamp) {
         String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE (ReceiverID = ?) AND Type = 'DEPOSIT' AND Timestamp BETWEEN ? AND ?";
         try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
@@ -110,7 +106,6 @@ public class ReportForUser implements ReportInterfaceUser {
         return 0.0;
     }
 
-    // Get total withdrawal amount for a specific customer within a date range
     public double getCustomerTotalWithdrawal(Customer customer, String startTimestamp, String endTimestamp) {
         String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE (SenderID = ?) AND Type = 'WITHDRAWAL' AND Timestamp BETWEEN ? AND ?";
         try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
@@ -128,7 +123,6 @@ public class ReportForUser implements ReportInterfaceUser {
         return 0.0;
     }
 
-    // Get total transfer out amount for a specific customer within a date range
     public double getCustomerTotalTransferOut(Customer customer, String startTimestamp, String endTimestamp) {
         String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE (SenderID = ?) AND Type = 'TRANSFER' AND Timestamp BETWEEN ? AND ?";
         try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
@@ -146,7 +140,6 @@ public class ReportForUser implements ReportInterfaceUser {
         return 0.0;
     }
 
-    // Get total transfer in amount for a specific customer within a date range
     public double getCustomerTotalTransferIn(Customer customer, String startTimestamp, String endTimestamp) {
         String sql = "SELECT COALESCE(SUM(Amount), 0) AS total FROM burger WHERE (ReceiverID = ?) AND Type = 'TRANSFER' AND Timestamp BETWEEN ? AND ?";
         try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());

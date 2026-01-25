@@ -25,6 +25,7 @@ public class TransferTransactionModal extends JDialog {
         setUndecorated(true);
         setLocationRelativeTo(parent);
         setBackground(new Color(0, 0, 0, 0));
+        setOpacity(0.0f);
 
         setShape(new java.awt.geom.RoundRectangle2D.Double(0, 0, 550, 520, 35, 35));
 
@@ -33,27 +34,29 @@ public class TransferTransactionModal extends JDialog {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(new Color(0, 0, 0, 30));
+                g2.fillRoundRect(3, 3, getWidth()-3, getHeight()-3, 35, 35);
                 g2.setColor(new Color(245, 238, 228));
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 35, 35);
+                g2.setColor(Color.BLACK);
+                g2.setStroke(new BasicStroke(1));
+                g2.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 35, 35);
             }
         };
         panel.setBounds(0, 0, 550, 520);
         add(panel);
 
-        // ----- Title -----
         JLabel title = new JLabel("Creating Transfer Transaction", SwingConstants.CENTER);
         title.setFont(new Font("Serif", Font.BOLD, 22));
         title.setForeground(new Color(10, 32, 68));
         title.setBounds(0, 35, 550, 30);
         panel.add(title);
 
-        // Divider line
         JPanel line = new JPanel();
         line.setBackground(new Color(140, 140, 140));
         line.setBounds(40, 80, 470, 1);
         panel.add(line);
 
-        // ----- Sender Account label -----
         JLabel senderLabel = new JLabel("Sender Account Number");
         senderLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         senderLabel.setForeground(new Color(10, 32, 68));
@@ -64,7 +67,6 @@ public class TransferTransactionModal extends JDialog {
         senderField.setBounds(50, 130, 450, 45);
         panel.add(senderField);
 
-        // ----- Receiver Account label -----
         JLabel receiverLabel = new JLabel("Receiver Account Number");
         receiverLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         receiverLabel.setForeground(new Color(10, 32, 68));
@@ -75,7 +77,6 @@ public class TransferTransactionModal extends JDialog {
         receiverField.setBounds(50, 220, 450, 45);
         panel.add(receiverField);
 
-        // ----- Amount label -----
         JLabel amtLabel = new JLabel("Amount");
         amtLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         amtLabel.setForeground(new Color(10, 32, 68));
@@ -86,7 +87,6 @@ public class TransferTransactionModal extends JDialog {
         amtField.setBounds(50, 310, 450, 45);
         panel.add(amtField);
 
-        // ----- Buttons -----
         JButton cancelBtn = styledDarkBtn("Cancel");
         cancelBtn.setBounds(180, 400, 90, 40);
         cancelBtn.setBackground(new Color(108, 130, 173));
@@ -172,9 +172,24 @@ public class TransferTransactionModal extends JDialog {
             }
         });
 
+        showWithAnimation();
+    }
+
+    private void showWithAnimation() {
         setVisible(true);
         toFront();
         requestFocus();
+        
+        Timer fadeInTimer = new Timer(10, e -> {
+            float opacity = getOpacity();
+            opacity += 0.05f;
+            if (opacity >= 1.0f) {
+                opacity = 1.0f;
+                ((Timer) e.getSource()).stop();
+            }
+            setOpacity(opacity);
+        });
+        fadeInTimer.start();
     }
 
     private JTextField styledInput(String placeholder) {

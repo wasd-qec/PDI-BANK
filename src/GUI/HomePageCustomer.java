@@ -34,20 +34,17 @@ public class HomePageCustomer extends JFrame {
 
         getContentPane().setBackground(new Color(30, 50, 85));
 
-        // ========== LEFT SIDE PANEL ==========
         JPanel sideBar = new JPanel(null);
         sideBar.setBounds(0, 0, 200, 600);
         sideBar.setBackground(new Color(8, 25, 64));
         add(sideBar);
 
-        // LOGO
         ImageIcon logo = new ImageIcon("src\\GUI\\TMB_Logo.png");
         Image scaledLogo = logo.getImage().getScaledInstance(110, 110, Image.SCALE_SMOOTH);
         JLabel logoLabel = new JLabel(new ImageIcon(scaledLogo));
         logoLabel.setBounds(45, 40, 110, 110);
         sideBar.add(logoLabel);
 
-        // MENU BUTTONS
         RoundedButton AccBT = new RoundedButton("Account Detail");
         AccBT.setBounds(30, 180, 140, 35);
         AccBT.addActionListener(e -> showAccountDetailDialog());
@@ -100,7 +97,6 @@ public class HomePageCustomer extends JFrame {
         amountText.setBounds(450, 25, 200, 30);
         balanceBox.add(amountText);
 
-        // ACTION BUTTONS
         RoundedButton depositBtn = new RoundedButton("Deposit");
         depositBtn.setBackground(new Color(218, 186, 121));
         depositBtn.setBounds(260, 150, 180, 50);
@@ -125,7 +121,6 @@ public class HomePageCustomer extends JFrame {
         recentLabel.setBounds(230, 230, 300, 30);
         add(recentLabel);
 
-        // TRANSACTION PANEL - will be populated dynamically (scrollable)
         transactionPanel = new JPanel();
         transactionPanel.setLayout(new BoxLayout(transactionPanel, BoxLayout.Y_AXIS));
         transactionPanel.setOpaque(false);
@@ -314,7 +309,6 @@ public class HomePageCustomer extends JFrame {
         titleLabel.setBounds(20, 20, 150, 25);
         editDialog.add(titleLabel);
 
-        // Phone Number
         JLabel phoneLabel = new JLabel("Phone Number");
         phoneLabel.setForeground(new Color(30, 50, 85));
         phoneLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
@@ -329,7 +323,6 @@ public class HomePageCustomer extends JFrame {
         phoneField.setForeground(Color.BLACK);
         editDialog.add(phoneField);
 
-        // Address
         JLabel addressLabel = new JLabel("Address");
         addressLabel.setForeground(new Color(30, 50, 85));
         addressLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
@@ -359,13 +352,11 @@ public class HomePageCustomer extends JFrame {
                 String newPhone = phoneField.getText().trim();
                 String newAddress = addressField.getText().trim();
                 
-                // Validation
                 if (newPhone.isEmpty() || newAddress.isEmpty()) {
                     JOptionPane.showMessageDialog(editDialog, "All fields are required!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 
-                // Validate phone number is numeric
                 int phoneNumber;
                 try {
                     phoneNumber = Integer.parseInt(newPhone);
@@ -374,14 +365,11 @@ public class HomePageCustomer extends JFrame {
                     return;
                 }
                 
-                // Update customer object
                 customer.setPhoneNumber(phoneNumber);
                 customer.setAddress(newAddress);
                 
-                // Save to database
                 customerHandling.updateCustomer(customer);
                 
-                // Refresh customer data from database
                 customer = customerHandling.getCustomerByAccNo(customer.getAccNo());
                 
                 editDialog.dispose();
@@ -493,9 +481,6 @@ public class HomePageCustomer extends JFrame {
         titleLabel.setBounds(30, 20, 300, 30);
         reportDialog.add(titleLabel);
 
-        // (search bar removed)
-
-        // Summary similar to Report.printCustomerAccountSummary
         ReportInterfaceUser report = new ReportForUser();
         double totalDeposit = report.getCustomerTotalDeposit(customer);
         double totalWithdrawal = report.getCustomerTotalWithdrawal(customer);
@@ -504,7 +489,6 @@ public class HomePageCustomer extends JFrame {
         double moneyIn = totalDeposit + totalTransferIn;
         double moneyOut = totalWithdrawal + totalTransferOut;
 
-        // Date range pickers (start / end)
         SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal = Calendar.getInstance();
         Date endDate = cal.getTime();
@@ -566,7 +550,6 @@ public class HomePageCustomer extends JFrame {
         summaryPanel.add(balValue);
 
 
-        // Display per-customer totals returned by Report (no extra calculation)
         JPanel valuesPanel = new JPanel(null);
         valuesPanel.setBackground(new Color(245, 240, 235));
         valuesPanel.setBounds(30, 190, 640, 220);
@@ -722,7 +705,7 @@ public class HomePageCustomer extends JFrame {
         successDialog.setVisible(true);
     }
 
-    // Transaction Dialog with backend integration
+
     class TransactionDialog extends JDialog {
         private JTextField recipientField;
         private JTextField amountField;
@@ -857,7 +840,6 @@ public class HomePageCustomer extends JFrame {
         }
     }
 
-    // Rounded Panel
     class RoundedPanel extends JPanel {
         private int radius;
 

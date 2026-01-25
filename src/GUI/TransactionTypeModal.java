@@ -19,8 +19,13 @@ public class TransactionTypeModal extends JDialog {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(new Color(0, 0, 0, 30));
+                g2.fillRoundRect(3, 3, getWidth()-3, getHeight()-3, 35, 35);
                 g2.setColor(new Color(245, 238, 228));
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 35, 35);
+                g2.setColor(Color.BLACK);
+                g2.setStroke(new BasicStroke(1));
+                g2.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 35, 35);
             }
         };
         panel.setBounds(0, 0, 500, 300);
@@ -60,7 +65,6 @@ public class TransactionTypeModal extends JDialog {
         panel.add(withdrawBtn);
         panel.add(transferBtn);
 
-        // Cancel label
         JLabel cancelLabel = new JLabel("Cancel", SwingConstants.CENTER);
         cancelLabel.setBounds(0, 200, 500, 25);
         cancelLabel.setForeground(new Color(10, 32, 68));
@@ -73,8 +77,8 @@ public class TransactionTypeModal extends JDialog {
                 dispose();
             }
         });
-
-        setVisible(true);
+        
+        showWithAnimation();
     }
 
     private JButton styledBtn(String text, int x, int y) {
@@ -100,4 +104,18 @@ public class TransactionTypeModal extends JDialog {
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         return btn;
     }
+
+    private void showWithAnimation() {
+        setVisible(true);
+        Timer fadeInTimer = new Timer(10, e -> {
+            float opacity = getOpacity();
+            opacity += 0.05f;
+            if (opacity >= 1.0f) {
+                opacity = 1.0f;
+                ((Timer) e.getSource()).stop();
+            }
+            setOpacity(opacity);
+        });
+        fadeInTimer.start();
+    }   
 }

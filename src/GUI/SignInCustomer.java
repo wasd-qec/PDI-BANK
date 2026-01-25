@@ -18,14 +18,12 @@ public class SignInCustomer extends JFrame {
         getContentPane().setBackground(new Color(213, 197, 186));
         setLayout(null);
 
-        // --- BACK BUTTON ---
         RoundedButton backBtn = new RoundedButton("Back");
         backBtn.setBackground(new Color(8, 25, 64));
         backBtn.setForeground(Color.WHITE);
         backBtn.setBounds(20, 20, 100, 35);
         add(backBtn);
 
-        // --- BLUE CARD PANEL ---
         RoundedPanel card = new RoundedPanel(35);
         card.setBounds(160, 40, 350, 400);
         card.setBackground(new Color(8, 25, 64));
@@ -33,7 +31,6 @@ public class SignInCustomer extends JFrame {
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         add(card);
 
-        // --- LOGO ---
         ImageIcon logo = new ImageIcon("src\\GUI\\TMB_Logo.png");
         Image scaledImg = logo.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
         JLabel logoLabel = new JLabel(new ImageIcon(scaledImg));
@@ -42,7 +39,6 @@ public class SignInCustomer extends JFrame {
         card.add(Box.createVerticalStrut(25));
         card.add(logoLabel);
 
-        // --- TITLE ---
         JLabel title = new JLabel("Sign In");
         title.setFont(new Font("Serif", Font.BOLD, 32));
         title.setForeground(Color.WHITE);
@@ -50,7 +46,6 @@ public class SignInCustomer extends JFrame {
         card.add(Box.createVerticalStrut(10));
         card.add(title);
 
-        // --- USERNAME FIELD ---
         RoundedTextField usernameField = new RoundedTextField(15, "Username");
         usernameField.setMaximumSize(new Dimension(250, 35));
         usernameField.setBackground(new Color(35, 55, 112));
@@ -68,7 +63,6 @@ public class SignInCustomer extends JFrame {
         card.add(passwordField);
 
 
-        // --- SIGN IN BUTTON ---
         RoundedButton signInBtn = new RoundedButton("Sign In");
         signInBtn.setMaximumSize(new Dimension(120, 35));
         signInBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -124,7 +118,6 @@ public class SignInCustomer extends JFrame {
 
     }
 
-    // Rounded Panel for card
     class RoundedPanel extends JPanel {
         private int radius;
 
@@ -142,7 +135,6 @@ public class SignInCustomer extends JFrame {
         }
     }
 
-    // Rounded Button Class
     class RoundedButton extends JButton {
         RoundedButton(String text) {
             super(text);
@@ -163,7 +155,6 @@ public class SignInCustomer extends JFrame {
         }
     }
 
-    // Rounded Text Field Class
     class RoundedTextField extends JTextField {
         private int radius;
         private String placeholder;
@@ -183,7 +174,6 @@ public class SignInCustomer extends JFrame {
             g2.fillRoundRect(0, 0, getWidth(), getHeight(), radius, radius);
             super.paintComponent(g);
 
-            // show placeholder only if empty
             if (getText().isEmpty()) {
                 g2.setColor(Color.LIGHT_GRAY);
                 g2.setFont(getFont());
@@ -193,8 +183,6 @@ public class SignInCustomer extends JFrame {
             g2.dispose();
         }
     }
-    // Rounded Password Field Class
-
     class RoundedPasswordField extends JPasswordField {
         private int radius;
         private String placeholder;
@@ -214,7 +202,6 @@ public class SignInCustomer extends JFrame {
             g2.fillRoundRect(0, 0, getWidth(), getHeight(), radius, radius);
             super.paintComponent(g);
 
-            // show placeholder only if empty
             if (getPassword().length == 0) {
                 g2.setColor(Color.LIGHT_GRAY);
                 g2.setFont(getFont());

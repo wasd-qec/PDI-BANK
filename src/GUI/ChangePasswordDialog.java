@@ -21,15 +21,14 @@ public class ChangePasswordDialog extends JDialog {
         setResizable(false);
         getContentPane().setBackground(new Color(245, 240, 235));
         setLayout(null);
+        getRootPane().setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
-        // Title
         JLabel titleLabel = new JLabel("Change Password");
         titleLabel.setFont(new Font("Serif", Font.BOLD, 18));
         titleLabel.setForeground(new Color(30, 50, 85));
         titleLabel.setBounds(20, 20, 200, 25);
         add(titleLabel);
 
-        // Old Password
         JLabel oldPasswordLabel = new JLabel("Old Password");
         oldPasswordLabel.setForeground(new Color(30, 50, 85));
         oldPasswordLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
@@ -44,7 +43,6 @@ public class ChangePasswordDialog extends JDialog {
         oldPasswordField.setForeground(Color.BLACK);
         add(oldPasswordField);
 
-        // New Password
         JLabel newPasswordLabel = new JLabel("New Password");
         newPasswordLabel.setForeground(new Color(30, 50, 85));
         newPasswordLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
@@ -59,7 +57,6 @@ public class ChangePasswordDialog extends JDialog {
         newPasswordField.setForeground(Color.BLACK);
         add(newPasswordField);
 
-        // Confirm Password
         JLabel confirmPasswordLabel = new JLabel("Confirm New Password");
         confirmPasswordLabel.setForeground(new Color(30, 50, 85));
         confirmPasswordLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
@@ -74,14 +71,12 @@ public class ChangePasswordDialog extends JDialog {
         confirmPasswordField.setForeground(Color.BLACK);
         add(confirmPasswordField);
 
-        // Cancel Button
         RoundedButton cancelBtn = new RoundedButton("Cancel");
         cancelBtn.setBackground(new Color(108, 130, 173));
         cancelBtn.setBounds(80, 300, 110, 35);
         cancelBtn.addActionListener(e -> dispose());
         add(cancelBtn);
 
-        // Change Password Button
         RoundedButton changeBtn = new RoundedButton("Change");
         changeBtn.setBackground(new Color(8, 25, 64));
         changeBtn.setBounds(220, 300, 110, 35);
@@ -94,7 +89,6 @@ public class ChangePasswordDialog extends JDialog {
         String newPassword = new String(newPasswordField.getPassword());
         String confirmPassword = new String(confirmPasswordField.getPassword());
 
-        // Validation
         if (oldPassword.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
             showErrorDialog("All fields are required!");
             return;
@@ -115,7 +109,6 @@ public class ChangePasswordDialog extends JDialog {
             return;
         }
 
-        // Verify old password against database
         String storedPassword = customerHandling.getPasswordByAccNo(customer.getAccNo());
         PasswordEncryption passwordEncryption = new PasswordEncryption();
         
@@ -129,7 +122,6 @@ public class ChangePasswordDialog extends JDialog {
             return;
         }
 
-        // Update password in database
         try {
             String encryptedNewPassword = passwordEncryption.encryptPassword(newPassword);
             customerHandling.updatePassword(customer.getAccNo(), encryptedNewPassword);
@@ -199,7 +191,6 @@ public class ChangePasswordDialog extends JDialog {
         successDialog.setVisible(true);
     }
 
-    // Rounded Button inner class
     class RoundedButton extends JButton {
         RoundedButton(String text) {
             super(text);

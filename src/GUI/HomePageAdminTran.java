@@ -23,57 +23,48 @@ public class HomePageAdminTran extends JFrame {
 
         getContentPane().setBackground(new Color(40, 65, 105));
 
-        // ========== LEFT SIDE PANEL ==========
         JPanel sidePanel = new JPanel(null);
         sidePanel.setBounds(0, 0, 200, 650);
         sidePanel.setBackground(new Color(8, 25, 64));
         add(sidePanel);
 
-        // LOGO
         ImageIcon logo = new ImageIcon("src\\GUI\\TMB_Logo.png");
         Image scaledLogo = logo.getImage().getScaledInstance(110, 110, Image.SCALE_SMOOTH);
         JLabel logoLabel = new JLabel(new ImageIcon(scaledLogo));
         logoLabel.setBounds(45, 40, 110, 110);
         sidePanel.add(logoLabel);
 
-        // ACCOUNT BUTTON
         RoundedButton accountBtn = new RoundedButton("Account");
         accountBtn.setBounds(28, 200, 145, 40);
         accountBtn.setBackground(new Color(108, 130, 173));
         sidePanel.add(accountBtn);
 
-        // TRANSACTION BUTTON
         RoundedButton transactionBtn = new RoundedButton("Transaction");
         transactionBtn.setBounds(28, 250, 145, 40);
         transactionBtn.setBackground(new Color(218, 186, 121));
         sidePanel.add(transactionBtn);
 
-        // Report BUTTON
         RoundedButton reportBtn = new RoundedButton("Report");
         reportBtn.setBounds(28, 300, 145, 40);
         reportBtn.setBackground(new Color(108, 130, 173));
         sidePanel.add(reportBtn);
 
-        // LOG OUT
         JLabel logoutLabel = new JLabel("Log out");
         logoutLabel.setForeground(Color.WHITE);
         logoutLabel.setBounds(30, 580, 100, 30);
         sidePanel.add(logoutLabel);
 
-        // ========== SEARCH BAR ==========
         searchBar = new RoundedTextField(20, "Search transaction ID");
         searchBar.setBounds(240, 30, 600, 40);
         searchBar.setBackground(new Color(235, 235, 235));
         add(searchBar);
 
-        // SEARCH BUTTON
         RoundedButton searchBtn = new RoundedButton("Search");
         searchBtn.setBounds(850, 30, 100, 40);
         searchBtn.setBackground(new Color(108, 130, 173));
         searchBtn.addActionListener(e -> performSearch());
         add(searchBtn);
 
-        // TOP BUTTONS
         RoundedButton createTranBtn = new RoundedButton("Create Transaction");
         createTranBtn.setBounds(240, 80, 200, 40);
         createTranBtn.setBackground(new Color(218, 186, 121));
@@ -91,14 +82,12 @@ public class HomePageAdminTran extends JFrame {
         refreshBtn.addActionListener(e -> loadTransactions());
         add(refreshBtn);
 
-        // ========== TRANSACTIONS TITLE ==========
         JLabel tranLabel = new JLabel("Transactions");
         tranLabel.setForeground(Color.WHITE);
         tranLabel.setFont(new Font("Serif", Font.BOLD, 20));
         tranLabel.setBounds(240, 130, 200, 40);
         add(tranLabel);
 
-        // ========== SCROLLABLE TRANSACTIONS PANEL ==========
         transactionsPanel = new JPanel();
         transactionsPanel.setLayout(new BoxLayout(transactionsPanel, BoxLayout.Y_AXIS));
         transactionsPanel.setBackground(new Color(40, 65, 105));
@@ -110,20 +99,17 @@ public class HomePageAdminTran extends JFrame {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         add(scrollPane);
 
-        // Load initial data
         loadTransactions();
 
         logoutLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         logoutLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
-        // ========== CLICK ACTIONS ==========
         accountBtn.addActionListener(e -> {
             dispose();
             new HomePageAdminAccount();
         });
 
         transactionBtn.addActionListener(e -> {
-            // Already on transactions page
         });
 
         reportBtn.addActionListener(e -> {
@@ -276,7 +262,6 @@ public class HomePageAdminTran extends JFrame {
         return transBox;
     }
 
-    // ========== RoundedPanel ==========
     class RoundedPanel extends JPanel {
         private int radius;
 
@@ -294,7 +279,6 @@ public class HomePageAdminTran extends JFrame {
         }
     }
 
-    // ========== RoundedButton ==========
     class RoundedButton extends JButton {
         RoundedButton(String text) {
             super(text);
@@ -316,7 +300,6 @@ public class HomePageAdminTran extends JFrame {
         }
     }
 
-    // ========== RoundedTextField (search bar) ==========
     class RoundedTextField extends JTextField {
         private String placeholder;
         private int radius;
@@ -370,14 +353,11 @@ public class HomePageAdminTran extends JFrame {
             setLayout(null);
             getContentPane().setBackground(new Color(245, 240, 235));
             
-            // Title
             JLabel titleLabel = new JLabel("Filter Transactions By:");
             titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 16));
             titleLabel.setForeground(new Color(30, 50, 85));
             titleLabel.setBounds(30, 20, 300, 25);
             add(titleLabel);
-            
-            // Min Amount
             JLabel minAmountLabel = new JLabel("Min Amount:");
             minAmountLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             minAmountLabel.setForeground(new Color(30, 50, 85));

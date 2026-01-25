@@ -23,7 +23,6 @@ public class MainFrame extends JFrame {
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
 
-        // Create pages
         LoginSelection selection = new LoginSelection();
         
         mainPanel.add(selection, "selection");

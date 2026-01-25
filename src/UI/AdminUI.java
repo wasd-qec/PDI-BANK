@@ -62,7 +62,7 @@ public class AdminUI {
         } else if (choice == 5) {
             DeactivateAccount();
         } else if (choice == 6) {
-            // Future feature can be added here
+            
         } else if (choice == 7) {
             filterTransactionsMenu();
         } else if (choice == 8) {

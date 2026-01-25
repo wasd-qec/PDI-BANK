@@ -12,8 +12,7 @@ import Config.DatabaseConfig;
 import Object.Customer;
 import Object.CustomerSearchCriteria;
 
-public class SearchCustomer {
-	public Customer findByAccNo(String accNo) {
+public class SearchCustomer {	public Customer findByAccNo(String accNo) {
 		String sql = "SELECT * FROM users WHERE accNo = ?";
 		try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
 			 PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -49,7 +48,6 @@ public class SearchCustomer {
 		StringBuilder sql = new StringBuilder("SELECT * FROM users WHERE 1=1");
 		List<Object> params = new ArrayList<>();
 
-		// Exact search fields
 		if (criteria.getAccNo() != null && !criteria.getAccNo().isEmpty()) {
 			sql.append(" AND accNo = ?");
 			params.add(criteria.getAccNo());
@@ -67,7 +65,6 @@ public class SearchCustomer {
 			params.add(Integer.parseInt(criteria.getPhoneNumber()));
 		}
 
-		// Filter fields (partial match / range)
 		if (criteria.getNameFilter() != null && !criteria.getNameFilter().isEmpty()) {
 			sql.append(" AND name LIKE ?");
 			params.add("%" + criteria.getNameFilter() + "%");

@@ -31,8 +31,6 @@ public class SearchTransaction {
         return null;
     }
 
-
-
     public List<Transaction> filterByAmountRange(double minAmount, double maxAmount) {
         String sql = "SELECT * FROM burger WHERE Amount BETWEEN ? AND ? ORDER BY Timestamp DESC";
         try (Connection conn = DriverManager.getConnection(DatabaseConfig.getDbUrl());
@@ -60,13 +58,11 @@ public class SearchTransaction {
         StringBuilder sql = new StringBuilder("SELECT * FROM burger WHERE 1=1");
         List<Object> params = new ArrayList<>();
 
-        // Exact search
         if (criteria.getTransactionId() != null && !criteria.getTransactionId().isEmpty()) {
             sql.append(" AND TransactionID = ?");
             params.add(criteria.getTransactionId());
         }
 
-        // Filters
         if (criteria.getSenderId() != null && !criteria.getSenderId().isEmpty()) {
             sql.append(" AND SenderID = ?");
             params.add(criteria.getSenderId());

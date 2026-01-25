@@ -23,6 +23,7 @@ public class AdminReportDialog extends JDialog {
         setResizable(false);
         getContentPane().setBackground(new Color(30, 50, 85));
         setLayout(null);
+        getRootPane().setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
         this.report = new ReportForAdmin();
         this.dateFmt = new SimpleDateFormat("yyyy-MM-dd");
@@ -32,14 +33,12 @@ public class AdminReportDialog extends JDialog {
     }
 
     private void initializeComponents() {
-        // Title
         JLabel titleLabel = new JLabel("Transaction Report");
         titleLabel.setFont(new Font("Serif", Font.BOLD, 20));
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setBounds(30, 20, 300, 30);
         add(titleLabel);
 
-        // Get initial data
         double totalDeposit = report.getTotalDeposit();
         double totalWithdrawal = report.getTotalWithdrawal();
         double totalTransfer = report.getTotalTransfer();
@@ -48,7 +47,6 @@ public class AdminReportDialog extends JDialog {
         int DeactivatedUsers = report.getDeactivatedUsers();
         int ActiveUsers = report.getActiveUsers();
 
-        // Date range pickers (start / end)
         Calendar cal = Calendar.getInstance();
         Date endDate = cal.getTime();
         cal.add(Calendar.DAY_OF_MONTH, -30);
@@ -68,7 +66,6 @@ public class AdminReportDialog extends JDialog {
         applyBtn.setBounds(370, 60, 100, 25);
         add(applyBtn);
 
-        // Summary Panel
         RoundedPanel summaryPanel = new RoundedPanel(12);
         summaryPanel.setBackground(new Color(245, 240, 235));
         summaryPanel.setBounds(30, 110, 640, 70);
@@ -111,7 +108,6 @@ public class AdminReportDialog extends JDialog {
         balValue.setBounds(460, 34, 160, 20);
         summaryPanel.add(balValue);
 
-        // Values Panel
         JPanel valuesPanel = new JPanel(null);
         valuesPanel.setBackground(new Color(245, 240, 235));
         valuesPanel.setBounds(30, 190, 640, 220);
@@ -165,7 +161,6 @@ public class AdminReportDialog extends JDialog {
         balVal2.setBounds(220, 160, 200, 20);
         valuesPanel.add(balVal2);
 
-        // Apply button listener
         applyBtn.addActionListener(e -> {
             Date s = (Date) startSpinner.getValue();
             Date en = (Date) endSpinner.getValue();
@@ -181,7 +176,6 @@ public class AdminReportDialog extends JDialog {
             tinVal.setText(String.format("$%.2f", tinR));
         });
 
-        // Close Button
         RoundedButton closeBtn = new RoundedButton("Close");
         closeBtn.setBackground(new Color(108, 130, 173));
         closeBtn.setBounds(300, 430, 100, 35);
@@ -189,7 +183,6 @@ public class AdminReportDialog extends JDialog {
         add(closeBtn);
     }
 
-    // ========== RoundedPanel ==========
     private static class RoundedPanel extends JPanel {
         private int radius;
 
@@ -207,7 +200,6 @@ public class AdminReportDialog extends JDialog {
         }
     }
 
-    // ========== RoundedButton ==========
     private static class RoundedButton extends JButton {
         RoundedButton(String text) {
             super(text);

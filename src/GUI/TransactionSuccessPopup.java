@@ -13,7 +13,6 @@ public class TransactionSuccessPopup extends JDialog {
         setBackground(new Color(0, 0, 0, 0));
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-        // Set shape to match actual dialog size
         setShape(new java.awt.geom.RoundRectangle2D.Double(0, 0, 450, 170, 35, 35));
 
         JPanel panel = new JPanel(null) {
@@ -21,8 +20,13 @@ public class TransactionSuccessPopup extends JDialog {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(new Color(0, 0, 0, 30));
+                g2.fillRoundRect(3, 3, getWidth()-3, getHeight()-3, 35, 35);
                 g2.setColor(new Color(245, 238, 228));
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 35, 35);
+                g2.setColor(Color.BLACK);
+                g2.setStroke(new BasicStroke(1));
+                g2.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 35, 35);
             }
         };
         panel.setBounds(0, 0, 450, 170);
@@ -36,10 +40,8 @@ public class TransactionSuccessPopup extends JDialog {
         msg.setBounds(0, 50, 450, 40);
         panel.add(msg);
 
-        // Only call setVisible once
         setVisible(true);
 
-        // Auto close after 1.8 seconds using SwingUtilities to avoid blocking
         Timer timer = new Timer(1800, e -> {
             dispose();
         });

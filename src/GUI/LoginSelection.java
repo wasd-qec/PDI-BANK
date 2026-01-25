@@ -26,31 +26,30 @@ public class LoginSelection extends JFrame {
         JLabel logoLabel = new JLabel(new ImageIcon(scaled));
         logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        card.add(Box.createVerticalStrut(30));  // Increased from 20
+        card.add(Box.createVerticalStrut(30));
         card.add(logoLabel);
 
         JLabel title = new JLabel("Login Selection");
         title.setForeground(Color.WHITE);
         title.setFont(new Font("Serif", Font.BOLD, 28));
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        card.add(Box.createVerticalStrut(20));  // Increased from 10
+        card.add(Box.createVerticalStrut(20));
         card.add(title);
 
         RoundedButton customerBtn = new RoundedButton("Customer");
         customerBtn.setMaximumSize(new Dimension(180, 40));
         customerBtn.setBounds(100, 300, 180, 40);
         customerBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        card.add(Box.createVerticalStrut(40));  // Increased from 25
+        card.add(Box.createVerticalStrut(40));
         card.add(customerBtn);
 
         RoundedButton adminBtn = new RoundedButton("Admin");
         adminBtn.setMaximumSize(new Dimension(180, 40));
         adminBtn.setBounds(100, 400, 180, 40);
         adminBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        card.add(Box.createVerticalStrut(20));  // Increased from 15
+        card.add(Box.createVerticalStrut(20));
         card.add(adminBtn);
 
-        // ====== BUTTON EVENTS ======
         customerBtn.addActionListener(e -> {
             dispose();
             new SignInCustomer();
@@ -58,7 +57,7 @@ public class LoginSelection extends JFrame {
 
         adminBtn.addActionListener(e -> {
             dispose();
-            new SignInAdmin(); // or AdminSignInPage if you make one
+            new SignInAdmin();
         });
 
         setVisible(true);
@@ -96,7 +95,6 @@ public class LoginSelection extends JFrame {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-            // FIXED ROUND VALUES (proper button shape)
             g2.setColor(new Color(218, 186, 121));
             g2.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);
 
