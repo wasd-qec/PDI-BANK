@@ -370,7 +370,6 @@ public class HomePageAdminTran extends JFrame {
             minAmountField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
             add(minAmountField);
 
-            // Max Amount
             JLabel maxAmountLabel = new JLabel("Max Amount:");
             maxAmountLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             maxAmountLabel.setForeground(new Color(30, 50, 85));
@@ -383,7 +382,6 @@ public class HomePageAdminTran extends JFrame {
             maxAmountField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
             add(maxAmountField);
             
-            // Type
             JLabel typeLabel = new JLabel("Type:");
             typeLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             typeLabel.setForeground(new Color(30, 50, 85));
@@ -396,7 +394,6 @@ public class HomePageAdminTran extends JFrame {
             typeCombo.setBackground(new Color(218, 186, 121));
             add(typeCombo);
 
-            // Sender ID
             JLabel senderLabel = new JLabel("Sender ID:");
             senderLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             senderLabel.setForeground(new Color(30, 50, 85));
@@ -409,7 +406,6 @@ public class HomePageAdminTran extends JFrame {
             senderField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
             add(senderField);
 
-            // Receiver ID
             JLabel receiverLabel = new JLabel("Receiver ID:");
             receiverLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             receiverLabel.setForeground(new Color(30, 50, 85));
@@ -422,7 +418,6 @@ public class HomePageAdminTran extends JFrame {
             receiverField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
             add(receiverField);
 
-            // Date From
             JLabel dateFromLabel = new JLabel("Date From:");
             dateFromLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             dateFromLabel.setForeground(new Color(30, 50, 85));
@@ -435,7 +430,6 @@ public class HomePageAdminTran extends JFrame {
             dateFromField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
             add(dateFromField);
 
-            // Date To
             JLabel dateToLabel = new JLabel("Date To:");
             dateToLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
             dateToLabel.setForeground(new Color(30, 50, 85));
@@ -448,21 +442,18 @@ public class HomePageAdminTran extends JFrame {
             dateToField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
             add(dateToField);
 
-            // Info text
             JLabel infoLabel = new JLabel("Date format: YYYY-MM-DD. Leave empty to skip filter.");
             infoLabel.setFont(new Font("Segoe UI", Font.ITALIC, 10));
             infoLabel.setForeground(new Color(100, 100, 100));
             infoLabel.setBounds(30, 355, 490, 15);
             add(infoLabel);
 
-            // Cancel Button
             RoundedButton cancelBtn = new RoundedButton("Cancel");
             cancelBtn.setBounds(220, 385, 120, 38);
             cancelBtn.setBackground(new Color(108, 130, 173));
             cancelBtn.addActionListener(e -> dispose());
             add(cancelBtn);
 
-            // OK Button
             RoundedButton okBtn = new RoundedButton("OK");
             okBtn.setBounds(360, 385, 120, 38);
             okBtn.setBackground(new Color(8, 25, 64));

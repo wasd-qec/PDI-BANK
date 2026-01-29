@@ -164,7 +164,7 @@ public class ChangePasswordDialog extends JDialog {
 
     private void showSuccessDialog(String message) {
         JDialog successDialog = new JDialog(this, "Success", true);
-        successDialog.setSize(350, 180);
+        successDialog.setSize(350, 220);
         successDialog.setLocationRelativeTo(this);
         successDialog.setResizable(false);
         successDialog.getContentPane().setBackground(new Color(245, 240, 235));
@@ -179,12 +179,12 @@ public class ChangePasswordDialog extends JDialog {
         JLabel messageLabel = new JLabel(message);
         messageLabel.setForeground(new Color(30, 50, 85));
         messageLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        messageLabel.setBounds(20, 60, 310, 60);
+        messageLabel.setBounds(20, 40, 310, 60);
         successDialog.add(messageLabel);
 
         RoundedButton okBtn = new RoundedButton("OK");
         okBtn.setBackground(new Color(34, 139, 34));
-        okBtn.setBounds(125, 130, 100, 35);
+        okBtn.setBounds(125, 110, 100, 35);
         okBtn.addActionListener(e -> successDialog.dispose());
         successDialog.add(okBtn);
 
